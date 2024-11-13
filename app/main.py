@@ -67,14 +67,15 @@ def search_transcripts(videos, search_terms):
             print("❌ Transcript unavailable.")
     return results
 
-def format_time(seconds):
-    """Convert seconds to a formatted time string (hh:mm:ss)."""
-    hours = int(seconds // 3600)
-    minutes = int((seconds % 3600) // 60)
-    seconds = int(seconds % 60)
-    if hours > 0:
-        return f"{hours:02}:{minutes:02}:{seconds:02}"
-    return f"{minutes:02}:{seconds:02}"
+def generateLink(uri, label=None):
+    if label is None: 
+        label = uri
+    parameters = ''
+
+    # OSC 8 ; params ; URI ST <name> OSC 8 ;; ST 
+    escape_mask = '\033]8;{};{}\033\\{}\033]8;;\033\\'
+
+    return escape_mask.format(parameters, uri, label)
 
 def main():
     query = input("Enter your search query for YouTube videos: ")
@@ -96,8 +97,9 @@ def main():
             print(f"- Title: {result['title']}")
             print(f"  Video URL: https://www.youtube.com/watch?v={result['videoId']}")
             for match in result["matches"]:
-                start_time = format_time(match["start"])
-                print(f"    - Match at {start_time}: {match['text']}")
+                start_time = int(match["start"])
+                printableLink = generateLink(f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}", "link")
+                print(f"    - Match at {start_time}: {match['text']} - {printableLink}")
     else:
         print("\nNo matching transcripts found.")
 
