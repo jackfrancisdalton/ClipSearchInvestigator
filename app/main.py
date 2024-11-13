@@ -1,81 +1,6 @@
-from dotenv import load_dotenv
-import os
-import requests
-from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
-
-# TODO:
-# - Add CLI option to configure sort relevancy and max results
-# - Improve CLI styling
-# - link or timestamp to the respective quote
-# - ability to increment search (ie if not found go to the next one)
-
-# Replace this with your YouTube Data API key
-dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
-load_dotenv(dotenv_path=dotenv_path)
-API_KEY = os.getenv('API_KEY')
-
-def search_youtube(query, max_results=2):
-    url = "https://www.googleapis.com/youtube/v3/search"
-    params = {
-        "part": "snippet",
-        "q": query,
-        "type": "video",
-        "maxResults": max_results,
-        "key": API_KEY,
-    }
-    response = requests.get(url, params=params)
-    response.raise_for_status()
-    videos = response.json()
-    return [
-        {"videoId": item["id"]["videoId"], "title": item["snippet"]["title"]}
-        for item in videos.get("items", [])
-    ]
-
-def fetch_transcript(video_id):
-    try:
-        return YouTubeTranscriptApi.get_transcript(video_id)
-    except (TranscriptsDisabled, NoTranscriptFound):
-        return None
-
-def search_transcripts(videos, search_terms):
-    results = []
-    print("\nSearching transcripts:\n")
-    for video in videos:
-        print(f"- {video['title']} ({video['videoId']}) -", end=" ")
-        
-        transcript = fetch_transcript(video["videoId"])
-        if transcript:
-            matching_entries = []
-            for entry in transcript:
-                if any(term.lower() in entry["text"].lower() for term in search_terms):
-                    matching_entries.append({
-                        "start": entry["start"],
-                        "duration": entry["duration"],
-                        "text": entry["text"]
-                    })
-            if matching_entries:
-                results.append({
-                    "videoId": video["videoId"],
-                    "title": video["title"],
-                    "matches": matching_entries
-                })
-                print(f"✅ Found {len(matching_entries)} match(es).")
-            else:
-                print("❌ No matches.")
-        else:
-            print("❌ Transcript unavailable.")
-    return results
-
-def generateLink(uri, label=None):
-    if label is None: 
-        label = uri
-    parameters = ''
-
-    # OSC 8 ; params ; URI ST <name> OSC 8 ;; ST 
-    escape_mask = '\033]8;{};{}\033\\{}\033]8;;\033\\'
-
-    return escape_mask.format(parameters, uri, label)
+from app.youtube_search import search_youtube
+from app.transcript_utils import search_transcripts
+from app.link_generator import generate_link
 
 def main():
     query = input("Enter your search query for YouTube videos: ")
@@ -98,8 +23,8 @@ def main():
             print(f"  Video URL: https://www.youtube.com/watch?v={result['videoId']}")
             for match in result["matches"]:
                 start_time = int(match["start"])
-                printableLink = generateLink(f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}", "link")
-                print(f"    - Match at {start_time}: {match['text']} - {printableLink}")
+                printable_link = generate_link(f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}", "link")
+                print(f"    - Match at {start_time}: {match['text']} - {printable_link}")
     else:
         print("\nNo matching transcripts found.")
 
