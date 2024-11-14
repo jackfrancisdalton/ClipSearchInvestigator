@@ -1,11 +1,13 @@
 // // src/api.js
-// export const searchVideos = async (query, maxResults = 10) => {
-//     const response = await fetch(`/api/search?query=${query}&maxResults=${maxResults}`);
-//     if (!response.ok) {
-//         throw new Error("Error fetching videos");
-//     }
-//     return response.json();
-// };
+export const searchVideos = async (query: string, terms: string, maxResults: number = 10) => {
+
+    const termsParam = terms.split(',').map(term => term.trim()).join(',');
+    const response = await fetch(`/api/searchtrans?query=${query}&terms=${termsParam}&max_results=${maxResults}`);
+    if (!response.ok) {
+        throw new Error("Error fetching videos");
+    }
+    return response.json();
+};
 
 // export const searchTranscripts = async (videos, searchTerms) => {
 //     const response = await fetch(`/api/transcripts`, {
@@ -20,3 +22,4 @@
 //     }
 //     return response.json();
 // };
+
