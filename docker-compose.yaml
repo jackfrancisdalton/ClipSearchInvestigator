@@ -9,5 +9,22 @@ services:
       - PORT=8000
     volumes:
       - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    volumes:
+      - ./frontend:/app
+    environment:
+      - NODE_ENV=production
+
+  nginx:
+    build:
+      context: ./reverseProxy
+    container_name: reverseProxy
     ports:
-      - "8000:8000"
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
