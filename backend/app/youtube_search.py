@@ -15,11 +15,13 @@ def search_youtube(
     max_results=10):
     
     url = "https://www.googleapis.com/youtube/v3/search"
+
     params = {
         "part": "snippet",
         "q": query,
         "type": "video",
         "maxResults": max_results,
+        "safeSearch": "none",
         "order": order,
         "key": API_KEY,
     }

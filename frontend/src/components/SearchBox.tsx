@@ -32,13 +32,13 @@ interface SearchBoxProps {
     setPublishedBefore,
   }: SearchBoxProps) {
     return (
-      <div className="max-w-4xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div className="max-w-4xl mx-auto p-2 rounded-lg">
         {/* Search Query */}
-        <div className="mb-4">
-          <label className="block mb-2 text-xl font-medium">Search Query</label>
+        <div className="mb-6">
+          <label className="block mb-2 text-l text-white-100 font-medium">Search Query</label>
           <input
             type="text"
-            className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
             placeholder="Enter your search query"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -46,8 +46,8 @@ interface SearchBoxProps {
         </div>
   
         {/* Slider for Number of Videos */}
-        <div className="mb-4">
-          <label className="block mb-2 text-xl font-medium">
+        <div className="mb-6">
+          <label className="block mb-2 text-l font-medium text-white-100">
             Number of Videos to Scan: {numVideos}
           </label>
           <input
@@ -56,16 +56,16 @@ interface SearchBoxProps {
             max="50"
             value={numVideos}
             onChange={(e) => setNumVideos(Number(e.target.value))}
-            className="w-full"
+            className="w-full bg-primary-100 accent-primary-500"
           />
         </div>
   
         {/* Search Terms */}
-        <div className="mb-4">
-          <label className="block mb-2 text-xl font-medium">Search Terms in Videos</label>
+        <div className="mb-6">
+          <label className="block mb-2 text-l text-white-100 font-medium">Search Terms in Videos</label>
           <input
             type="text"
-            className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full text-white-100 p-3 bg-white-700 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
             placeholder="Enter the terms to find in videos"
             value={searchTerms}
             onChange={(e) => setSearchTerms(e.target.value)}
@@ -73,12 +73,12 @@ interface SearchBoxProps {
         </div>
   
         {/* Sort Option Dropdown */}
-        <div className="mb-4">
-          <label className="block mb-2 text-xl font-medium">Sort By</label>
+        <div className="mb-6">
+          <label className="block mb-2 text-l text-white-100 font-medium">Sort By</label>
           <select
             value={order}
             onChange={(e) => setOrder(e.target.value)}
-            className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full p-3 text-white-100 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
           >
             <option value="date">Date</option>
             <option value="rating">Rating</option>
@@ -90,22 +90,22 @@ interface SearchBoxProps {
         </div>
   
         {/* Published After Date Picker */}
-        <div className="mb-4">
-          <label className="block mb-2 text-xl font-medium">Published After</label>
+        <div className="mb-6">
+          <label className="block mb-2 text-l text-white-100 font-medium">Published After</label>
           <input
             type="date"
-            className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
             value={publishedAfter}
             onChange={(e) => setPublishedAfter(e.target.value)}
           />
         </div>
   
         {/* Published Before Date Picker */}
-        <div className="mb-4">
-          <label className="block mb-2 text-xl font-medium">Published Before</label>
+        <div className="mb-6">
+          <label className="block mb-2 text-l text-white-100 font-medium">Published Before</label>
           <input
             type="date"
-            className="w-full p-3 bg-gray-700 rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
             value={publishedBefore}
             onChange={(e) => setPublishedBefore(e.target.value)}
           />
@@ -119,8 +119,8 @@ interface SearchBoxProps {
             className={`px-6 py-3 ${
               loading
                 ? 'bg-gray-500 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700'
-            } text-white font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500`}
+                : 'bg-primary-600 hover:bg-primary-300'
+            } text-white font-semibold rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-primary-500`}
           >
             {loading ? 'Searching...' : 'Search'}
           </button>

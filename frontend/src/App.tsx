@@ -13,31 +13,31 @@ function App() {
   const [publishedAfter, setPublishedAfter] = useState('');
   const [publishedBefore, setPublishedBefore] = useState('');
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<{ videoTitle: string; quotes: { text: string; timestamp: string, link: string }[] }[] //> ([]);
-  >([
-    { videoTitle: 'test video', quotes: [
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-      { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-    ] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-    { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  const [results, setResults] = useState<{ videoTitle: string; quotes: { text: string; timestamp: string, link: string }[] }[]> ([]);
+  // >([
+  //   { videoTitle: 'test video', quotes: [
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
+  //   ] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
+  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
 
-  ]);
+  // ]);
 
   const fetchVideoResults = async () => {
     if (!searchQuery || !searchTerms) {
@@ -45,7 +45,7 @@ function App() {
       return;
     }
 
-    setLoading(true); // Start loading
+    setLoading(true);
 
     try {
       const result = await searchVideos(
@@ -74,10 +74,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex">
+    <div className="min-h-screen bg-background-700 text-white flex">
       {/* Search Box - Fixed Left */}
-      <div className="w-1/5 bg-gray-800 p-6 fixed h-full">
-        <h1 className="text-3xl font-bold mb-4">Youtube Giga Search</h1>
+      <div className="w-1/5 bg-background-700 p-6 fixed h-full border-r-4 border-r-primary-600 shadow-lg">
         <SearchBox
           loading={loading}
           searchQuery={searchQuery}
