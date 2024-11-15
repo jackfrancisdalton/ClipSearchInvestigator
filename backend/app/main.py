@@ -1,8 +1,10 @@
+from typing import Optional
 from fastapi import FastAPI, HTTPException, Query
 from app.schemas import Video, TranscriptSearchRequest
 from app.youtube_search import search_youtube
 from app.transcript_utils import search_transcripts
 from app.link_generator import generate_link
+from datetime import date
 
 app = FastAPI()
 
@@ -16,14 +18,22 @@ async def search(query: str = Query(...), max_results: int = Query(10)):
 
 
 @app.get("/searchtrans")
-async def search(query: str = Query(...), terms: str = Query(...), max_results: int = Query(10)):
-
-    # query = input("Enter your search query for YouTube videos: ")
-    # search_terms = input("Enter words to search in transcripts (comma-separated): ").split(",")
-    # search_terms = [term.strip() for term in search_terms]
-
+async def search(
+    query: str = Query(...), 
+    terms: str = Query(...), 
+    order: str = Query(...),
+    published_before: Optional[date] = Query(None),
+    published_after: Optional[date] = Query(None),
+    max_results: int = Query(10)
+):
     terms_list = terms.split(",")
-    videos = search_youtube(query, max_results)
+    videos = search_youtube(
+        query, 
+        order, 
+        published_before, 
+        published_after,
+        max_results
+    )
 
     if not videos:
         return { "error": "No videos found." }
@@ -40,7 +50,7 @@ async def search(query: str = Query(...), terms: str = Query(...), max_results: 
         response[result['title']] = []
         for match in result["matches"]:
             start_time = int(match["start"])
-            printable_link = generate_link(f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}", "link")
+            printable_link = f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}"
             response[result['title']].append({
                 "start_time": start_time,
                 "text": match['text'],
