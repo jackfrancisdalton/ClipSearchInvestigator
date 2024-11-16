@@ -3,7 +3,6 @@ from fastapi import FastAPI, HTTPException, Query
 from app.schemas import Video, TranscriptSearchRequest
 from app.youtube_search import search_youtube
 from app.transcript_utils import search_transcripts
-from app.link_generator import generate_link
 from datetime import date
 
 app = FastAPI()
@@ -39,7 +38,7 @@ async def search(
         return { "error": "No videos found." }
     
     # print(f"\nFound {len(videos)} videos. Starting transcript search...\n")
-    results = search_transcripts(videos, terms_list)
+    results = await search_transcripts(videos, terms_list)
 
     if not results:
         return { "error": "No matching transcripts found." }
@@ -58,15 +57,3 @@ async def search(
             })
 
     return response
-
-    # if results:
-    #     print("\nVideos containing search terms in their transcripts:")
-    #     for result in results:
-    #         print(f"- Title: {result['title']}")
-    #         print(f"  Video URL: https://www.youtube.com/watch?v={result['videoId']}")
-    #         for match in result["matches"]:
-    #             start_time = int(match["start"])
-    #             printable_link = generate_link(f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}", "link")
-    #             print(f"    - Match at {start_time}: {match['text']} - {printable_link}")
-    # else:
-    #     print("\nNo matching transcripts found.")

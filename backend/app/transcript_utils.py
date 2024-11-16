@@ -1,19 +1,19 @@
 from youtube_transcript_api import YouTubeTranscriptApi
 from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
+import asyncio
 
-def fetch_transcript(video_id):
+async def fetch_transcript(video_id):
     try:
-        return YouTubeTranscriptApi.get_transcript(video_id)
+        return await asyncio.to_thread(YouTubeTranscriptApi.get_transcript, video_id)
     except (TranscriptsDisabled, NoTranscriptFound):
         return None
 
-def search_transcripts(videos, search_terms):
+async def search_transcripts(videos, search_terms):
     results = []
-    print("\nSearching transcripts:\n")
-    for video in videos:
-        print(f"- {video['title']} ({video['videoId']}) -", end=" ")
-        
-        transcript = fetch_transcript(video["videoId"])
+    
+    async def process_video(video):
+        transcript = await fetch_transcript(video["videoId"])
+
         if transcript:
             matching_entries = []
             for entry in transcript:
@@ -24,14 +24,19 @@ def search_transcripts(videos, search_terms):
                         "text": entry["text"]
                     })
             if matching_entries:
-                results.append({
+                return {
                     "videoId": video["videoId"],
                     "title": video["title"],
                     "matches": matching_entries
-                })
-                print(f"✅ Found {len(matching_entries)} match(es).")
-            else:
-                print("❌ No matches.")
-        else:
-            print("❌ Transcript unavailable.")
+                }
+
+        return None
+
+    # Create tasks for all videos
+    tasks = [process_video(video) for video in videos]
+    processed_results = await asyncio.gather(*tasks)
+
+    # Filter out None results
+    results = [result for result in processed_results if result]
+    
     return results
