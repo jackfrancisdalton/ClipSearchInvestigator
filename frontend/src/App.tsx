@@ -1,19 +1,24 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './App.css';
 import { searchVideos } from './Api';
 import LoadingSpinner from './components/LoadingSpinner';
 import SearchResult from './components/SearchResult';
 import SearchBox from './components/SearchBox';
+import { APIQuote, VideoTranscriptResult } from './types/video';
+
+// TODO: clean up mapping of APIquote and quote so no mapping is required
+// add handling for error messages: no video found, no quotes found, internal error
+// replace passing in a bunch of values and setters, with a callback and a single object
 
 function App() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchTerms, setSearchTerms] = useState('');
-  const [numVideos, setNumVideos] = useState(10);
+  const [query, setQuery] = useState('');
+  const [terms, setTerms] = useState('');
+  const [maxResults, setMaxResults] = useState(10);
   const [order, setOrder] = useState('relevance');
   const [publishedAfter, setPublishedAfter] = useState('');
   const [publishedBefore, setPublishedBefore] = useState('');
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<{ videoTitle: string; quotes: { text: string; timestamp: string, link: string }[] }[]> ([]);
+  const [results, setResults] = useState<VideoTranscriptResult[]> ([]);
   // >([
   //   { videoTitle: 'test video', quotes: [
   //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
@@ -40,7 +45,7 @@ function App() {
   // ]);
 
   const fetchVideoResults = async () => {
-    if (!searchQuery || !searchTerms) {
+    if (!query || !terms) {
       alert('Please fill out both the search query and search terms.');
       return;
     }
@@ -48,43 +53,43 @@ function App() {
     setLoading(true);
 
     try {
-      const result = await searchVideos(
-        searchQuery, 
-        searchTerms, 
+      const result = await searchVideos({
+        query, 
+        terms, 
         order, 
         publishedBefore,
         publishedAfter,
-        numVideos
-      );
+        maxResults
+      });
 
       const transformedResults = Object.entries(result).map(([videoTitle, quotes]: [string, any]) => ({
         videoTitle,
-        quotes: quotes.map((quote: { text: string; start_time: number, link: string }) => ({
+        quotes: quotes.map((quote: APIQuote) => ({
           text: quote.text,
-          timestamp: new Date(quote.start_time * 1000).toISOString().substr(11, 8),
+          startTime: new Date(quote.startTime * 1000).toISOString().substr(11, 8),
           link: quote.link,
         })),
       }));
+      
       setResults(transformedResults);
     } catch (error) {
       console.error('Error fetching video results:', error);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
-      {/* Search Box - Fixed Left */}
       <div className="w-1/5 bg-background-700 p-6 fixed h-full border-r-4 border-r-primary-600 shadow-lg">
         <SearchBox
           loading={loading}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          numVideos={numVideos}
-          setNumVideos={setNumVideos}
-          searchTerms={searchTerms}
-          setSearchTerms={setSearchTerms}
+          searchQuery={query}
+          setSearchQuery={setQuery}
+          numVideos={maxResults}
+          setNumVideos={setMaxResults}
+          searchTerms={terms}
+          setSearchTerms={setTerms}
           fetchVideoResults={fetchVideoResults}
           order={order}
           setOrder={setOrder}
@@ -95,12 +100,9 @@ function App() {
         />
       </div>
 
-      {/* Results Section - Right */}
       <div className="ml-[20%] w-[80%] p-8 overflow-auto">
-        {/* Loading Spinner */}
         {loading && <LoadingSpinner />}
 
-        {/* Results */}
         {!loading && results.length > 0 && (
           <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
             {results.map((result, index) => (

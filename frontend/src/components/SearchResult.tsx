@@ -1,16 +1,6 @@
-interface Quote {
-    text: string;
-    timestamp: string;
-    link: string;
-}
+import { VideoTranscriptResult } from "../types/video";
 
-interface Result {
-    videoTitle: string;
-    quotes: Quote[];
-}
-
-function SearchResult({ result }: { result: Result }) {
-
+function SearchResult({ result }: { result: VideoTranscriptResult }) {
 
     return(
         <div className="bg-background-500 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
@@ -21,7 +11,7 @@ function SearchResult({ result }: { result: Result }) {
                         className="text-sm bg-primary-600 p-2 rounded-lg cursor-pointer"
                         onClick={() => window.open(quote.link, '_blank')}
                     >
-                        <strong>"{quote.text}"</strong> - {quote.timestamp}
+                        <strong>"{quote.text}"</strong> - {quote.startTime}
                     </li>
                 ))}
             </ul>
