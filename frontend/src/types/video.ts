@@ -5,13 +5,13 @@ export type Video = {
     publishedAt: string;
 };
 
-export type APIQuote = { 
+export type APIMatch = { 
     text: string; 
     startTime: number, 
     link: string 
 };
   
-export type Quote = { 
+export type Match = { 
     text: string; 
     startTime: string, 
     link: string 
@@ -19,5 +19,5 @@ export type Quote = {
   
 export type VideoTranscriptResult = { 
     videoTitle: string; 
-    quotes: Quote[] 
+    matches: Match[] 
 }

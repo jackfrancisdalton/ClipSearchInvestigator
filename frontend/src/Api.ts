@@ -1,4 +1,4 @@
-import { APIQuote, Video, VideoTranscriptResult,  } from "./types/video";
+import { APIMatch, Video, VideoTranscriptResult,  } from "./types/video";
 
 type SearchVideosParams = {
     query: string;
@@ -38,7 +38,7 @@ export const searchVideos = async ({
         throw new Error("Error fetching videos");
     }
 
-    const results: VideoTranscriptResult[] = await response.json();
+    const results: any = await response.json();
 
-    return results;
+    return results.results;
 };

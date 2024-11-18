@@ -1,5 +1,6 @@
 from typing import Optional
 from fastapi import FastAPI, Query
+from app.schemas import Video
 from app.youtube_search import search_youtube
 from app.transcript_utils import search_transcripts
 from datetime import date
@@ -34,16 +35,23 @@ async def search(
 
     response = {}
 
+    response["results"] = []
+
     for result in results:
-        response[result['title']] = []
+        matches = []
 
         for match in result["matches"]:
             start_time = int(match["start"])
             printable_link = f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}"
-            response[result['title']].append({
+            matches.append({
                 "startTime": start_time,
                 "text": match['text'],
                 "link": printable_link
             })
+
+        response["results"].append({
+            "title": result['title'],
+            "matches": matches
+        })
 
     return response

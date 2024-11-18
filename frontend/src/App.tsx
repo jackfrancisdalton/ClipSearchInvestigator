@@ -4,7 +4,7 @@ import { searchVideos } from './Api';
 import LoadingSpinner from './components/LoadingSpinner';
 import SearchResult from './components/SearchResult';
 import SearchBox from './components/SearchBox';
-import { APIQuote, VideoTranscriptResult } from './types/video';
+import { APIMatch, Match, VideoTranscriptResult } from './types/video';
 
 // TODO: clean up mapping of APIquote and quote so no mapping is required
 // add handling for error messages: no video found, no quotes found, internal error
@@ -62,15 +62,15 @@ function App() {
         maxResults
       });
 
-      const transformedResults = Object.entries(result).map(([videoTitle, quotes]: [string, any]) => ({
-        videoTitle,
-        quotes: quotes.map((quote: APIQuote) => ({
-          text: quote.text,
-          startTime: new Date(quote.startTime * 1000).toISOString().substr(11, 8),
-          link: quote.link,
+      const transformedResults = result.map((result: VideoTranscriptResult) => ({
+        videoTitle: result.videoTitle,
+        matches: result.matches.map((match: any) => ({
+          text: match.text,
+          startTime: new Date(match.startTime * 1000).toISOString().substr(11, 8),
+          link: match.link,
         })),
       }));
-      
+
       setResults(transformedResults);
     } catch (error) {
       console.error('Error fetching video results:', error);
