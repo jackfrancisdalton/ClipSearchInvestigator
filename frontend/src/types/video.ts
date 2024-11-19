@@ -4,12 +4,6 @@ export type Video = {
     description: string;
     publishedAt: string;
 };
-
-export type APIMatch = { 
-    text: string; 
-    startTime: number, 
-    link: string 
-};
   
 export type Match = { 
     text: string; 

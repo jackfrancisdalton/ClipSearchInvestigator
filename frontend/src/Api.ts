@@ -1,4 +1,4 @@
-import { APIMatch, Video, VideoTranscriptResult,  } from "./types/video";
+import { VideoTranscriptResult,  } from "./types/video";
 
 type SearchVideosParams = {
     query: string;
@@ -20,12 +20,12 @@ export const searchVideos = async ({
 
     // Add search terms
     const params = new URLSearchParams();
+    
     params.append("query", query);
     params.append("terms", terms.split(',').map(term => term.trim()).join(','));
     params.append("order", order);
     params.append("max_results", maxResults.toString());
 
-    // Add before/after limits if specified
     if (publishedBefore) 
         params.append("published_before", publishedBefore);
     if (publishedAfter) 

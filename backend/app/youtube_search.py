@@ -1,7 +1,10 @@
 import os
 import requests
 from dotenv import load_dotenv
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
+import asyncio
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_path)
@@ -59,14 +62,54 @@ def search_youtube(
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-    # response = requests.get(url, params=params)
-    # response.raise_for_status()
-    # videos = response.json()
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
+import asyncio
 
-    # return [
-    #     {
-    #         "videoId": item["id"]["videoId"], 
-    #         "title": item["snippet"]["title"]
-    #     }
-    #     for item in videos.get("items", [])
-    # ]
+async def fetch_transcript(video_id):
+    try:
+        return await asyncio.to_thread(YouTubeTranscriptApi.get_transcript, video_id)
+    except (TranscriptsDisabled, NoTranscriptFound):
+        return None
+
+async def fetch_video_transcript_matches(video, search_terms):
+    transcript = await fetch_transcript(video["videoId"])
+
+    # TODO: change this so option can be passed to search for substring or exact match of search terms
+    if transcript:
+        matching_entries = []
+
+        for entry in transcript:
+            if any(term.lower() in entry["text"].lower() for term in search_terms):
+                matching_entries.append({
+                    "start": entry["start"],
+                    "duration": entry["duration"],
+                    "text": entry["text"]
+                })
+                
+        if matching_entries:
+            return {
+                "videoId": video["videoId"],
+                "title": video["title"],
+                "description": video['description'],
+                "channelTitle": video['channelTitle'],
+                "publishedAt": video['publishedAt'],
+                "videoId": video['videoId'],
+                "thumbnailUrl": video['thumbnailUrl'],
+                "matches": matching_entries
+            }
+
+    return None
+
+
+async def generate_transcript_matches(videos, search_terms):
+    results = []
+
+    # Create tasks for fetching all scripts in parallel
+    tasks = [fetch_video_transcript_matches(video, search_terms) for video in videos]
+    processed_results = await asyncio.gather(*tasks)
+
+    # Filter out None results
+    results = [result for result in processed_results if result]
+    
+    return results

@@ -1,8 +1,6 @@
 from typing import Optional
 from fastapi import FastAPI, Query
-from app.schemas import Video
-from app.youtube_search import search_youtube
-from app.transcript_utils import search_transcripts
+from app.youtube_search import generate_transcript_matches, search_youtube
 from datetime import date
 
 app = FastAPI()
@@ -16,6 +14,7 @@ async def search(
     published_after: Optional[date] = Query(None),
     max_results: int = Query(10)
 ):
+    # TODO: change term_list to be a list of terms instead of string that is split
     terms_list = terms.split(",")
     videos = search_youtube(
         query, 
@@ -28,7 +27,7 @@ async def search(
     if not videos:
         return { "error": "No videos found." }
     
-    transcriptResults = await search_transcripts(videos, terms_list)
+    transcriptResults = await generate_transcript_matches(videos, terms_list)
 
     if not transcriptResults:
         return { "error": "No matching transcripts found." }
