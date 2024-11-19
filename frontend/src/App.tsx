@@ -4,7 +4,8 @@ import { searchVideos } from './Api';
 import LoadingSpinner from './components/LoadingSpinner';
 import SearchResult from './components/SearchResult';
 import SearchBox from './components/SearchBox';
-import { APIMatch, Match, VideoTranscriptResult } from './types/video';
+import { VideoTranscriptResult } from './types/video';
+import SelectedTermsBar from './components/SelectedTermsBar';
 
 // TODO: clean up mapping of APIquote and quote so no mapping is required
 // add handling for error messages: no video found, no quotes found, internal error
@@ -19,30 +20,6 @@ function App() {
   const [publishedBefore, setPublishedBefore] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<VideoTranscriptResult[]> ([]);
-  // >([
-  //   { videoTitle: 'test video', quotes: [
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //     { text: 'asdasd', timestamp: '12:13', link: 'www.google.com' },
-  //   ] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-  //   { videoTitle: 'test video', quotes: [{ text: 'asdasd', timestamp: '12:13', link: 'www.google.com' }] },
-
-  // ]);
 
   const fetchVideoResults = async () => {
     if (!query || !terms) {
@@ -92,6 +69,7 @@ function App() {
       </div>
 
       <div className="ml-[20%] w-[80%] p-8 overflow-auto">
+        {!loading && <SelectedTermsBar terms={terms.split(',')} onTermClick={() => { console.log("hello")} }></SelectedTermsBar>}
         {loading && <LoadingSpinner />}
 
         {!loading && results.length > 0 && (

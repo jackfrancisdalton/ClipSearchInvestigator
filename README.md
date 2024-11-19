@@ -7,22 +7,23 @@ Ever find it annoying not being able to find "that video". This script aims to s
 ## Add support for:
 - channel only searching https://developers.google.com/youtube/v3/docs/search/list
 - video length filtering
-- tracking page token, and load more
+- tracking page token, and load more on request
+- display meaningful error messages and clear results 
 
 ## Styling
-- Custom style
-- collapsable side bar
-- expandable 
+- fix display of titles
+- make
 
 # Content
 - list total number of video and quote results
 - list number of quotes per video result
-- add quote search
+- add quote search filter
 
 # Clean up
 - replace prop passes with a callback function
 - clean up types of react app
 - clean up typing of fast api app
+- clean up structure of python FASTAPI
 
 # Handling/Validation
 - clean up default values/optionals
