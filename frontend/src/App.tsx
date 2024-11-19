@@ -62,16 +62,7 @@ function App() {
         maxResults
       });
 
-      const transformedResults = result.map((result: VideoTranscriptResult) => ({
-        videoTitle: result.videoTitle,
-        matches: result.matches.map((match: any) => ({
-          text: match.text,
-          startTime: new Date(match.startTime * 1000).toISOString().substr(11, 8),
-          link: match.link,
-        })),
-      }));
-
-      setResults(transformedResults);
+      setResults(result);
     } catch (error) {
       console.error('Error fetching video results:', error);
     } finally {

@@ -40,5 +40,18 @@ export const searchVideos = async ({
 
     const results: any = await response.json();
 
-    return results.results;
+    const transformedResults = results.results.map((result: VideoTranscriptResult) => ({
+        videoTitle: result.videoTitle,
+        description: result.description,
+        channelTitle: result.channelTitle,
+        publishedAt: result.publishedAt,
+        thumbnailUrl: result.thumbnailUrl,
+        matches: result.matches.map((match: any) => ({
+            text: match.text,
+            startTime: new Date(match.startTime * 1000).toISOString().substr(11, 8),
+            link: match.link,
+        })),
+    }));
+
+    return transformedResults;
 };

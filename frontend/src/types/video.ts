@@ -19,5 +19,9 @@ export type Match = {
   
 export type VideoTranscriptResult = { 
     videoTitle: string; 
+    description: string;
+    channelTitle: string;
+    publishedAt: string;
+    thumbnailUrl: string;
     matches: Match[] 
 }

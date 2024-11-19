@@ -44,7 +44,11 @@ def search_youtube(
         return [
             {
                 "videoId": item["id"]["videoId"], 
-                "title": item["snippet"]["title"]
+                "title": item["snippet"]["title"],
+                "description": item["snippet"]["description"],
+                "channelTitle": item["snippet"]["channelTitle"],
+                "publishedAt": item["snippet"]["publishedAt"],
+                "thumbnailUrl": item["snippet"]["thumbnails"]["default"]["url"]
             }
             for item in videos.get("items", [])
         ]

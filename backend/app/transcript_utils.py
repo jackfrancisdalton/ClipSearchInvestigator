@@ -24,6 +24,11 @@ async def process_video(video, search_terms):
             return {
                 "videoId": video["videoId"],
                 "title": video["title"],
+                "description": video['description'],
+                "channelTitle": video['channelTitle'],
+                "publishedAt": video['publishedAt'],
+                "videoId": video['videoId'],
+                "thumbnailUrl": video['thumbnailUrl'],
                 "matches": matching_entries
             }
 

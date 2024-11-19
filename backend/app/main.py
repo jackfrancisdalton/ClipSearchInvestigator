@@ -28,21 +28,21 @@ async def search(
     if not videos:
         return { "error": "No videos found." }
     
-    results = await search_transcripts(videos, terms_list)
+    transcriptResults = await search_transcripts(videos, terms_list)
 
-    if not results:
+    if not transcriptResults:
         return { "error": "No matching transcripts found." }
 
-    response = {}
+    response = {
+        "results": []
+    }
 
-    response["results"] = []
-
-    for result in results:
+    for transcriptResult in transcriptResults:
         matches = []
 
-        for match in result["matches"]:
+        for match in transcriptResult["matches"]:
             start_time = int(match["start"])
-            printable_link = f"https://www.youtube.com/watch?v={result['videoId']}&t={start_time}"
+            printable_link = f"https://www.youtube.com/watch?v={transcriptResult['videoId']}&t={start_time}"
             matches.append({
                 "startTime": start_time,
                 "text": match['text'],
@@ -50,7 +50,12 @@ async def search(
             })
 
         response["results"].append({
-            "title": result['title'],
+            "videoTitle": transcriptResult['title'],
+            "description": transcriptResult['description'],
+            "channelTitle": transcriptResult['channelTitle'],
+            "publishedAt": transcriptResult['publishedAt'],
+            "videoId": transcriptResult['videoId'],
+            "thumbnailUrl": transcriptResult['thumbnailUrl'],
             "matches": matches
         })
 
