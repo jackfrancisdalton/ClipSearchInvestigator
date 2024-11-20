@@ -19,15 +19,16 @@ const SelectedTermsBar: React.FC<SelectedTermsBarProps> = ({ terms, onTermClick 
     };
 
     return (
-        <div style={{ display: 'flex', gap: '10px', marginTop: "0", marginBottom: "15px"}}>
+        <div className="flex gap-2 mt-0 mb-4 p-4 rounded-lg bg-background-500 items-center">
+            <span className="mr-4">Filter by term:</span>
             {terms.map(term => (
-                <div
-                    key={term}
-                    onClick={() => handleTermClick(term)}
-                    className={`p-2 rounded-lg ${activeTerms.includes(term) ? 'bg-primary-600' : 'bg-primary-300'}`}
-                >
-                    {term}
-                </div>
+            <div
+                key={term}
+                onClick={() => handleTermClick(term)}
+                className={`p-2 rounded-lg ${activeTerms.includes(term) ? 'bg-primary-600' : 'bg-primary-300'}`}
+            >
+                {term}
+            </div>
             ))}
         </div>
     );

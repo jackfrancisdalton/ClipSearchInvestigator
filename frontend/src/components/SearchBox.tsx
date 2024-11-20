@@ -84,7 +84,7 @@ interface SearchBoxProps {
               />
               <button
                 type="button"
-                className="ml-2 p-2 bg-red-500 text-white rounded-lg"
+                className="ml-2 p-3 bg-red-600 text-white rounded-lg"
                 onClick={() => {
                   const newTerms = searchTerms.filter((_, i) => i !== index);
                   setSearchTerms(newTerms);

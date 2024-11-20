@@ -6,6 +6,7 @@ import SearchResult from './components/SearchResult';
 import SearchBox from './components/SearchBox';
 import { VideoTranscriptResult } from './types/video';
 import SelectedTermsBar from './components/SelectedTermsBar';
+import ResultsPlaceHolder from './components/ResultsPlaceHolder';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -64,10 +65,14 @@ function App() {
         />
       </div>
 
-      <div className="ml-[20%] w-[80%] p-8 overflow-auto">
-        {!loading && results.length > 0 && (
-          <SelectedTermsBar terms={terms} onTermClick={() => { console.log("hello")} } />
+      <div className="ml-[20%] w-[80%] p-6 overflow-auto">
+        {!loading && results.length === 0 && (
+          <ResultsPlaceHolder />
         )}
+
+        {/* {!loading && results.length > 0 && (
+          <SelectedTermsBar terms={terms} onTermClick={() => { console.log("hello")} } />
+        )} */}
         {loading && <LoadingSpinner />}
 
         {!loading && results.length > 0 && (
