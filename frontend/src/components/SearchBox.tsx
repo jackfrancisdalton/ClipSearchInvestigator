@@ -41,7 +41,7 @@ function SearchBox({
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-2 rounded-lg">
       {/* Search Query */}
       <div className="mb-6">
-        <label className="block mb-2 text-l text-white-100 font-medium">Search Query</label>
+        <label className="block mb-2 text-l text-white-100 font-medium">Search for videos you want to check</label>
         <input
           type="text"
           className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
@@ -68,7 +68,7 @@ function SearchBox({
 
       {/* Dynamic List of Input Boxes for Search Terms */}
       <div className="mb-6">
-        <label className="block mb-2 text-l text-white-100 font-medium">Search Terms in Videos</label>
+        <label className="block mb-2 text-l text-white-100 font-medium">Terms you want to check for</label>
         {searchTerms.map((term, index) => (
           <div key={index} className="flex items-center mb-2">
             <input
