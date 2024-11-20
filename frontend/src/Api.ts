@@ -39,6 +39,10 @@ export const searchVideos = async ({
 
     const results: any = await response.json();
 
+    if (results.error) {
+        throw new Error(results.error);
+    }
+
     const transformedResults = results.results.map((result: VideoTranscriptResult) => ({
         videoTitle: result.videoTitle,
         description: result.description,

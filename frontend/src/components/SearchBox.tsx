@@ -32,12 +32,6 @@ interface SearchBoxProps {
     setPublishedBefore,
   }: SearchBoxProps) {
 
-    const handleTermsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value = e.target.value;
-      const termsArray = value.split(',').map((term) => term.trim());
-      setSearchTerms(termsArray);
-    };
-
     return (
       <div className="max-w-4xl mx-auto p-2 rounded-lg">
         {/* Search Query */}
@@ -84,7 +78,7 @@ interface SearchBoxProps {
               />
               <button
                 type="button"
-                className="ml-2 p-3 bg-red-600 text-white rounded-lg"
+                className="ml-2 p-3 bg-red-600 text-white-100 rounded-lg"
                 onClick={() => {
                   const newTerms = searchTerms.filter((_, i) => i !== index);
                   setSearchTerms(newTerms);

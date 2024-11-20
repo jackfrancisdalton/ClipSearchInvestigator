@@ -7,6 +7,7 @@ import SearchBox from './components/SearchBox';
 import { VideoTranscriptResult } from './types/video';
 import SelectedTermsBar from './components/SelectedTermsBar';
 import ResultsPlaceHolder from './components/ResultsPlaceHolder';
+import ErrorMessage from './components/ErrorMessage';
 
 function App() {
   const [query, setQuery] = useState('');
@@ -17,6 +18,7 @@ function App() {
   const [publishedBefore, setPublishedBefore] = useState('');
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<VideoTranscriptResult[]> ([]);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchVideoResults = async () => {
     if (!query || terms.length === 0) {
@@ -24,6 +26,7 @@ function App() {
       return;
     }
 
+    setError(null);
     setLoading(true);
 
     try {
@@ -37,8 +40,11 @@ function App() {
       });
 
       setResults(result);
-    } catch (error) {
+
+    } catch (error: Error | any) {
       console.error('Error fetching video results:', error);
+      setError(error.message);
+      setResults([]);
     } finally {
       setLoading(false);
     }
@@ -66,8 +72,12 @@ function App() {
       </div>
 
       <div className="ml-[20%] w-[80%] p-6 overflow-auto">
-        {!loading && results.length === 0 && (
+        {!loading && !error && results.length === 0 && (
           <ResultsPlaceHolder />
+        )}
+
+        {!!error && (
+          <ErrorMessage errorMessage={error}></ErrorMessage>
         )}
 
         {/* {!loading && results.length > 0 && (
