@@ -8,14 +8,12 @@ app = FastAPI()
 @app.get("/searchtrans")
 async def search(
     query: str = Query(...), 
-    terms: str = Query(...), 
+    terms: list[str] = Query(...), 
     order: str = Query(...),
     published_before: Optional[date] = Query(None),
     published_after: Optional[date] = Query(None),
     max_results: int = Query(10)
 ):
-    # TODO: change term_list to be a list of terms instead of string that is split
-    terms_list = terms.split(",")
     videos = search_youtube(
         query, 
         order, 
@@ -27,7 +25,7 @@ async def search(
     if not videos:
         return { "error": "No videos found." }
     
-    transcriptResults = await generate_transcript_matches(videos, terms_list)
+    transcriptResults = await generate_transcript_matches(videos, terms)
 
     if not transcriptResults:
         return { "error": "No matching transcripts found." }

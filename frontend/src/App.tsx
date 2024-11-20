@@ -7,13 +7,9 @@ import SearchBox from './components/SearchBox';
 import { VideoTranscriptResult } from './types/video';
 import SelectedTermsBar from './components/SelectedTermsBar';
 
-// TODO: clean up mapping of APIquote and quote so no mapping is required
-// add handling for error messages: no video found, no quotes found, internal error
-// replace passing in a bunch of values and setters, with a callback and a single object
-
 function App() {
   const [query, setQuery] = useState('');
-  const [terms, setTerms] = useState('');
+  const [terms, setTerms] = useState<string[]>([]);
   const [maxResults, setMaxResults] = useState(10);
   const [order, setOrder] = useState('relevance');
   const [publishedAfter, setPublishedAfter] = useState('');
@@ -22,7 +18,7 @@ function App() {
   const [results, setResults] = useState<VideoTranscriptResult[]> ([]);
 
   const fetchVideoResults = async () => {
-    if (!query || !terms) {
+    if (!query || terms.length === 0) {
       alert('Please fill out both the search query and search terms.');
       return;
     }
@@ -69,7 +65,7 @@ function App() {
       </div>
 
       <div className="ml-[20%] w-[80%] p-8 overflow-auto">
-        {!loading && <SelectedTermsBar terms={terms.split(',')} onTermClick={() => { console.log("hello")} }></SelectedTermsBar>}
+        {!loading && <SelectedTermsBar terms={terms} onTermClick={() => { console.log("hello")} }></SelectedTermsBar>}
         {loading && <LoadingSpinner />}
 
         {!loading && results.length > 0 && (

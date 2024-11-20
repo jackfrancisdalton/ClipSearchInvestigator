@@ -2,7 +2,7 @@ import { VideoTranscriptResult,  } from "./types/video";
 
 type SearchVideosParams = {
     query: string;
-    terms: string;
+    terms: string[];
     order?: string;
     publishedBefore?: string;
     publishedAfter?: string;
@@ -18,11 +18,10 @@ export const searchVideos = async ({
     maxResults = 10
 }: SearchVideosParams): Promise<VideoTranscriptResult[]> => {
 
-    // Add search terms
     const params = new URLSearchParams();
-    
+
     params.append("query", query);
-    params.append("terms", terms.split(',').map(term => term.trim()).join(','));
+    terms.forEach((term) => params.append("terms", term));
     params.append("order", order);
     params.append("max_results", maxResults.toString());
 
