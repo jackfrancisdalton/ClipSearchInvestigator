@@ -65,7 +65,9 @@ function App() {
       </div>
 
       <div className="ml-[20%] w-[80%] p-8 overflow-auto">
-        {!loading && <SelectedTermsBar terms={terms} onTermClick={() => { console.log("hello")} }></SelectedTermsBar>}
+        {!loading && results.length > 0 && (
+          <SelectedTermsBar terms={terms} onTermClick={() => { console.log("hello")} } />
+        )}
         {loading && <LoadingSpinner />}
 
         {!loading && results.length > 0 && (

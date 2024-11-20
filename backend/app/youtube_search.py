@@ -76,7 +76,7 @@ async def fetch_video_transcript_matches(video, search_terms):
         matching_entries = []
 
         for entry in transcript:
-            if any(term.lower() in entry["text"].lower() for term in search_terms):
+            if any(f" {term.lower()} " in f" {entry['text'].lower()} " for term in search_terms):
                 matching_entries.append({
                     "start": entry["start"],
                     "duration": entry["duration"],
