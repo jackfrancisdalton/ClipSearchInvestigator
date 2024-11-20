@@ -67,16 +67,40 @@ interface SearchBoxProps {
           />
         </div>
   
-        {/* Search Terms */}
+        {/* Dynamic List of Input Boxes for Search Terms */}
         <div className="mb-6">
           <label className="block mb-2 text-l text-white-100 font-medium">Search Terms in Videos</label>
-          <input
-            type="text"
-            className="w-full text-white-100 p-3 bg-white-700 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            placeholder="Enter the terms to find in videos"
-            value={searchTerms.join(', ')} // Join the array into a string for display
-            onChange={handleTermsChange} // Call the handler on change
-          />
+          {searchTerms.map((term, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <input
+                type="text"
+                className="w-full text-white-100 p-3 bg-white-700 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
+                value={term}
+                onChange={(e) => {
+                  const newTerms = [...searchTerms];
+                  newTerms[index] = e.target.value;
+                  setSearchTerms(newTerms);
+                }}
+              />
+              <button
+                type="button"
+                className="ml-2 p-2 bg-red-500 text-white rounded-lg"
+                onClick={() => {
+                  const newTerms = searchTerms.filter((_, i) => i !== index);
+                  setSearchTerms(newTerms);
+                }}
+              >
+                Remove
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            className="mt-2 p-2 bg-primary-600 text-white rounded-lg"
+            onClick={() => setSearchTerms([...searchTerms, ''])}
+          >
+            Add Term
+          </button>
         </div>
   
         {/* Sort Option Dropdown */}

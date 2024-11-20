@@ -9,7 +9,7 @@ import SelectedTermsBar from './components/SelectedTermsBar';
 
 function App() {
   const [query, setQuery] = useState('');
-  const [terms, setTerms] = useState<string[]>([]);
+  const [terms, setTerms] = useState<string[]>(['']);
   const [maxResults, setMaxResults] = useState(10);
   const [order, setOrder] = useState('relevance');
   const [publishedAfter, setPublishedAfter] = useState('');
