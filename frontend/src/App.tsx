@@ -42,13 +42,38 @@ function App() {
       setResults(result);
 
     } catch (error: Error | any) {
-      console.error('Error fetching video results:', error);
       setError(error.message);
       setResults([]);
     } finally {
       setLoading(false);
     }
   };
+
+  const updateSearchParams = ({ 
+    q, 
+    mr, 
+    t, 
+    o, 
+    pa, 
+    pb 
+  }: { 
+    q: string; 
+    mr: number; 
+    t: string[]; 
+    o: string; 
+    pa: string; 
+    pb: string; 
+  }) => {
+    setQuery(q);
+    setMaxResults(mr);
+    setTerms(t);
+    setOrder(o);
+    setPublishedAfter(pa);
+    setPublishedBefore(pb);
+  }
+
+
+
 
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
