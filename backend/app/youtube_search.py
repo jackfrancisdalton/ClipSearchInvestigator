@@ -62,10 +62,6 @@ def search_youtube(
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
-import asyncio
-
 async def fetch_transcript(video_id):
     try:
         return await asyncio.to_thread(YouTubeTranscriptApi.get_transcript, video_id)
