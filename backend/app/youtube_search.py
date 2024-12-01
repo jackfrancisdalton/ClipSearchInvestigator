@@ -39,7 +39,7 @@ def search_youtube(
         published_after = datetime.combine(published_after, datetime.min.time(), tzinfo=timezone.utc)
         params["publishedAfter"] = published_after.isoformat(timespec='seconds').replace('+00:00', 'Z')
     if channel_id: 
-        params["channelId"] = channel_id
+        params["channelId"] = get_channel_id(channel_id)
 
     try:
         response = requests.get(url, params=params)
@@ -111,3 +111,31 @@ async def generate_transcript_matches(videos, search_terms):
     results = [result for result in processed_results if result]
     
     return results
+
+def get_channel_id(channel_name):
+    url = "https://www.googleapis.com/youtube/v3/search"
+    params = {
+        "part": "snippet",
+        "q": channel_name,
+        "type": "channel",
+        "key": API_KEY,
+    }
+    
+    response = requests.get(url, params=params)
+    
+    if response.status_code == 200:
+        data = response.json()
+        if "items" in data and len(data["items"]) > 0:
+            channel_id = data["items"][0]["snippet"]["channelId"]
+            return channel_id
+        else:
+            return "Channel not found."
+    else:
+        return f"Error: {response.status_code}, {response.text}"
+
+# # Example usage
+# if __name__ == "__main__":
+#     api_key = "YOUR_YOUTUBE_API_KEY"  # Replace with your API key
+#     channel_name = "ChannelName"  # Replace with the channel name you want to search
+#     channel_id = get_channel_id(api_key, channel_name)
+#     print(f"Channel ID for '{channel_name}': {channel_id}")
