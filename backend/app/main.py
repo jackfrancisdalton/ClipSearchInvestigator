@@ -30,6 +30,9 @@ async def search(
     if not transcriptResults:
         return { "error": "No matching transcripts found." }
 
+    return format_response(transcriptResults)
+
+def format_response(transcriptResults):
     response = {
         "results": []
     }
