@@ -1,28 +1,28 @@
 import { VideoTranscriptResult,  } from "./types/video";
 
 type SearchVideosParams = {
-    query: string;
-    terms: string[];
+    searchQuery: string;
+    searchTerms: string[];
     order?: string;
     publishedBefore?: string;
     publishedAfter?: string;
     channelName?: string;
-    maxResults?: number;
+    numVideos?: number;
 };
 
 export const searchVideos = async ({
-    query, 
-    terms, 
+    searchQuery, 
+    searchTerms: terms, 
     order = "relevance", 
     publishedBefore, 
     publishedAfter,
     channelName, 
-    maxResults = 10
+    numVideos: maxResults = 10
 }: SearchVideosParams): Promise<VideoTranscriptResult[]> => {
 
     const params = new URLSearchParams();
 
-    params.append("query", query);
+    params.append("query", searchQuery);
     terms.forEach((term) => params.append("terms", term));
     params.append("order", order);
     params.append("max_results", maxResults.toString());

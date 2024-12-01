@@ -36,13 +36,13 @@ function App() {
 
     try {
       const result = await searchVideos({
-        query: searchQuery,
-        terms: searchTerms,
+        searchQuery,
+        searchTerms,
         order,
         publishedBefore,
         publishedAfter,
-        maxResults: numVideos,
-        channelName: channelName
+        numVideos,
+        channelName
       });
 
       setResults(result);

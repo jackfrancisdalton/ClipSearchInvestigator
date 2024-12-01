@@ -11,7 +11,6 @@ async def fetch_transcript(video_id):
 async def fetch_video_transcript_matches(video, search_terms):
     transcript = await fetch_transcript(video["videoId"])
 
-    # TODO: change this so option can be passed to search for substring or exact match of search terms
     if transcript:
         matching_entries = []
 
@@ -39,13 +38,9 @@ async def fetch_video_transcript_matches(video, search_terms):
 
 
 async def generate_transcript_matches(videos, search_terms):
-    results = []
-
-    # Create tasks for fetching all scripts in parallel
     tasks = [fetch_video_transcript_matches(video, search_terms) for video in videos]
     processed_results = await asyncio.gather(*tasks)
 
-    # Filter out None results
     results = [result for result in processed_results if result]
     
     return results
