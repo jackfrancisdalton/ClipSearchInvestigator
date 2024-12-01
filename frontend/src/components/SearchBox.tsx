@@ -83,15 +83,15 @@ function SearchBox({
         </button>
       </div>
 
-      {/* Channel ID Input */}
+      {/* Channel Name Input */}
       <div className="mb-6">
-        <label className="block mb-2 text-l text-white-100 font-medium">Channel ID</label>
+        <label className="block mb-2 text-l text-white-100 font-medium">Channel Name</label>
         <input
           type="text"
           className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
           placeholder="Enter the channel ID"
-          value={searchState.channelId || ''}
-          onChange={(e) => setSearchState({ channelId: e.target.value })}
+          value={searchState.channelName || ''}
+          onChange={(e) => setSearchState({ channelName: e.target.value })}
         />
       </div>
 

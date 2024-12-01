@@ -20,12 +20,12 @@ function App() {
     order: 'relevance',
     publishedAfter: '',
     publishedBefore: '',
-    channelId: '',
+    channelName: '',
   });
 
   const fetchVideoResults = async () => {
-    const { searchQuery, searchTerms, order, publishedBefore, publishedAfter, numVideos, channelId } = searchState;
-    
+    const { searchQuery, searchTerms, order, publishedBefore, publishedAfter, numVideos, channelName } = searchState;
+
     if (!searchQuery || searchTerms.length === 0) {
       alert('Please fill out both the search query and search terms.');
       return;
@@ -42,7 +42,7 @@ function App() {
         publishedBefore,
         publishedAfter,
         maxResults: numVideos,
-        channelId: channelId
+        channelName: channelName
       });
 
       setResults(result);
