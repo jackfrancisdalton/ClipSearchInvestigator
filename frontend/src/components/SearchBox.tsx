@@ -1,37 +1,25 @@
+import { SearchState } from "../types/video";
+
 interface SearchBoxProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  numVideos: number;
-  setNumVideos: (num: number) => void;
-  searchTerms: string[];
-  setSearchTerms: (terms: string[]) => void;
+  searchState: {
+    searchQuery: string;
+    numVideos: number;
+    searchTerms: string[];
+    order: string;
+    publishedAfter: string;
+    publishedBefore: string;
+  };
+  setSearchState: (state: Partial<SearchState>) => void;
   fetchVideoResults: () => void;
   loading: boolean;
-  order: string;
-  setOrder: (option: string) => void;
-  publishedAfter: string;
-  setPublishedAfter: (date: string) => void;
-  publishedBefore: string;
-  setPublishedBefore: (date: string) => void;
 }
 
 function SearchBox({
-  searchQuery,
-  setSearchQuery,
-  numVideos,
-  setNumVideos,
-  searchTerms,
-  setSearchTerms,
+  searchState,
+  setSearchState,
   fetchVideoResults,
   loading,
-  order,
-  setOrder,
-  publishedAfter,
-  setPublishedAfter,
-  publishedBefore,
-  setPublishedBefore,
 }: SearchBoxProps) {
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetchVideoResults();
@@ -46,22 +34,22 @@ function SearchBox({
           type="text"
           className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
           placeholder="Enter your search query"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={searchState.searchQuery}
+          onChange={(e) => setSearchState({ searchQuery: e.target.value })}
         />
       </div>
 
       {/* Slider for Number of Videos */}
       <div className="mb-6">
         <label className="block mb-2 text-l font-medium text-white-100">
-          Number of Videos to Scan: {numVideos}
+          Number of Videos to Scan: {searchState.numVideos}
         </label>
         <input
           type="range"
           min="1"
           max="50"
-          value={numVideos}
-          onChange={(e) => setNumVideos(Number(e.target.value))}
+          value={searchState.numVideos}
+          onChange={(e) => setSearchState({ numVideos: Number(e.target.value) })}
           className="w-full bg-primary-100 accent-primary-500"
         />
       </div>
@@ -69,24 +57,24 @@ function SearchBox({
       {/* Dynamic List of Input Boxes for Search Terms */}
       <div className="mb-6">
         <label className="block mb-2 text-l text-white-100 font-medium">Terms you want to check for</label>
-        {searchTerms.map((term, index) => (
+        {searchState.searchTerms.map((term, index) => (
           <div key={index} className="flex items-center mb-2">
             <input
               type="text"
               className="w-full text-white-100 p-3 bg-white-700 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
               value={term}
               onChange={(e) => {
-                const newTerms = [...searchTerms];
+                const newTerms = [...searchState.searchTerms];
                 newTerms[index] = e.target.value;
-                setSearchTerms(newTerms);
+                setSearchState({ searchTerms: newTerms });
               }}
             />
             <button
               type="button"
               className="ml-2 p-3 bg-red-600 text-white-100 rounded-lg"
               onClick={() => {
-                const newTerms = searchTerms.filter((_, i) => i !== index);
-                setSearchTerms(newTerms);
+                const newTerms = searchState.searchTerms.filter((_, i) => i !== index);
+                setSearchState({ searchTerms: newTerms });
               }}
             >
               Remove
@@ -96,7 +84,7 @@ function SearchBox({
         <button
           type="button"
           className="mt-2 p-2 bg-primary-600 text-white rounded-lg"
-          onClick={() => setSearchTerms([...searchTerms, ''])}
+          onClick={() => setSearchState({ searchTerms: [...searchState.searchTerms, ''] })}
         >
           Add Term
         </button>
@@ -106,8 +94,8 @@ function SearchBox({
       <div className="mb-6">
         <label className="block mb-2 text-l text-white-100 font-medium">Sort By</label>
         <select
-          value={order}
-          onChange={(e) => setOrder(e.target.value)}
+          value={searchState.order}
+          onChange={(e) => setSearchState({ order: e.target.value })}
           className="w-full p-3 text-white-100 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
         >
           <option value="date">Date</option>
@@ -125,8 +113,8 @@ function SearchBox({
         <input
           type="date"
           className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-          value={publishedAfter}
-          onChange={(e) => setPublishedAfter(e.target.value)}
+          value={searchState.publishedAfter}
+          onChange={(e) => setSearchState({ publishedAfter: e.target.value })}
         />
       </div>
 
@@ -136,8 +124,8 @@ function SearchBox({
         <input
           type="date"
           className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-          value={publishedBefore}
-          onChange={(e) => setPublishedBefore(e.target.value)}
+          value={searchState.publishedBefore}
+          onChange={(e) => setSearchState({ publishedBefore: e.target.value })}
         />
       </div>
 

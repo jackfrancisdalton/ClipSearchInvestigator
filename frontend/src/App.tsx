@@ -4,24 +4,27 @@ import { searchVideos } from './Api';
 import LoadingSpinner from './components/LoadingSpinner';
 import SearchResult from './components/SearchResult';
 import SearchBox from './components/SearchBox';
-import { VideoTranscriptResult } from './types/video';
-import SelectedTermsBar from './components/SelectedTermsBar';
+import { SearchState, VideoTranscriptResult } from './types/video';
 import ResultsPlaceHolder from './components/ResultsPlaceHolder';
 import ErrorMessage from './components/ErrorMessage';
 
 function App() {
-  const [query, setQuery] = useState('');
-  const [terms, setTerms] = useState<string[]>(['']);
-  const [maxResults, setMaxResults] = useState(10);
-  const [order, setOrder] = useState('relevance');
-  const [publishedAfter, setPublishedAfter] = useState('');
-  const [publishedBefore, setPublishedBefore] = useState('');
+
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<VideoTranscriptResult[]> ([]);
+  const [results, setResults] = useState<VideoTranscriptResult[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [searchState, setSearchState] = useState<SearchState>({
+    searchQuery: '',
+    numVideos: 10,
+    searchTerms: [''],
+    order: 'relevance',
+    publishedAfter: '',
+    publishedBefore: '',
+  });
 
   const fetchVideoResults = async () => {
-    if (!query || terms.length === 0) {
+    const { searchQuery, searchTerms, order, publishedBefore, publishedAfter, numVideos } = searchState;
+    if (!searchQuery || searchTerms.length === 0) {
       alert('Please fill out both the search query and search terms.');
       return;
     }
@@ -31,12 +34,12 @@ function App() {
 
     try {
       const result = await searchVideos({
-        query, 
-        terms, 
-        order, 
+        query: searchQuery,
+        terms: searchTerms,
+        order,
         publishedBefore,
         publishedAfter,
-        maxResults
+        maxResults: numVideos,
       });
 
       setResults(result);
@@ -49,50 +52,14 @@ function App() {
     }
   };
 
-  const updateSearchParams = ({ 
-    q, 
-    mr, 
-    t, 
-    o, 
-    pa, 
-    pb 
-  }: { 
-    q: string; 
-    mr: number; 
-    t: string[]; 
-    o: string; 
-    pa: string; 
-    pb: string; 
-  }) => {
-    setQuery(q);
-    setMaxResults(mr);
-    setTerms(t);
-    setOrder(o);
-    setPublishedAfter(pa);
-    setPublishedBefore(pb);
-  }
-
-
-
-
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
       <div className="w-1/5 bg-background-700 p-6 fixed h-full border-r-4 border-r-primary-600 shadow-lg">
         <SearchBox
           loading={loading}
-          searchQuery={query}
-          setSearchQuery={setQuery}
-          numVideos={maxResults}
-          setNumVideos={setMaxResults}
-          searchTerms={terms}
-          setSearchTerms={setTerms}
+          searchState={searchState}
+          setSearchState={(state) => setSearchState((prev) => ({ ...prev, ...state }))}
           fetchVideoResults={fetchVideoResults}
-          order={order}
-          setOrder={setOrder}
-          publishedAfter={publishedAfter}
-          setPublishedAfter={setPublishedAfter}
-          publishedBefore={publishedBefore}
-          setPublishedBefore={setPublishedBefore}
         />
       </div>
 
@@ -105,9 +72,6 @@ function App() {
           <ErrorMessage errorMessage={error}></ErrorMessage>
         )}
 
-        {/* {!loading && results.length > 0 && (
-          <SelectedTermsBar terms={terms} onTermClick={() => { console.log("hello")} } />
-        )} */}
         {loading && <LoadingSpinner />}
 
         {!loading && results.length > 0 && (

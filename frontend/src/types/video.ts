@@ -19,3 +19,12 @@ export type VideoTranscriptResult = {
     thumbnailUrl: string;
     matches: Match[] 
 }
+
+export interface SearchState {
+    searchQuery: string;
+    numVideos: number;
+    searchTerms: string[];
+    order: string;
+    publishedAfter: string;
+    publishedBefore: string;
+}
