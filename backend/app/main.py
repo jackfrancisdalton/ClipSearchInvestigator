@@ -12,6 +12,7 @@ async def search(
     order: str = Query(...),
     published_before: Optional[date] = Query(None),
     published_after: Optional[date] = Query(None),
+    channel_id: Optional[str] = Query(None),
     max_results: int = Query(10)
 ):
     videos = search_youtube(
@@ -19,6 +20,7 @@ async def search(
         order, 
         published_before, 
         published_after,
+        channel_id,
         max_results
     )
 

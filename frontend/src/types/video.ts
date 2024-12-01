@@ -27,4 +27,5 @@ export interface SearchState {
     order: string;
     publishedAfter: string;
     publishedBefore: string;
+    channelId: string;
 }

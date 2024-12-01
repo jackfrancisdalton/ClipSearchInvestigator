@@ -1,14 +1,7 @@
 import { SearchState } from "../types/video";
 
 interface SearchBoxProps {
-  searchState: {
-    searchQuery: string;
-    numVideos: number;
-    searchTerms: string[];
-    order: string;
-    publishedAfter: string;
-    publishedBefore: string;
-  };
+  searchState: SearchState;
   setSearchState: (state: Partial<SearchState>) => void;
   fetchVideoResults: () => void;
   loading: boolean;
@@ -56,7 +49,7 @@ function SearchBox({
 
       {/* Dynamic List of Input Boxes for Search Terms */}
       <div className="mb-6">
-        <label className="block mb-2 text-l text-white-100 font-medium">Terms you want to check for</label>
+        <label className="block mb-2 text-l text-white-100 font-medium">Transcript Term you want to find</label>
         {searchState.searchTerms.map((term, index) => (
           <div key={index} className="flex items-center mb-2">
             <input
@@ -88,6 +81,18 @@ function SearchBox({
         >
           Add Term
         </button>
+      </div>
+
+      {/* Channel ID Input */}
+      <div className="mb-6">
+        <label className="block mb-2 text-l text-white-100 font-medium">Channel ID</label>
+        <input
+          type="text"
+          className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
+          placeholder="Enter the channel ID"
+          value={searchState.channelId || ''}
+          onChange={(e) => setSearchState({ channelId: e.target.value })}
+        />
       </div>
 
       {/* Sort Option Dropdown */}

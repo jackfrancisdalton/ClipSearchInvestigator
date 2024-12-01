@@ -15,6 +15,7 @@ def search_youtube(
     order, 
     published_before,
     published_after,
+    channel_id,
     max_results=10):
     
     url = "https://www.googleapis.com/youtube/v3/search"
@@ -37,7 +38,8 @@ def search_youtube(
         # Ensure proper format for publishedAfter
         published_after = datetime.combine(published_after, datetime.min.time(), tzinfo=timezone.utc)
         params["publishedAfter"] = published_after.isoformat(timespec='seconds').replace('+00:00', 'Z')
-
+    if channel_id: 
+        params["channelId"] = channel_id
 
     try:
         response = requests.get(url, params=params)

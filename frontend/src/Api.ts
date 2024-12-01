@@ -6,6 +6,7 @@ type SearchVideosParams = {
     order?: string;
     publishedBefore?: string;
     publishedAfter?: string;
+    channelId?: string;
     maxResults?: number;
 };
 
@@ -14,7 +15,8 @@ export const searchVideos = async ({
     terms, 
     order = "relevance", 
     publishedBefore, 
-    publishedAfter, 
+    publishedAfter,
+    channelId, 
     maxResults = 10
 }: SearchVideosParams): Promise<VideoTranscriptResult[]> => {
 
@@ -29,6 +31,8 @@ export const searchVideos = async ({
         params.append("published_before", publishedBefore);
     if (publishedAfter) 
         params.append("published_after", publishedAfter);
+    if (channelId) 
+        params.append("channel_id", channelId);
 
     // Fetch results
     const response = await fetch(`/api/searchtrans?${params.toString()}`);
