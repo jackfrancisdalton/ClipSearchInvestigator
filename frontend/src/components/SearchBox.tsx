@@ -22,7 +22,7 @@ function SearchBox({
     <form onSubmit={handleSubmit} className="max-w-4xl mx-auto p-2 rounded-lg">
       {/* Search Query */}
       <div className="mb-6">
-        <label className="block mb-2 text-l text-white-100 font-medium">Search for videos you want to check</label>
+        <label className="block mb-2 text-l text-white-100 font-medium">Search for videos you want to scan</label>
         <input
           type="text"
           className="w-full p-3 bg-white-700 text-white-100 rounded-lg border border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
@@ -35,7 +35,7 @@ function SearchBox({
       {/* Slider for Number of Videos */}
       <div className="mb-6">
         <label className="block mb-2 text-l font-medium text-white-100">
-          Number of Videos to Scan: {searchState.numVideos}
+          Number of Search Results to Scan: {searchState.numVideos}
         </label>
         <input
           type="range"

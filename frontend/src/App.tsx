@@ -46,7 +46,6 @@ function App() {
       });
 
       setResults(result);
-
     } catch (error: Error | any) {
       setError(error.message);
       setResults([]);
@@ -78,7 +77,7 @@ function App() {
         {loading && <LoadingSpinner />}
 
         {!loading && results.length > 0 && (
-          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
             {results.map((result, index) => (
               <SearchResult key={index} result={result} />
             ))}

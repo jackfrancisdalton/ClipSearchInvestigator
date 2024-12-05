@@ -66,6 +66,7 @@ def search_youtube(
 
 def get_channel_id(channel_name):
     url = "https://www.googleapis.com/youtube/v3/search"
+    
     params = {
         "part": "snippet",
         "q": channel_name,
@@ -84,10 +85,3 @@ def get_channel_id(channel_name):
             return "Channel not found."
     else:
         return f"Error: {response.status_code}, {response.text}"
-
-# # Example usage
-# if __name__ == "__main__":
-#     api_key = "YOUR_YOUTUBE_API_KEY"  # Replace with your API key
-#     channel_name = "ChannelName"  # Replace with the channel name you want to search
-#     channel_id = get_channel_id(api_key, channel_name)
-#     print(f"Channel ID for '{channel_name}': {channel_id}")
