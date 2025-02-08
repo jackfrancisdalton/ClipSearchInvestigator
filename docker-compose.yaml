@@ -15,8 +15,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000" # for mapping webpack dev server to 80
+    # ports:
+      # - "3000:3000" # for accessing host directly for webhook auto refresh
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -25,9 +25,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0  # Prevent Webpack
 
-
-  nginx:
-    container_name: reverseProxy
+  reverse-proxy:
+    container_name: reverse-proxy
     build:
       context: ./reverseProxy
     environment:
