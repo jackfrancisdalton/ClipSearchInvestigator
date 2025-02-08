@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  reverse-proxy:
+    container_name: reverse-proxy
+    build:
+      context: ./reverseProxy
+    environment:
+      - FRONTEND_PORT=3000  # THe port frontend exposes on (normally either 3000 or 80) TODO: look into how we change this between dev and prod builds
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
   backend:
     container_name: backend
     build:
@@ -24,15 +36,4 @@ services:
       - NODE_ENV=production
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0  # Prevent Webpack
-
-  reverse-proxy:
-    container_name: reverse-proxy
-    build:
-      context: ./reverseProxy
-    environment:
-      - FRONTEND_PORT=3000  # THe port frontend exposes on (normally either 3000 or 80) TODO: look into how we change this between dev and prod builds
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-      - frontend
+      - NODE_ENV=development
