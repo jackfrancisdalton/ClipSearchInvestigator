@@ -27,14 +27,10 @@ export const searchVideos = async ({
     params.append("order", order);
     params.append("max_results", maxResults.toString());
 
-    if (publishedBefore) 
-        params.append("published_before", publishedBefore);
-    if (publishedAfter) 
-        params.append("published_after", publishedAfter);
-    if (channelName) 
-        params.append("channel_name", channelName);
+    if (publishedBefore) params.append("published_before", publishedBefore);
+    if (publishedAfter) params.append("published_after", publishedAfter);
+    if (channelName) params.append("channel_name", channelName);
 
-    // Fetch results
     const response = await fetch(`/api/searchtrans?${params.toString()}`);
 
     if (!response.ok) {
