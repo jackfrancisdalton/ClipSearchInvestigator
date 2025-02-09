@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  reverse-proxy:
+    environment:
+      - FRONTEND_PORT=3000  # Frontend will run on port 3000 as a live reload react dev server
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0  # Prevent Webpack
+      - NODE_ENV=development

@@ -6,7 +6,7 @@ services:
     build:
       context: ./reverseProxy
     environment:
-      - FRONTEND_PORT=3000  # THe port frontend exposes on (normally either 3000 or 80) TODO: look into how we change this between dev and prod builds
+      - FRONTEND_PORT=3000  # Frontend will run on port 3000 as a live reload react dev server
     ports:
       - "80:80"
     depends_on:
@@ -26,14 +26,6 @@ services:
     container_name: frontend
     build:
       context: ./frontend
-      dockerfile: Dockerfile.dev
-    # ports:
-      # - "3000:3000" # for accessing host directly for webhook auto refresh
     volumes:
       - ./frontend:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=production
-      - CHOKIDAR_USEPOLLING=true
-      - WDS_SOCKET_PORT=0  # Prevent Webpack
-      - NODE_ENV=development

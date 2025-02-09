@@ -3,11 +3,11 @@ version: "3.8"
 services:
   reverse-proxy:
     environment:
-      - FRONTEND_PORT=80
+      - FRONTEND_PORT=80 # Frontend will run on port 80 as it's built and hosted by an nginx server
 
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     environment:
       - NODE_ENV=production
