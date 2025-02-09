@@ -1,25 +1,18 @@
-# Use Node.js as the base image
 FROM node:18
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json first for caching
 COPY package*.json ./
 
-# Install dependencies
 RUN npm install
 
-# Copy the rest of the application files
 COPY . .
 
-# Expose port 3000 for React development server
 EXPOSE 3000
 
-# Enable polling to detect file changes inside Docker
+# Env Variables to ensure that webhooks work correclty with auto refresh in dev mode
 ENV CHOKIDAR_USEPOLLING=true
 ENV WATCHPACK_POLLING=true
 ENV WDS_SOCKET_PORT=3000
 
-# Start the React development server
 CMD ["npm", "start"]
