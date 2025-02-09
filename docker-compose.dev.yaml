@@ -2,6 +2,8 @@ version: '3.8'
 
 services:
   reverse-proxy:
+    volumes: 
+      - ./reverseProxy/default.dev.conf.template:/etc/nginx/conf.d/default.conf.template
     environment:
       - FRONTEND_PORT=3000  # Frontend will run on port 3000 as a live reload react dev server
 

@@ -2,6 +2,8 @@ version: "3.8"
 
 services:
   reverse-proxy:
+    volumes:
+      - ./reverseProxy/default.prod.conf.template:/etc/nginx/conf.d/default.conf.template
     environment:
       - FRONTEND_PORT=80 # Frontend will run on port 80 as it's built and hosted by an nginx server
 
