@@ -7,6 +7,11 @@ services:
     environment:
       - FRONTEND_PORT=3000  # Frontend will run on port 3000 as a live reload react dev server
 
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+
   frontend:
     build:
       context: ./frontend
