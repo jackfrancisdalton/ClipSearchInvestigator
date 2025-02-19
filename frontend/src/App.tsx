@@ -57,15 +57,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
-      
-       {/* <div className="w-1/5 bg-background-700 p-6 fixed h-full border-r-4 border-r-primary-600 shadow-lg">
-         <SearchBox
-          loading={loading}
-          searchState={searchState}
-          setSearchState={(state) => setSearchState((prev) => ({ ...prev, ...state }))}
-          fetchVideoResults={fetchVideoResults}
-        />
-      </div> */}
 
       <SideBar>
         <SearchBox

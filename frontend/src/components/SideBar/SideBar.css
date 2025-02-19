@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .sidebar {
-  @apply fixed top-0 left-0 h-full bg-gray-800 shadow-lg transition-transform transform -translate-x-full md:translate-x-0 md:w-1/5;
+  @apply fixed top-0 left-0 h-full bg-gray-800  text-white-100 shadow-lg transition-transform transform -translate-x-full md:translate-x-0 md:w-1/5;
 }
 
 .sidebar.open {
@@ -11,7 +11,7 @@
 }
 
 .sidebar-toggle {
-  @apply absolute top-4 left-4 text-2xl md:hidden;
+  @apply absolute top-4 left-4 text-white-100 text-2xl md:hidden;
 }
 
 .sidebar-content {
