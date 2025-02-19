@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "./SideBar.scss";
 
 interface SideBarProps {
   children: React.ReactNode;
@@ -14,7 +15,7 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
       {/* Toggle button (only visible on mobile) */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-4 left-4 z-50 md:hidden p-2 bg-primary-600 text-white rounded"
+        className="testClass fixed top-4 left-4 z-50 md:hidden p-2 bg-primary-600 text-white rounded"
       >
         {isOpen ? 'Close' : 'Menu'}
       </button>
