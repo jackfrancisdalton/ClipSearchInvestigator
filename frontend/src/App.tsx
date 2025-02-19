@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import './App.css';
 import { searchVideos } from './Api';
-import LoadingSpinner from './components/LoadingSpinner';
-import SearchResult from './components/SearchResult';
-import SearchBox from './components/SearchBox';
+import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
+import SearchResult from './components/SearchResult/SearchResult';
+import SearchBox from './components/SearchBox/SearchBox';
 import { SearchState, VideoTranscriptResult } from './types/video';
-import ResultsPlaceHolder from './components/ResultsPlaceHolder';
-import ErrorMessage from './components/ErrorMessage';
+import ResultsPlaceHolder from './components/ResultsPlaceHolder/ResultsPlaceHolder';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 
 function App() {
 
