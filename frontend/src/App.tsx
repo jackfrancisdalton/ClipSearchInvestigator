@@ -7,6 +7,7 @@ import SearchBox from './components/SearchBox/SearchBox';
 import { SearchState, VideoTranscriptResult } from './types/video';
 import ResultsPlaceHolder from './components/ResultsPlaceHolder/ResultsPlaceHolder';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import SideBar from './components/SideBar/SideBar';
 
 function App() {
 
@@ -56,14 +57,24 @@ function App() {
 
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
-      <div className="w-1/5 bg-background-700 p-6 fixed h-full border-r-4 border-r-primary-600 shadow-lg">
+      
+       {/* <div className="w-1/5 bg-background-700 p-6 fixed h-full border-r-4 border-r-primary-600 shadow-lg">
+         <SearchBox
+          loading={loading}
+          searchState={searchState}
+          setSearchState={(state) => setSearchState((prev) => ({ ...prev, ...state }))}
+          fetchVideoResults={fetchVideoResults}
+        />
+      </div> */}
+
+      <SideBar>
         <SearchBox
           loading={loading}
           searchState={searchState}
           setSearchState={(state) => setSearchState((prev) => ({ ...prev, ...state }))}
           fetchVideoResults={fetchVideoResults}
         />
-      </div>
+      </SideBar>
 
       <div className="ml-[20%] w-[80%] p-6 overflow-auto">
         {!loading && !error && results.length === 0 && (
