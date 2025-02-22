@@ -4,3 +4,5 @@ fastapi
 uvicorn
 requests
 cryptography
+SQLAlchemy
+psycopg2-binary
