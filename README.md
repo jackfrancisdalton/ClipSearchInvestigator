@@ -4,6 +4,13 @@ Ever find it annoying not being able to find "that video". This script aims to s
 
 # TODO:
 
+## While on holiday
+- Add scroll to the pop out nav, atm it scrolls the main nav
+- update the title and mini icon
+- add aria labels
+- add ability to store your key in an SQL database for the backend via a config page
+- improve the error message
+
 ## Add support for:
 - channel only searching https://developers.google.com/youtube/v3/docs/search/list
 - video length filtering
