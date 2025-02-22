@@ -5,8 +5,21 @@ from datetime import date
 from app.transcript_fetcher import generate_transcript_matches
 from app.video_fetcher import search_youtube
 from app.response_formatter import format_response
+from backend.app import password_encryptor
+from backend.app.schemas import ApiKeyRequest
 
 app = FastAPI()
+
+
+
+
+@app.post("/store_api_key")
+async def store_api_key(request: ApiKeyRequest):
+    encrypted_key = password_encryptor.encrypt(request.google_api_key.encode())
+
+    # TODO: add the ability to store the data here
+
+    return {"message": "API key received", "encrypted_key": encrypted_key.decode()}
 
 @app.get("/searchtrans")
 async def search(
