@@ -22,6 +22,8 @@ async def store_api_key(request: ApiKeyRequest):
 
     # TODO: add the ability to store the data here
     db = SessionLocal()
+
+    print("GIT 3")
     try:
         # Optionally, check if a record for this user already exists.
         existing = db.query(ApiKey).filter(ApiKey.encrypted_api_key == request.google_api_key).first()
@@ -32,6 +34,7 @@ async def store_api_key(request: ApiKeyRequest):
             db.add(new_record)
         db.commit()
     except Exception as e:
+        print("GIT 4", f"{e}")
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
     finally:
