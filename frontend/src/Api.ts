@@ -58,3 +58,20 @@ export const searchVideos = async ({
 
     return transformedResults;
 };
+
+
+export const setAndStoreApiKey = async ({ apiKey }: { apiKey: String }) => {
+    const response = await fetch('/api/store_api_key', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ google_api_key: apiKey }),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to store API key');
+    }
+
+    return await response.json();
+}

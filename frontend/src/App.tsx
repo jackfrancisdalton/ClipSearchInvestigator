@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './App.css';
-import { searchVideos } from './Api';
+import { searchVideos, setAndStoreApiKey } from './Api';
 import LoadingSpinner from './components/LoadingSpinner/LoadingSpinner';
 import SearchResult from './components/SearchResult/SearchResult';
 import SearchBox from './components/SearchBox/SearchBox';
@@ -55,6 +55,19 @@ function App() {
     }
   };
 
+  const postAPIKey = async ({ apiKey}: { apiKey: string }) => {
+    try {
+      const result = await setAndStoreApiKey({ apiKey })
+      console.log('result:', result)
+    }
+    catch (error: Error | any) {
+      console.log("Error:", error)
+    }
+    finally {
+      console.log('FINALLY')
+    }
+  } 
+
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
 
@@ -85,6 +98,11 @@ function App() {
             ))}
           </div>
         )}
+
+        <button
+          className="p-5 bg-background-500"
+          onClick={() => postAPIKey({ apiKey: "hello" })}
+        >TEST BUTTON</button>
       </div>
     </div>
   );

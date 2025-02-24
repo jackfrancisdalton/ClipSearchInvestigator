@@ -14,8 +14,6 @@ from app.database import SessionLocal  # Import your session factory
 app = FastAPI()
 
 
-
-
 @app.post("/store_api_key")
 async def store_api_key(request: ApiKeyRequest):
     encrypted_key = password_encryptor.encrypt(request.google_api_key.encode())
