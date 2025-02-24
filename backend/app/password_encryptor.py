@@ -8,4 +8,10 @@ if not FERNET_KEY:
     # In production, do NOT generate a new key on startup; set FERNET_KEY in your environment.
     FERNET_KEY = Fernet.generate_key()
 
-fernet = Fernet(FERNET_KEY)
+cipher_suite = Fernet(FERNET_KEY)
+
+def encrypt(data: bytes) -> bytes:
+    return cipher_suite.encrypt(data)
+
+def decrypt(data: bytes) -> bytes:
+    return cipher_suite.decrypt(data)

@@ -9,13 +9,15 @@ from app.response_formatter import format_response
 from app import password_encryptor
 from app.schemas import ApiKeyRequest
 from app.db_schema import ApiKey  # Import your ApiKey model
-from app.database import SessionLocal  # Import your session factory
+from app.database import DATABASE_URL, SessionLocal  # Import your session factory
 
 app = FastAPI()
 
 
 @app.post("/store_api_key")
 async def store_api_key(request: ApiKeyRequest):
+
+    print(DATABASE_URL)
     encrypted_key = password_encryptor.encrypt(request.google_api_key.encode())
 
     # TODO: add the ability to store the data here
