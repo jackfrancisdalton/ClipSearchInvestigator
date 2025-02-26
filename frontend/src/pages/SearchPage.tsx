@@ -1,13 +1,8 @@
 import { useState } from 'react';
 import './App.css';
 import { searchVideos, setAndStoreApiKey } from '../Api';
-import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
-import SearchResult from '../components/SearchResult/SearchResult';
-import SearchBox from '../components/SearchBox/SearchBox';
 import { SearchState, VideoTranscriptResult } from '../types/video';
-import ResultsPlaceHolder from '../components/ResultsPlaceHolder/ResultsPlaceHolder';
-import ErrorMessage from '../components/ErrorMessage/ErrorMessage';
-import SideBar from '../components/SideBar/SideBar';
+import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
 
 function SearchPage() {
   const [loading, setLoading] = useState(false);

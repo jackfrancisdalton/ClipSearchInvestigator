@@ -6,7 +6,6 @@ function App() {
   // TODO: Configure when it should go to either of the pages
   // TODO: Configure a smooth transition
 
-  
   return (
     <Router>
       <Routes>
