@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './App.css';
 import { searchVideos, setAndStoreApiKey } from '../Api';
 import { SearchState, VideoTranscriptResult } from '../types/video';
 import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
