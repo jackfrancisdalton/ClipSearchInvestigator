@@ -60,6 +60,21 @@ export const searchVideos = async ({
 };
 
 
+export const isApiKeySet = async (): Promise<{ isSet: boolean }> => {
+    const response = await fetch('/api/is_api_key_set', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to check if API key is set');
+    }
+
+    return await response.json();
+}
+
 export const setAndStoreApiKey = async ({ apiKey }: { apiKey: String }) => {
     const response = await fetch('/api/store_api_key', {
         method: 'POST',

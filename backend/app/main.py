@@ -14,6 +14,10 @@ from app.database import DATABASE_URL, SessionLocal  # Import your session facto
 app = FastAPI()
 
 
+@app.get("/is_api_key_set")
+async def is_api_key_set():
+    return { "isSet": False }
+
 @app.post("/store_api_key")
 async def store_api_key(request: ApiKeyRequest):
 

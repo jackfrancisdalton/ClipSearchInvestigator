@@ -1,14 +1,13 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 function SetUpPage() {
   const [apiKey, setApiKey] = useState('');
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleSubmit = () => {
     // Process the API key (e.g., call setAndStoreApiKey)
     // Then navigate to the main content
-    navigate('/home');
+    // navigate('/home');
   };
 
   return (
