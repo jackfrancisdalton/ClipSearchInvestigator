@@ -30,6 +30,12 @@ function App() {
     return <div>Loading...</div>;
   }
 
+  // TODO:
+  // - Wrap with <Suspense>
+  // - Wrap with <ErrorBoundary>
+  // - Wrap with <StrictMode>
+  // - 
+
   // Render SearchPage if setup is complete (true) or SetupPage if not (false)
   return isSetupComplete ? <SearchPage /> : <SetUpPage />;
 
