@@ -84,6 +84,7 @@ function SearchPage() {
 
         {loading && <LoadingSpinner />}
 
+        {/* // TODO create layout component that these can be a child of in order to make dynamic sizing work */}
         {!loading && results.length > 0 && (
           <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
             {results.map((result, index) => (
