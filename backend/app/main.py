@@ -16,7 +16,7 @@ app = FastAPI()
 
 @app.get("/is_api_key_set")
 async def is_api_key_set():
-    return { "isSet": False }
+    return { "isSet": True }
 
 @app.post("/store_api_key")
 async def store_api_key(request: ApiKeyRequest):

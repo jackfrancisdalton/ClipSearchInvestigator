@@ -1,1 +1,1 @@
-export { requireAuth } from './requireAuth'; 
+export { isAppConfigured } from './isAppConfigured'; 
