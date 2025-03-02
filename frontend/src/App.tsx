@@ -2,12 +2,37 @@ import SetUpPage from './pages/SetUpPage';
 import SearchPage from './pages/SearchPage';
 
 import './App.css';
-import { useEffect, useState } from 'react';
+import { StrictMode, Suspense, useEffect, useState } from 'react';
 import { isApiKeySet } from './Api';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { requireAuth } from './loaders';
+import RootLayout from './components/Layouts/RootLayout/RootLayout';
 
 function App() {
   // TODO: Configure when it should go to either of the pages
   // TODO: Configure a smooth transition
+
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <RootLayout />,
+      children: [
+        {
+          index: true,
+          element: true ? <SearchPage /> : <SetUpPage />
+        },
+        {
+          path: 'dashboard',
+          loader: requireAuth,
+          element: <SearchPage />
+        },
+        {
+          path: 'setup',
+          element: <SetUpPage />
+        }
+      ]
+    }
+  ]);
 
   const [isSetupComplete, setIsSetupComplete] = useState<boolean | null>(null);
 
@@ -37,8 +62,22 @@ function App() {
   // - set up so that search page is lazy loaded based on iff the API is actually returning a true value
 
   // Render SearchPage if setup is complete (true) or SetupPage if not (false)
-  return isSetupComplete ? <SearchPage /> : <SetUpPage />;
+  // const targetPage =  isSetupComplete ? <SearchPage /> : <SetUpPage />;
 
+
+  return (
+    <StrictMode>
+      <Suspense fallback={<div>Loading route...</div>}>
+        <RouterProvider router={router} />
+      </Suspense>
+    </StrictMode>
+  );
+  
+  // return (
+  //   <StrictMode>
+  //     {targetPage}
+  //   </StrictMode>
+  // )
   // return (
   //   <BrowserRouter>
   //     <Routes>

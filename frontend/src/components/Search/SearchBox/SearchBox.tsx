@@ -1,4 +1,4 @@
-import { SearchState } from "../../types/video";
+import { SearchState } from "../../../types/video";
 
 interface SearchBoxProps {
   searchState: SearchState;
