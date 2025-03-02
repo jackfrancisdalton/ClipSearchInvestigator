@@ -34,7 +34,7 @@ function App() {
   // - Wrap with <Suspense>
   // - Wrap with <ErrorBoundary>
   // - Wrap with <StrictMode>
-  // - 
+  // - set up so that search page is lazy loaded based on iff the API is actually returning a true value
 
   // Render SearchPage if setup is complete (true) or SetupPage if not (false)
   return isSetupComplete ? <SearchPage /> : <SetUpPage />;
