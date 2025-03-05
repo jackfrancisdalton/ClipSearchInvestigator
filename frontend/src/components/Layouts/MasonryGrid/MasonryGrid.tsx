@@ -10,7 +10,6 @@ const MasonryGrid: React.FC<MasonryGridProps> = ({ children, columns, gap = '1re
   return (
     <div style={{ columnCount: columns, columnGap: gap }}>
       {React.Children.map(children, child => (
-      // wrap each child so it won't break between columns
         <div className="break-inside-avoid mb-4">
           {child}
         </div>

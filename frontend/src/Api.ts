@@ -1,3 +1,4 @@
+import { AppConfigResponse, SetAPIKeyRequest } from "./types/ApiResponseTypes";
 import { VideoTranscriptResult,  } from "./types/video";
 
 type SearchVideosParams = {
@@ -60,7 +61,7 @@ export const searchVideos = async ({
 };
 
 
-export const isApiKeySet = async (): Promise<{ isSet: boolean }> => {
+export const isApiKeySet = async (): Promise<AppConfigResponse> => {
     const response = await fetch('/api/is_api_key_set', {
         method: 'GET',
         headers: {
@@ -75,7 +76,7 @@ export const isApiKeySet = async (): Promise<{ isSet: boolean }> => {
     return await response.json();
 }
 
-export const setAndStoreApiKey = async ({ apiKey }: { apiKey: String }) => {
+export const setAndStoreApiKey = async ({ apiKey }: SetAPIKeyRequest) => {
     const response = await fetch('/api/store_api_key', {
         method: 'POST',
         headers: {

@@ -3,15 +3,10 @@ Ever find it annoying not being able to find "that video". This script aims to s
 
 
 # TODO:
-
-## While on holiday
-- Add scroll to the pop out nav, atm it scrolls the main nav
-- update the title and mini icon in the tab
-- add aria labels
-- Fix the issue with the broken SQL storage of API key
--- improve ui and information on this
--- configure the page for managing this
-- improve the error message styling and content
+1. Clean up the SQL SCHema system so that it can 
+2. test out to verify that the setting and behaviour of api key works as intended
+2. add initial testing system for back end and frontned, but don't write any tests yet
+3. update the tab name and mini icon
 
 ## Add support for:
 - channel only searching https://developers.google.com/youtube/v3/docs/search/list
@@ -23,10 +18,7 @@ Ever find it annoying not being able to find "that video". This script aims to s
 - display full transcript in pop up on click 
 - searching but substring or exact match
 
-## Styling
-- Make the boxes line up in a way that fills the space instead of a fixed size
-
-# Content to display
+# More content that we should display at the top
 - list total number of video and quote results
 - list number of quotes per video result
 - add quote search filter
@@ -35,9 +27,3 @@ Ever find it annoying not being able to find "that video". This script aims to s
 - clean up default values/optionals
 - add relevant alerts for missing values
 - add standard error handling method for api/react integrations
-
-# Testing 
-- Add tests to all
-
-# Finally:
-- write up read me details and publish release

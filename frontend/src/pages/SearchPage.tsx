@@ -85,15 +85,6 @@ function SearchPage() {
 
         {loading && <LoadingSpinner />}
 
-        {/* // TODO create layout component that these can be a child of in order to make dynamic sizing work
-        {!loading && results.length > 0 && (
-          <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3">
-            {results.map((result, index) => (
-              <SearchResult key={index} result={result} />
-            ))}
-          </div>
-        )} */}
-
         {!loading && results.length > 0 && (
           <MasonryGrid columns={3}>
             {results.map((result, index) => (
@@ -103,10 +94,11 @@ function SearchPage() {
         )}
 
 
-        {/* <button
+        <button
           className="p-5 bg-background-500"
           onClick={() => postAPIKey({ apiKey: "hello" })}
-        >TEST BUTTON</button> */}
+        >TEST BUTTON</button>
+        
       </div>
     </div>
   );

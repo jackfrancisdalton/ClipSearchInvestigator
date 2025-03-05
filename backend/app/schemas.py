@@ -9,6 +9,5 @@ class TranscriptSearchRequest(BaseModel):
     videos: List[Video]
     search_terms: List[str]
 
-
 class ApiKeyRequest(BaseModel):
     google_api_key: str

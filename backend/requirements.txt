@@ -5,4 +5,6 @@ uvicorn
 requests
 cryptography
 SQLAlchemy
+alembic
+pydantic
 psycopg2-binary

@@ -30,7 +30,7 @@ function App() {
   // TODO:
   // - Wrap with <ErrorBoundary>
   // - set up so that search page is lazy loaded based on iff the API is actually returning a true value
-
+  // - replace suspense with an actual component for loading
   // TODO: Configure a smooth transition and proper loading rooute
 
   return (
