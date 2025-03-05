@@ -7,6 +7,12 @@ Ever find it annoying not being able to find "that video". This script aims to s
 2. test out to verify that the setting and behaviour of api key works as intended
 2. add initial testing system for back end and frontned, but don't write any tests yet
 3. update the tab name and mini icon
+4. add a top bar above the results that allows you to:
+-- sort bar by: date of video, number of total matches, number of matches matched (ie term 1,2,3) 
+-- total number of results found
+-- total number of matches found
+-- range of dates the videos are from
+
 
 ## Add support for:
 - channel only searching https://developers.google.com/youtube/v3/docs/search/list
