@@ -13,7 +13,6 @@ from app.database import DATABASE_URL, SessionLocal  # Import your session facto
 
 app = FastAPI()
 
-
 @app.get("/is_api_key_set")
 async def is_api_key_set():
     return { "isSet": True }
