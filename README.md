@@ -33,3 +33,9 @@ Ever find it annoying not being able to find "that video". This script aims to s
 - clean up default values/optionals
 - add relevant alerts for missing values
 - add standard error handling method for api/react integrations
+
+
+
+# Maintaining:
+## SQL
+`alembic revision --autogenerate -m "Updated models"` is run inside the container to generate new migrations when models change

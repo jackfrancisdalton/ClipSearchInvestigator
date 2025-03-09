@@ -9,6 +9,7 @@ from app.video_fetcher import search_youtube
 from app.utility.response_formatter import format_response
 from app import pydantic_schemas
 from app.data import models, database
+from app.utility import password_encryptor
 
 app = FastAPI()
 
@@ -23,7 +24,21 @@ def get_db():
 # Endpoint to post an API key (store it)
 @app.post("/store_api_key", response_model=pydantic_schemas.AppConfigResponse)
 def create_api_key(request: pydantic_schemas.AppConfigCreate, db: Session = Depends(get_db)):
+    # TODO: get rid of this and do the encryption on the frontend
+    encrypted_key = password_encryptor.encrypt(request.youtube_api_key.encode())
     return handle_db_operation(db, models.AppConfig(youtube_api_key=request.youtube_api_key))
+
+@app.get("/get_api_key", response_model=pydantic_schemas.AppConfigResponse)
+def get_api_key(db: Session = Depends(get_db)):
+    api_key = db.query(models.AppConfig).first()
+    if not api_key:
+        raise HTTPException(status_code=404, detail="API key not found")
+    return api_key
+
+@app.get("/is_appconfig_set", response_model=bool)
+def is_appconfig_set(db: Session = Depends(get_db)):
+    appconfig = db.query(models.AppConfig).first()
+    return appconfig is not None
 
 def handle_db_operation(db: Session, db_model):
     db.add(db_model)
@@ -34,16 +49,6 @@ def handle_db_operation(db: Session, db_model):
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
     return db_model
-
-
-
-# # Endpoint to retrieve an API key by id
-# @app.get("/api_keys/{api_key_id}", response_model=schemas.ApiKeyResponse)
-# def read_api_key(api_key_id: int, db: Session = Depends(get_db)):
-#     db_key = db.query(models.ApiKey).filter(models.ApiKey.id == api_key_id).first()
-#     if db_key is None:
-#         raise HTTPException(status_code=404, detail="API key not found")
-#     return db_key
 
 @app.get("/is_api_key_set")
 async def is_api_key_set():
