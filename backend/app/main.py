@@ -4,15 +4,11 @@ from datetime import date
 
 from sqlalchemy.orm import Session
 
-
 from app.transcript_fetcher import generate_transcript_matches
 from app.video_fetcher import search_youtube
-from app.response_formatter import format_response
-from app import password_encryptor
-from app.schemas import ApiKeyRequest
-from app.database import DATABASE_URL, SessionLocal
-from backend.app import database, models
-from backend.app import schemas  # Import your session factory
+from app.utility.response_formatter import format_response
+from app import pydantic_schemas
+from app.data import models, database
 
 app = FastAPI()
 
@@ -25,19 +21,20 @@ def get_db():
         db.close()
 
 # Endpoint to post an API key (store it)
-@app.post("/api_keys", response_model=schemas.ApiKeyResponse)
-def create_api_key(api_key_data: schemas.ApiKeyCreate, db: Session = Depends(get_db)):
-    db_key = models.ApiKey(api_key=api_key_data.api_key)
-    db.add(db_key)
+@app.post("/store_api_key", response_model=pydantic_schemas.AppConfigResponse)
+def create_api_key(request: pydantic_schemas.AppConfigCreate, db: Session = Depends(get_db)):
+    return handle_db_operation(db, models.AppConfig(youtube_api_key=request.youtube_api_key))
 
+def handle_db_operation(db: Session, db_model):
+    db.add(db_model)
     try:
         db.commit()
-        db.refresh(db_key)
+        db.refresh(db_model)
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
-    
-    return db_key
+    return db_model
+
 
 
 # # Endpoint to retrieve an API key by id

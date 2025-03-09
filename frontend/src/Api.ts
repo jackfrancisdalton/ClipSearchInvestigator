@@ -82,7 +82,7 @@ export const setAndStoreApiKey = async ({ apiKey }: SetAPIKeyRequest) => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ google_api_key: apiKey }),
+        body: JSON.stringify({ youtube_api_key: apiKey }),
     });
 
     if (!response.ok) {
