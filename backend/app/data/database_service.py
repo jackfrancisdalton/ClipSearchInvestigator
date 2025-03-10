@@ -8,6 +8,7 @@ def store_model_in_db(db: Session, db_model):
         db.commit()
         db.refresh(db_model)
     except Exception as e:
+        print(f'error: {e}')
         db.rollback()
         raise Exception(status_code=500, detail=f"Database error: {e}")
     return db_model

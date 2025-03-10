@@ -2,7 +2,7 @@ import { redirect } from "react-router-dom";
 import { isApiKeySet } from "../Api";
 
 export async function isAppConfigured() {
-  const auth = Boolean((await isApiKeySet()).isSet)
+  const auth = Boolean((await isApiKeySet()))
   
   if (!auth) {
     return redirect("/setup");

@@ -29,14 +29,14 @@ def create_api_key(
 ):
     try:
         encrypted_key = password_encryptor.encrypt(request.api_key.encode())
-        new_api_key = models.YoutubeSearchApiKey(api_key=encrypted_key)        
+        new_api_key = models.YoutubeSearchApiKey(api_key=encrypted_key)
         store_model_in_db(db, new_api_key)    
         return {"message": "API key stored successfully"}
     
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Failed to store API key:"
+            detail=f"Failed to store API key: {e}"
         )
 
 @app.get(
@@ -46,7 +46,6 @@ def create_api_key(
 def is_api_key_set(db: Session = Depends(get_db)):
     appconfig = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
     return appconfig is not None
-    return True
 
 @app.get("/searchtrans")
 async def search(
