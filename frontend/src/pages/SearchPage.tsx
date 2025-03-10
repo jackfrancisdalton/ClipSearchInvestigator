@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { searchVideos, setAndStoreApiKey } from '../Api';
+import { searchVideos } from '../Api';
 import { SearchState, VideoTranscriptResult } from '../types/video';
 import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
 import MasonryGrid from '../components/Layouts/MasonryGrid/MasonryGrid';
@@ -49,19 +49,6 @@ function SearchPage() {
     }
   };
 
-  const postAPIKey = async ({ apiKey}: { apiKey: string }) => {
-    try {
-      const result = await setAndStoreApiKey({ apiKey })
-      console.log('result:', result)
-    }
-    catch (error: Error | any) {
-      console.log("Error:", error)
-    }
-    finally {
-      console.log('FINALLY')
-    }
-  } 
-
   return (
     <div className="min-h-screen bg-background-700 text-white flex">
 
@@ -92,13 +79,6 @@ function SearchPage() {
             ))}
           </MasonryGrid>
         )}
-
-
-        <button
-          className="p-5 bg-background-500"
-          onClick={() => postAPIKey({ apiKey: "hello" })}
-        >TEST BUTTON</button>
-        
       </div>
     </div>
   );

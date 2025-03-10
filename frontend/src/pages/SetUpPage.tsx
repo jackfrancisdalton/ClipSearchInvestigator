@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { useState } from 'react';
 import { setAndStoreApiKey } from '../Api';
 
 function SetUpPage() {
