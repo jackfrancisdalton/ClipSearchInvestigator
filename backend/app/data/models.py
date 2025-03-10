@@ -1,8 +1,12 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from app.data.database import Base
+from sqlalchemy import DateTime
+from datetime import datetime
 
-class AppConfig(Base):
-    __tablename__ = "app_configs"  # This name is used by Alembic migrations
+class YoutubeSearchApiKey(Base):
+    __tablename__ = "youtube_search_api_keys"
 
     id = Column(Integer, primary_key=True, index=True)
-    youtube_api_key = Column(String, unique=True, index=True, nullable=False)
+    api_key = Column(String, unique=True, index=True, nullable=False)
+    date_created = Column(DateTime, default=lambda: datetime.now(datetime.timezone.utc), index=True, nullable=False)
+    is_active = Column(Boolean, index=True, nullable=False)

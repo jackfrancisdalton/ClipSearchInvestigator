@@ -1,15 +1,24 @@
+from datetime import datetime
 from pydantic import BaseModel
 
-# Base schema with common fields
-class AppConfig(BaseModel):
-    youtube_api_key: str
+# ------ Shared Models ------
+class YoutubeSearchApiKeyBase(BaseModel):
+    api_key: str
 
-# Schema for requests (e.g., when posting a new API key)
-class AppConfigCreate(AppConfig):
+# ------ Child Models -------
+class YoutubeSearchApiKeyCreate(YoutubeSearchApiKeyBase):
     pass
 
-class AppConfigResponse(AppConfig):
-    id: int
+# ---- Leaving in place for debugging purposes if required
+# class YoutubeSearchApiKeyRead(YoutubeSearchApiKeyBase):
+#     id: int
+#     date_created: datetime
+#     is_active: bool
 
-    class Config:
-        from_attributes = True
+#     class Config:
+#         from_attributes = True
+
+
+
+class YoutubeSearchApiKeyUpdate(BaseModel):
+    is_active: bool

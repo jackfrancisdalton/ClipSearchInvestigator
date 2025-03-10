@@ -1,15 +1,20 @@
+# Library imports
 from typing import Optional
-from fastapi import Depends, FastAPI, HTTPException, Query
+from fastapi import Depends, FastAPI, HTTPException, Query, status
 from datetime import date
-
 from sqlalchemy.orm import Session
 
+# App imports
 from app.transcript_fetcher import generate_transcript_matches
 from app.video_fetcher import search_youtube
 from app.utility.response_formatter import format_response
-from app import pydantic_schemas
 from app.data import models, database
 from app.utility import password_encryptor
+
+# Pydantic imports
+from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
+from app.pydantic_schemas.shared import MessageResponse
+
 
 app = FastAPI()
 
@@ -21,25 +26,36 @@ def get_db():
     finally:
         db.close()
 
-# Endpoint to post an API key (store it)
-@app.post("/store_api_key", response_model=pydantic_schemas.AppConfigResponse)
-def create_api_key(request: pydantic_schemas.AppConfigCreate, db: Session = Depends(get_db)):
-    # TODO: get rid of this and do the encryption on the frontend
-    encrypted_key = password_encryptor.encrypt(request.youtube_api_key.encode())
-    return handle_db_operation(db, models.AppConfig(youtube_api_key=request.youtube_api_key))
+@app.post(
+    "/store_api_key",
+    response_model=MessageResponse,
+    status_code=status.HTTP_200_OK
+)
+def create_api_key(
+    request: YoutubeSearchApiKeyCreate, 
+    db: Session = Depends(get_db)
+):
+    try:
+        encrypted_key = password_encryptor.encrypt(request.api_key.encode())
+        new_api_key = models.YoutubeSearchApiKey(api_key=encrypted_key)        
+        handle_db_operation(db, new_api_key)    
+        return {"message": "API key stored successfully"}
+    
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Failed to store API key:"
+        )
 
-@app.get("/get_api_key", response_model=pydantic_schemas.AppConfigResponse)
-def get_api_key(db: Session = Depends(get_db)):
-    api_key = db.query(models.AppConfig).first()
-    if not api_key:
-        raise HTTPException(status_code=404, detail="API key not found")
-    return api_key
-
-@app.get("/is_appconfig_set", response_model=bool)
+@app.get(
+    "/is_youtube_api_key_set", 
+    response_model=bool
+)
 def is_appconfig_set(db: Session = Depends(get_db)):
-    appconfig = db.query(models.AppConfig).first()
+    appconfig = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
     return appconfig is not None
 
+# TODO: move into a utility file and rename to store model
 def handle_db_operation(db: Session, db_model):
     db.add(db_model)
     try:
@@ -49,38 +65,6 @@ def handle_db_operation(db: Session, db_model):
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Database error: {e}")
     return db_model
-
-@app.get("/is_api_key_set")
-async def is_api_key_set():
-    return { "isSet": True }
-
-# @app.post("/store_api_key")
-# async def store_api_key(request: ApiKeyRequest):
-
-#     print(DATABASE_URL)
-#     encrypted_key = password_encryptor.encrypt(request.google_api_key.encode())
-
-#     # TODO: add the ability to store the data here
-#     db = SessionLocal()
-
-#     print("GIT 3")
-#     try:
-#         # Optionally, check if a record for this user already exists.
-#         existing = db.query(ApiKey).filter(ApiKey.encrypted_api_key == request.google_api_key).first()
-#         if existing:
-#             existing.encrypted_api_key = encrypted_key.decode()
-#         else:
-#             new_record = ApiKey(encrypted_api_key=encrypted_key.decode())
-#             db.add(new_record)
-#         db.commit()
-#     except Exception as e:
-#         print("GIT 4", f"{e}")
-#         db.rollback()
-#         raise HTTPException(status_code=500, detail=f"Database error: {e}")
-#     finally:
-#         db.close()
-
-#     return {"message": "API key received", "encrypted_key": encrypted_key.decode()}
 
 @app.get("/searchtrans")
 async def search(
