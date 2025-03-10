@@ -39,3 +39,11 @@ Ever find it annoying not being able to find "that video". This script aims to s
 # Maintaining:
 ## SQL
 `alembic revision --autogenerate -m "Updated models"` is run inside the container to generate new migrations when models change
+
+docker compose exec to database then run: 
+
+psql -U youtubeSearchUser YoutubeSearchDb: to connect to pql client 
+\dt: to list tables
+SELECT * FROM mytable; : to select all keys
+TRUNCATE table_name; : to drop all records
+
