@@ -8,23 +8,15 @@ from sqlalchemy.orm import Session
 from app.transcript_fetcher import generate_transcript_matches
 from app.video_fetcher import search_youtube
 from app.utility.response_formatter import format_response
-from app.data import models, database
+from app.data import models
 from app.utility import password_encryptor
+from app.data.database_service import get_db, store_model_in_db
 
 # Pydantic imports
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
 from app.pydantic_schemas.shared import MessageResponse
 
-
 app = FastAPI()
-
-# Dependency to get a database session per request
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.post(
     "/store_api_key",
@@ -38,7 +30,7 @@ def create_api_key(
     try:
         encrypted_key = password_encryptor.encrypt(request.api_key.encode())
         new_api_key = models.YoutubeSearchApiKey(api_key=encrypted_key)        
-        handle_db_operation(db, new_api_key)    
+        store_model_in_db(db, new_api_key)    
         return {"message": "API key stored successfully"}
     
     except Exception as e:
@@ -48,23 +40,13 @@ def create_api_key(
         )
 
 @app.get(
-    "/is_youtube_api_key_set", 
+    "/is_api_key_set", 
     response_model=bool
 )
-def is_appconfig_set(db: Session = Depends(get_db)):
+def is_api_key_set(db: Session = Depends(get_db)):
     appconfig = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
     return appconfig is not None
-
-# TODO: move into a utility file and rename to store model
-def handle_db_operation(db: Session, db_model):
-    db.add(db_model)
-    try:
-        db.commit()
-        db.refresh(db_model)
-    except Exception as e:
-        db.rollback()
-        raise HTTPException(status_code=500, detail=f"Database error: {e}")
-    return db_model
+    return True
 
 @app.get("/searchtrans")
 async def search(
