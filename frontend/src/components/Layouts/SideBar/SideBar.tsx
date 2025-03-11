@@ -15,7 +15,7 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
       {/* Toggle button (only visible on mobile) */}
       <button
         onClick={toggleSidebar}
-        className="testClass fixed top-4 left-4 z-50 md:hidden p-2 bg-primary-600 text-white rounded"
+        className="fixed z-50 p-2 text-white rounded testClass top-4 left-4 md:hidden bg-primary-600"
       >
         {isOpen ? 'Close' : 'Menu'}
       </button>
@@ -23,11 +23,11 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
       {/* Sidebar container */}
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-background-700 shadow-lg z-50 transform transition-transform duration-300 
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 border-r-4 border-primary-600`}
       >
         <div className="p-4">
           {/* Optional close button inside sidebar for mobile */}
-          <div className="md:hidden mb-4">
+          <div className="mb-4 md:hidden">
             <button onClick={toggleSidebar} className="text-white">
               Close
             </button>
