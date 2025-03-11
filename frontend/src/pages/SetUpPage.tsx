@@ -23,23 +23,23 @@ function SetUpPage() {
 
   return (
     <form 
-      className="w-full flex flex-col items-center justify-center min-h-screen bg-background-700 text-white p-4"
+      className="flex flex-col items-center justify-center w-full min-h-screen p-4 text-white bg-background-700"
       onSubmit={handleSubmit}
     >
-      <h1 className="text-3xl mb-4">To get started, enter your YouTube API key here</h1>
+      <h1 className="mb-4 text-3xl">To get started, enter your YouTube API key here</h1>
       <input
         type="text"
         value={apiKey}
         onChange={(e) => setApiKey(e.target.value)}
         placeholder="Enter API Key"
-        className="p-2 text-black w-full max-w-md"
+        className="w-full max-w-md p-2 text-black"
       />
       {/* TODO: add loading conditions */}
       {/* TODO: add error message */}
-      <button className="mt-4 p-2 bg-blue-500 w-full max-w-md" onClick={handleSubmit}>
+      <button className="w-full max-w-md p-2 mt-4 bg-blue-500" onClick={handleSubmit}>
         Submit
       </button>
-      <div className="mt-4 p-4 bg-gray-800 w-full max-w-md text-sm">
+      <div className="w-full max-w-md p-4 mt-4 text-sm bg-gray-800">
         <p>You can find your YouTube API key in the Google Developer Console.</p>
         <p>
           Follow this <a href="https://developers.google.com/youtube/registering_an_application" className="text-blue-400">guide</a> to get your API key.

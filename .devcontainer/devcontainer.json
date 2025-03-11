@@ -27,5 +27,17 @@
         "context": "."
     },
     "remoteUser": "vscode",
-    "forwardPorts": []
+    "forwardPorts": [],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.vscode-pylance",
+                "ms-python.debugpy",
+                "bradlc.vscode-tailwindcss",
+                "heybourn.headwind",
+                "dsznajder.es7-react-js-snippets",
+                "redhat.vscode-yaml"
+            ]
+        }
+    }
 }

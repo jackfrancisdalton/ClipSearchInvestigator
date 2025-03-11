@@ -21,6 +21,8 @@ async def fetch_video_transcript_matches(video, search_terms):
                     "duration": entry["duration"],
                     "text": entry["text"]
                 })
+
+        print("matching_entries", matching_entries)
                 
         if matching_entries:
             return {
@@ -39,6 +41,7 @@ async def fetch_video_transcript_matches(video, search_terms):
 
 async def generate_transcript_matches(videos, search_terms):
     tasks = [fetch_video_transcript_matches(video, search_terms) for video in videos]
+
     processed_results = await asyncio.gather(*tasks)
 
     results = [result for result in processed_results if result]
