@@ -10,43 +10,66 @@ function SetUpPage() {
     e.preventDefault();
     setLoading(true);
     setErrorMessage(null);
+    setErrorMessage(`Error: message}`);
 
     try {
-      const res = await setAndStoreApiKey({ apiKey });
-      // TODO: show success then after timeout go to home page
-    } catch (err) {
-      setErrorMessage("error message");
+      await setAndStoreApiKey({ apiKey });
+      setErrorMessage(null);
+    } catch (err: Error | any) {
+      setErrorMessage(`Error: ${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
+  const renderForm = () => (
     <form 
-      className="flex flex-col items-center justify-center w-full min-h-screen p-4 text-white bg-background-700"
+      className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md"
       onSubmit={handleSubmit}
     >
-      <h1 className="mb-4 text-3xl">To get started, enter your YouTube API key here</h1>
+      <h1 className="mb-6 text-2xl font-bold text-center text-primary-500">Welcome to Youtube search, please complete your set up</h1>
+      <label htmlFor="apiKey" className="block mb-2 text-sm font-medium text-white-100">YouTube API Key</label>
       <input
+        id="apiKey"
         type="text"
         value={apiKey}
         onChange={(e) => setApiKey(e.target.value)}
-        placeholder="Enter API Key"
-        className="w-full max-w-md p-2 text-black"
+        placeholder="API Key"
+        className="w-full p-2 mb-4 text-black rounded outline-none"
+        aria-label="Paste your API Key here"
       />
-      {/* TODO: add loading conditions */}
-      {/* TODO: add error message */}
-      <button className="w-full max-w-md p-2 mt-4 bg-blue-500" onClick={handleSubmit}>
-        Submit
+      {errorMessage && (
+        <div className="w-full p-2 mb-4 bg-red-500 rounded text-white-100">
+          {errorMessage}
+        </div>
+      )}
+      <button 
+        type="submit"
+        className="w-full p-2 mb-4 text-white rounded bg-primary-500 hover:bg-primary-600"
+        aria-label="Complete Set Up"
+      >
+        Complete Set Up
       </button>
-      <div className="w-full max-w-md p-4 mt-4 text-sm bg-gray-800">
-        <p>You can find your YouTube API key in the Google Developer Console.</p>
+      <div className="text-sm text-gray-400">
         <p>
-          Follow this <a href="https://developers.google.com/youtube/registering_an_application" className="text-blue-400">guide</a> to get your API key.
+          You can find your YouTube API key in the Google Developer Console. Follow this <a href="https://developers.google.com/youtube/registering_an_application" className="text-primary-400">guide</a> to get your API key.
         </p>
-        <p>Note: There are limits on the number of requests you can make with the API key. Please refer to the <a href="https://developers.google.com/youtube/v3/getting-started#quota" className="text-blue-400">quota limits</a> for more information.</p>
+        <br />
+        <p>Note: There are limits on the number of requests you can make with the API key. Please refer to the <a href="https://developers.google.com/youtube/v3/getting-started#quota" className="text-primary-400">quota limits</a> for more information.</p>
       </div>
     </form>
+  );
+
+  const renderLoading = () => (
+    <div className="flex items-center justify-center min-h-screen p-4 bg-background-700">
+      <div className="w-16 h-16 border-4 border-t-4 border-gray-200 rounded-full border-t-primary-500 animate-spin"></div>
+    </div>
+  );
+
+  return (
+    <div className="flex items-center justify-center min-h-screen p-4 bg-background-700">
+      {loading ? renderLoading() : renderForm()}
+    </div>
   );
 }
 

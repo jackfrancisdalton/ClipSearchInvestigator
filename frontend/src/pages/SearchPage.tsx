@@ -50,7 +50,7 @@ function SearchPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background-700 text-white flex">
+    <div className="flex min-h-screen text-white bg-background-700">
 
       <SideBar>
         <SearchBox
