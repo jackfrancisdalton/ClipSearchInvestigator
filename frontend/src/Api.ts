@@ -37,7 +37,7 @@ export const searchVideos = async ({
         params.append("channelName", channelName);
 
 
-    const response = await fetch(`${API_BASE}searchtrans?${params.toString()}`);
+    const response = await fetch(`${API_BASE}search-transcripts?${params.toString()}`);
 
     if (!response.ok) {
         const errorData: ApiErrorResponse = await response.json();

@@ -5,9 +5,8 @@ from sqlalchemy.orm import Session
 from datetime import date
 
 # App imports
-from app.transcript_fetcher import generate_transcript_matches
+from app.transcript_fetcher import fetch_transcript_matches
 from app.video_fetcher import search_youtube
-from app.utility.response_formatter import format_response
 from app.data import models
 from app.utility import password_encryptor
 from app.data.database_service import get_db, store_model_in_db
@@ -29,12 +28,12 @@ def create_api_key(
     db: Session = Depends(get_db)
 ):
     try:
-        new_api_key = models.YoutubeSearchApiKey(
+        encrypted_api_key = models.YoutubeSearchApiKey(
             api_key=password_encryptor.encrypt(request.api_key.encode())
         )
-        store_model_in_db(db, new_api_key)    
+        store_model_in_db(db, encrypted_api_key)    
         return ActionResultResponse(success=True, message="API key stored successfully")
-    
+
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -76,7 +75,7 @@ def delete_all_api_keys(db: Session = Depends(get_db)):
         )
 
 @app.get(    
-    "/searchtrans",
+    "/search-transcripts",
     response_model=SearchResponse,
     status_code=status.HTTP_200_OK
 )
@@ -104,7 +103,7 @@ async def search(
             detail="No videos found."
         )
     
-    transcriptResults = await generate_transcript_matches(videos, terms)
+    transcriptResults = await fetch_transcript_matches(videos, terms)
 
     if not transcriptResults:
         raise HTTPException(
@@ -112,4 +111,4 @@ async def search(
             detail="No transcripts found."
         )
 
-    return format_response(transcriptResults)
+    return SearchResponse(results=transcriptResults)
