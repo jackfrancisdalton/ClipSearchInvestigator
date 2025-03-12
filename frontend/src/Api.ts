@@ -2,7 +2,7 @@ import { ActionResultResponse, ApiErrorResponse, isAppConfiguredResponse, SetAPI
 
 const API_BASE = '/api/'
 
-type SearchVideosParams = {
+type TranscriptSearchParams = {
     videoSearchQuery: string;
     matchTerms: string[];
     sortOrder?: string;
@@ -12,7 +12,7 @@ type SearchVideosParams = {
     maxResults?: number;
 };
 
-export const searchVideos = async ({
+export const searchForTermsInTranscripts = async ({
     videoSearchQuery, 
     matchTerms, 
     sortOrder = "relevance", 
@@ -20,7 +20,7 @@ export const searchVideos = async ({
     publishedAfter,
     channelName, 
     maxResults = 10
-}: SearchVideosParams): Promise<VideoTranscriptResult[]> => {
+}: TranscriptSearchParams): Promise<VideoTranscriptResult[]> => {
 
     const params = new URLSearchParams();
 

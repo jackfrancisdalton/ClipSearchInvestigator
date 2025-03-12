@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { deleteAllApiKeys, searchVideos } from '../Api';
+import { deleteAllApiKeys, searchForTermsInTranscripts } from '../Api';
 import { SearchState, VideoTranscriptResult } from '../types/video';
 import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
 import MasonryGrid from '../components/Layouts/MasonryGrid/MasonryGrid';
@@ -30,7 +30,7 @@ function SearchPage() {
     setLoading(true);
 
     try {
-      const result = await searchVideos({
+      const result = await searchForTermsInTranscripts({
         videoSearchQuery,
         matchTerms,
         sortOrder,
