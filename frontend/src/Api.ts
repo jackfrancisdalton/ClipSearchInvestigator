@@ -49,7 +49,7 @@ export const searchForTermsInTranscripts = async ({
 };
 
 
-export const isApiKeySet = async (): Promise<isAppConfiguredResponse> => {
+export const isAppConfigured = async (): Promise<isAppConfiguredResponse> => {
     const response = await fetch(
         `${API_BASE}is_app_configured`, {
             method: 'GET',

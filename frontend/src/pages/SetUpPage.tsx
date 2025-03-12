@@ -1,20 +1,25 @@
 import { useState } from 'react';
 import { saveApiKey } from '../Api';
+import { useNavigate } from 'react-router-dom';
 
 function SetUpPage() {
   const [apiKey, setApiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setErrorMessage(null);
-    setErrorMessage(`Error: message}`);
 
     try {
       await saveApiKey({ apiKey });
-      setErrorMessage(null);
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 2000); // Navigate to the home page after 2 seconds
     } catch (err: Error | any) {
       setErrorMessage(`Error: ${err.message}`);
     } finally {
@@ -23,10 +28,7 @@ function SetUpPage() {
   };
 
   const renderForm = () => (
-    <form 
-      className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md"
-      onSubmit={handleSubmit}
-    >
+    <form onSubmit={handleSubmit}>
       <h1 className="mb-6 text-2xl font-bold text-center text-primary-500">Welcome to Youtube search, please complete your set up</h1>
       <label htmlFor="apiKey" className="block mb-2 text-sm font-medium text-white-100">YouTube API Key</label>
       <input
@@ -61,14 +63,29 @@ function SetUpPage() {
   );
 
   const renderLoading = () => (
-    <div className="flex items-center justify-center min-h-screen p-4 bg-background-700">
+    <div className="flex items-center justify-center min-h-[50vh]">
       <div className="w-16 h-16 border-4 border-t-4 border-gray-200 rounded-full border-t-primary-500 animate-spin"></div>
+    </div>
+  );
+
+  const renderSuccess = () => (
+    <div className="flex items-center justify-center min-h-[50vh]">
+      <div className="text-center">
+        <div className="w-16 h-16 mb-4 text-green-500">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-full h-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M20 6L9 17l-5-5" />
+          </svg>
+        </div>
+        <p className="text-white-100">Setup Complete! Redirecting...</p>
+      </div>
     </div>
   );
 
   return (
     <div className="flex items-center justify-center min-h-screen p-4 bg-background-700">
-      {loading ? renderLoading() : renderForm()}
+      <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
+        {loading ? renderLoading() : success ? renderSuccess() : renderForm()}
+      </div>
     </div>
   );
 }

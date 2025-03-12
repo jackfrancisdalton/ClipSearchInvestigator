@@ -5,8 +5,9 @@ import './App.css';
 
 import { StrictMode, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { isAppConfigured } from './loaders';
 import RootLayout from './components/Layouts/RootLayout/RootLayout';
+import { redirectIfNotConfigured } from './loaders/redirectIfNotConfigured';
+import { redirectIfAlreadyConfigured } from './loaders/redirectIfAlreadyConfigured';
 
 function App() {
   const router = createBrowserRouter([
@@ -16,11 +17,12 @@ function App() {
       children: [
         {
           index: true,
-          loader: isAppConfigured,
+          loader: redirectIfNotConfigured,
           element: <SearchPage />
         },
         {
           path: 'setup',
+          loader: redirectIfAlreadyConfigured,
           element: <SetUpPage />
         }
       ]
