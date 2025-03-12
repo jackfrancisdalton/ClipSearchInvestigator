@@ -21,10 +21,10 @@ export type VideoTranscriptResult = {
 }
 
 export interface SearchState {
-    searchQuery: string;
-    numVideos: number;
-    searchTerms: string[];
-    order: string;
+    videoSearchQuery: string;
+    maxResults: number;
+    matchTerms: string[];
+    sortOrder: string;
     publishedAfter: string;
     publishedBefore: string;
     channelName: string;

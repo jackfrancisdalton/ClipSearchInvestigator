@@ -9,19 +9,19 @@ function SearchPage() {
   const [results, setResults] = useState<VideoTranscriptResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [searchState, setSearchState] = useState<SearchState>({
-    searchQuery: '',
-    numVideos: 10,
-    searchTerms: [''],
-    order: 'relevance',
+    videoSearchQuery: '',
+    maxResults: 10,
+    matchTerms: [''],
+    sortOrder: 'relevance',
     publishedAfter: '',
     publishedBefore: '',
     channelName: '',
   });
 
   const fetchVideoResults = async () => {
-    const { searchQuery, searchTerms, order, publishedBefore, publishedAfter, numVideos, channelName } = searchState;
+    const { videoSearchQuery, matchTerms, sortOrder, publishedBefore, publishedAfter, maxResults, channelName } = searchState;
 
-    if (!searchQuery || searchTerms.length === 0) {
+    if (!videoSearchQuery || matchTerms.length === 0) {
       alert('Please fill out both the search query and search terms.');
       return;
     }
@@ -31,12 +31,12 @@ function SearchPage() {
 
     try {
       const result = await searchVideos({
-        searchQuery,
-        searchTerms,
-        order,
+        videoSearchQuery,
+        matchTerms,
+        sortOrder,
         publishedBefore,
         publishedAfter,
-        numVideos,
+        maxResults,
         channelName
       });
       
@@ -76,7 +76,7 @@ function SearchPage() {
 
         {loading && <LoadingSpinner />}
 
-        <button onClick={onDeleteApiKeys}>Delete All API Keys</button>
+        <button className="text-white-50" onClick={onDeleteApiKeys}>Delete All API Keys</button>
 
         {!loading && results.length > 0 && (
           <MasonryGrid columns={3}>

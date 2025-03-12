@@ -28,7 +28,7 @@ async def fetch_video_transcript_matches(video: Dict[str, Any], search_terms: Li
                 
         if matching_entries:
             return TranscriptResult(
-                videoTitle=video["title"],
+                videoTitle=video["videoTitle"],
                 description=video["description"],
                 channelTitle=video["channelTitle"],
                 publishedAt=video["publishedAt"],

@@ -80,17 +80,17 @@ def delete_all_api_keys(db: Session = Depends(get_db)):
     status_code=status.HTTP_200_OK
 )
 async def search(
-    query: str = Query(...), 
-    terms: list[str] = Query(...), 
-    order: str = Query(...),
+    video_search_query: str = Query(..., alias="videoSearchQuery"), 
+    match_terms: list[str] = Query(..., alias="matchTerms"), 
+    sort_order: str = Query(..., alias="sortOrder"),
     published_before: Optional[date] = Query(None, alias="publishedBefore"),
     published_after: Optional[date] = Query(None, alias="publishedAfter"),
     channel_name: Optional[str] = Query(None, alias="channelName"),
     max_results: int = Query(10, alias="maxResults")
 ):
     videos = search_youtube(
-        query, 
-        order, 
+        video_search_query, 
+        sort_order, 
         published_before, 
         published_after,
         channel_name,
@@ -103,7 +103,7 @@ async def search(
             detail="No videos found."
         )
     
-    transcriptResults = await fetch_transcript_matches(videos, terms)
+    transcriptResults = await fetch_transcript_matches(videos, match_terms)
 
     if not transcriptResults:
         raise HTTPException(

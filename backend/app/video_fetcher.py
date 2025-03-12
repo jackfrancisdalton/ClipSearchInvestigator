@@ -11,8 +11,8 @@ load_dotenv(dotenv_path=dotenv_path)
 API_KEY = os.getenv('API_KEY')
 
 def search_youtube(
-    query, 
-    order, 
+    video_search_query, 
+    sort_order, 
     published_before,
     published_after,
     channel_name,
@@ -22,11 +22,11 @@ def search_youtube(
 
     params = {
         "part": "snippet",
-        "q": query,
+        "q": video_search_query,
         "type": "video",
         "maxResults": max_results,
         "safeSearch": "none",
-        "order": order,
+        "order": sort_order,
         "key": API_KEY,
     }
 

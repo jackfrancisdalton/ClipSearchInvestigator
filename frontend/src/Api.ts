@@ -3,30 +3,30 @@ import { ActionResultResponse, ApiErrorResponse, isAppConfiguredResponse, SetAPI
 const API_BASE = '/api/'
 
 type SearchVideosParams = {
-    searchQuery: string;
-    searchTerms: string[];
-    order?: string;
+    videoSearchQuery: string;
+    matchTerms: string[];
+    sortOrder?: string;
     publishedBefore?: string;
     publishedAfter?: string;
     channelName?: string;
-    numVideos?: number;
+    maxResults?: number;
 };
 
 export const searchVideos = async ({
-    searchQuery, 
-    searchTerms: terms, 
-    order = "relevance", 
+    videoSearchQuery, 
+    matchTerms, 
+    sortOrder = "relevance", 
     publishedBefore, 
     publishedAfter,
     channelName, 
-    numVideos: maxResults = 10
+    maxResults = 10
 }: SearchVideosParams): Promise<VideoTranscriptResult[]> => {
 
     const params = new URLSearchParams();
 
-    params.append("query", searchQuery);
-    terms.forEach((term) => params.append("terms", term));
-    params.append("order", order);
+    params.append("videoSearchQuery", videoSearchQuery);
+    matchTerms.forEach((term) => params.append("matchTerms", term));
+    params.append("sortOrder", sortOrder);
     params.append("maxResults", maxResults.toString());
 
     if (publishedBefore) 
