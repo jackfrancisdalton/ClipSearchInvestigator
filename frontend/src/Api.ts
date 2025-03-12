@@ -1,5 +1,4 @@
-import { ActionResultResponse, isAppConfiguredResponse, SetAPIKeyRequest } from "./types/ApiResponseTypes";
-import { VideoTranscriptResult,  } from "./types/video";
+import { ActionResultResponse, isAppConfiguredResponse, SetAPIKeyRequest, VideoTranscriptResult } from "./types";
 
 const API_BASE = '/api/'
 
@@ -30,9 +29,12 @@ export const searchVideos = async ({
     params.append("order", order);
     params.append("maxResults", maxResults.toString());
 
-    if (publishedBefore) params.append("publishedBefore", publishedBefore);
-    if (publishedAfter) params.append("publishedAfter", publishedAfter);
-    if (channelName) params.append("channelName", channelName);
+    if (publishedBefore) 
+        params.append("publishedBefore", publishedBefore);
+    if (publishedAfter) 
+        params.append("publishedAfter", publishedAfter);
+    if (channelName) 
+        params.append("channelName", channelName);
 
     const response = await fetch(`${API_BASE}searchtrans?${params.toString()}`);
 

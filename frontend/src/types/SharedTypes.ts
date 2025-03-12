@@ -3,3 +3,8 @@ export type ErrorResponse = {
     message: string;
     code: number;
 }
+
+export type ActionResultResponse = {
+    success: boolean
+    message: string
+}
