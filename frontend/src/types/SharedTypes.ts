@@ -8,3 +8,7 @@ export type ActionResultResponse = {
     success: boolean
     message: string
 }
+
+export interface ApiErrorResponse {
+    detail: string;
+}

@@ -39,7 +39,7 @@ function SearchPage() {
         numVideos,
         channelName
       });
-
+      
       setResults(result);
     } catch (error: Error | any) {
       setError(error.message);

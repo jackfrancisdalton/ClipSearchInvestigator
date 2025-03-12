@@ -1,4 +1,4 @@
-import { ActionResultResponse, isAppConfiguredResponse, SetAPIKeyRequest, VideoTranscriptResult } from "./types";
+import { ActionResultResponse, ApiErrorResponse, isAppConfiguredResponse, SetAPIKeyRequest, VideoTranscriptResult } from "./types";
 
 const API_BASE = '/api/'
 
@@ -36,32 +36,16 @@ export const searchVideos = async ({
     if (channelName) 
         params.append("channelName", channelName);
 
+
     const response = await fetch(`${API_BASE}searchtrans?${params.toString()}`);
 
     if (!response.ok) {
-        throw new Error("Error fetching videos");
+        const errorData: ApiErrorResponse = await response.json();
+        throw new Error(errorData.detail);
     }
 
-    const results: any = await response.json();
-
-    if (results.error) {
-        throw new Error(results.error);
-    }
-
-    const transformedResults = results.results.map((result: VideoTranscriptResult) => ({
-        videoTitle: result.videoTitle,
-        description: result.description,
-        channelTitle: result.channelTitle,
-        publishedAt: result.publishedAt,
-        thumbnailUrl: result.thumbnailUrl,
-        matches: result.matches.map((match: any) => ({
-            text: match.text,
-            startTime: new Date(match.startTime * 1000).toISOString().substr(11, 8),
-            link: match.link,
-        })),
-    }));
-
-    return transformedResults;
+    const results: any = await response.json()
+    return results.results;
 };
 
 

@@ -99,11 +99,17 @@ async def search(
     )
 
     if not videos:
-        return { "error": "No videos found." }
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No videos found."
+        )
     
     transcriptResults = await generate_transcript_matches(videos, terms)
 
     if not transcriptResults:
-        return { "error": "No matching transcripts found." }
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No transcripts found."
+        )
 
     return format_response(transcriptResults)
