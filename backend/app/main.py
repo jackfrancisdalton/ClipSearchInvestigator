@@ -15,6 +15,7 @@ from app.data.database_service import get_db, store_model_in_db
 # Pydantic imports
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
 from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
+from app.pydantic_schemas.search_results import SearchResponse
 
 app = FastAPI()
 
@@ -74,7 +75,11 @@ def delete_all_api_keys(db: Session = Depends(get_db)):
             detail=f"Failed to delete API keys: {e}"
         )
 
-@app.get("/searchtrans")
+@app.get(    
+    "/searchtrans",
+    response_model=SearchResponse,
+    status_code=status.HTTP_200_OK
+)
 async def search(
     query: str = Query(...), 
     terms: list[str] = Query(...), 

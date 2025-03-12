@@ -3,7 +3,6 @@ from typing import Optional, List
 from datetime import date
 
 # ------ Shared Models ------
-
 def to_camel(string: str) -> str:
     parts = string.split('_')
     return parts[0] + ''.join(word.capitalize() for word in parts[1:])
