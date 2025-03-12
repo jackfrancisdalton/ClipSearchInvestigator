@@ -28,8 +28,9 @@ def create_api_key(
     db: Session = Depends(get_db)
 ):
     try:
-        encrypted_key = password_encryptor.encrypt(request.api_key.encode())
-        new_api_key = models.YoutubeSearchApiKey(api_key=encrypted_key)
+        new_api_key = models.YoutubeSearchApiKey(
+            api_key=password_encryptor.encrypt(request.api_key.encode())
+        )
         store_model_in_db(db, new_api_key)    
         return {"message": "API key stored successfully"}
     
@@ -44,8 +45,26 @@ def create_api_key(
     response_model=bool
 )
 def is_api_key_set(db: Session = Depends(get_db)):
-    appconfig = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
-    return appconfig is not None
+    youtube_api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
+    return youtube_api_key is not None
+
+@app.delete(
+    "/delete_all_api_keys",
+    response_model=MessageResponse,
+    status_code=status.HTTP_200_OK
+)
+def delete_all_api_keys(db: Session = Depends(get_db)):
+    try:
+        db.query(models.YoutubeSearchApiKey).delete()
+        db.commit()
+        return {"message": "All API keys deleted successfully"}
+    
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Failed to delete API keys: {e}"
+        )
 
 @app.get("/searchtrans")
 async def search(

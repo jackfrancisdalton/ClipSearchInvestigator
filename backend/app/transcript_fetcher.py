@@ -3,9 +3,11 @@ from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFoun
 import asyncio
 
 async def fetch_transcript(video_id):
-    try:
-        return await asyncio.to_thread(YouTubeTranscriptApi.get_transcript, video_id)
-    except (TranscriptsDisabled, NoTranscriptFound):
+    try:        
+        result = await asyncio.to_thread(YouTubeTranscriptApi.get_transcript, video_id)
+        return result
+    except (TranscriptsDisabled, NoTranscriptFound) as e:
+        print(f"Error fetching transcript for video {video_id}: {e}")
         return None
 
 async def fetch_video_transcript_matches(video, search_terms):
@@ -21,8 +23,6 @@ async def fetch_video_transcript_matches(video, search_terms):
                     "duration": entry["duration"],
                     "text": entry["text"]
                 })
-
-        print("matching_entries", matching_entries)
                 
         if matching_entries:
             return {
