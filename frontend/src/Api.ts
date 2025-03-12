@@ -1,5 +1,7 @@
-import { AppConfigResponse, SetAPIKeyRequest } from "./types/ApiResponseTypes";
+import { ActionResultResponse, isAppConfiguredResponse, SetAPIKeyRequest } from "./types/ApiResponseTypes";
 import { VideoTranscriptResult,  } from "./types/video";
+
+const API_BASE = '/api/'
 
 type SearchVideosParams = {
     searchQuery: string;
@@ -26,13 +28,13 @@ export const searchVideos = async ({
     params.append("query", searchQuery);
     terms.forEach((term) => params.append("terms", term));
     params.append("order", order);
-    params.append("max_results", maxResults.toString());
+    params.append("maxResults", maxResults.toString());
 
-    if (publishedBefore) params.append("published_before", publishedBefore);
-    if (publishedAfter) params.append("published_after", publishedAfter);
-    if (channelName) params.append("channel_name", channelName);
+    if (publishedBefore) params.append("publishedBefore", publishedBefore);
+    if (publishedAfter) params.append("publishedAfter", publishedAfter);
+    if (channelName) params.append("channelName", channelName);
 
-    const response = await fetch(`/api/searchtrans?${params.toString()}`);
+    const response = await fetch(`${API_BASE}searchtrans?${params.toString()}`);
 
     if (!response.ok) {
         throw new Error("Error fetching videos");
@@ -61,13 +63,13 @@ export const searchVideos = async ({
 };
 
 
-export const isApiKeySet = async (): Promise<AppConfigResponse> => {
-    const response = await fetch('/api/is_api_key_set', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+export const isApiKeySet = async (): Promise<isAppConfiguredResponse> => {
+    const response = await fetch(
+        `${API_BASE}is_app_configured`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json'},
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to check if API key is set');
@@ -76,18 +78,33 @@ export const isApiKeySet = async (): Promise<AppConfigResponse> => {
     return await response.json();
 }
 
-export const setAndStoreApiKey = async ({ apiKey }: SetAPIKeyRequest) => {
-    const response = await fetch('/api/store_api_key', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ api_key: apiKey }),
-    });
+export const saveApiKey = async (body: SetAPIKeyRequest): Promise<ActionResultResponse> => {
+    const response = await fetch(
+        `${API_BASE}store_api_key`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        }
+    );
 
     if (!response.ok) {
         throw new Error('Failed to store API key');
     }
 
     return await response.json();
+}
+
+export const deleteAllApiKeys = async (): Promise<ActionResultResponse> => {
+    const response = await fetch(
+        `${API_BASE}delete_all_api_keys`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Failed to delete all API keys');
+    }
+
+    return response.json();
 }

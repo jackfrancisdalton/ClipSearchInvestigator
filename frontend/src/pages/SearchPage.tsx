@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { searchVideos } from '../Api';
+import { deleteAllApiKeys, searchVideos } from '../Api';
 import { SearchState, VideoTranscriptResult } from '../types/video';
 import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
 import MasonryGrid from '../components/Layouts/MasonryGrid/MasonryGrid';
@@ -49,6 +49,10 @@ function SearchPage() {
     }
   };
 
+  const onDeleteApiKeys = async () => {
+    await deleteAllApiKeys();
+  }
+
   return (
     <div className="flex min-h-screen text-white bg-background-700">
 
@@ -71,6 +75,8 @@ function SearchPage() {
         )}
 
         {loading && <LoadingSpinner />}
+
+        <button onClick={onDeleteApiKeys}>Delete All API Keys</button>
 
         {!loading && results.length > 0 && (
           <MasonryGrid columns={3}>

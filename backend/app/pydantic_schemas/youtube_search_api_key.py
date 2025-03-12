@@ -1,24 +1,13 @@
-from datetime import datetime
+from app.pydantic_schemas.shared import NormalisedBaseModel
 from pydantic import BaseModel
 
 # ------ Shared Models ------
-class YoutubeSearchApiKeyBase(BaseModel):
+class YoutubeSearchApiKeyBase(NormalisedBaseModel):
     api_key: str
 
 # ------ Child Models -------
 class YoutubeSearchApiKeyCreate(YoutubeSearchApiKeyBase):
     pass
 
-# ---- Leaving in place for debugging purposes if required
-# class YoutubeSearchApiKeyRead(YoutubeSearchApiKeyBase):
-#     id: int
-#     date_created: datetime
-#     is_active: bool
-
-#     class Config:
-#         from_attributes = True
-
-
-
-class YoutubeSearchApiKeyUpdate(BaseModel):
+class YoutubeSearchApiKeyUpdate(NormalisedBaseModel):
     is_active: bool

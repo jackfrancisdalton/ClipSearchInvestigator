@@ -1,8 +1,8 @@
 # Library imports
 from typing import Optional
-from fastapi import Depends, FastAPI, HTTPException, Query, status
-from datetime import date
+from fastapi import Depends, FastAPI, HTTPException, status, Query
 from sqlalchemy.orm import Session
+from datetime import date
 
 # App imports
 from app.transcript_fetcher import generate_transcript_matches
@@ -14,13 +14,13 @@ from app.data.database_service import get_db, store_model_in_db
 
 # Pydantic imports
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
-from app.pydantic_schemas.shared import MessageResponse
+from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
 
 app = FastAPI()
 
 @app.post(
     "/store_api_key",
-    response_model=MessageResponse,
+    response_model=ActionResultResponse,
     status_code=status.HTTP_200_OK
 )
 def create_api_key(
@@ -32,32 +32,40 @@ def create_api_key(
             api_key=password_encryptor.encrypt(request.api_key.encode())
         )
         store_model_in_db(db, new_api_key)    
-        return {"message": "API key stored successfully"}
+        return ActionResultResponse(success=True, message="API key stored successfully")
     
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to store API key: {e}"
         )
 
+
 @app.get(
-    "/is_api_key_set", 
-    response_model=bool
+    "/is_app_configured", 
+    response_model=isAppConfiguredResponse
 )
-def is_api_key_set(db: Session = Depends(get_db)):
+def is_app_configured(db: Session = Depends(get_db)):
     youtube_api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
-    return youtube_api_key is not None
+    
+    return isAppConfiguredResponse(
+        is_api_key_set=youtube_api_key is not None
+    )
+
 
 @app.delete(
     "/delete_all_api_keys",
-    response_model=MessageResponse,
+    response_model=ActionResultResponse,
     status_code=status.HTTP_200_OK
 )
 def delete_all_api_keys(db: Session = Depends(get_db)):
     try:
         db.query(models.YoutubeSearchApiKey).delete()
         db.commit()
-        return {"message": "All API keys deleted successfully"}
+        return ActionResultResponse(
+            success=True, 
+            message="All API keys deleted successfully"
+        )
     
     except Exception as e:
         db.rollback()
@@ -71,10 +79,10 @@ async def search(
     query: str = Query(...), 
     terms: list[str] = Query(...), 
     order: str = Query(...),
-    published_before: Optional[date] = Query(None),
-    published_after: Optional[date] = Query(None),
-    channel_name: Optional[str] = Query(None),
-    max_results: int = Query(10)
+    published_before: Optional[date] = Query(None, alias="publishedBefore"),
+    published_after: Optional[date] = Query(None, alias="publishedAfter"),
+    channel_name: Optional[str] = Query(None, alias="channelName"),
+    max_results: int = Query(10, alias="maxResults")
 ):
     videos = search_youtube(
         query, 

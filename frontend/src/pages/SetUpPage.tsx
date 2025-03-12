@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { setAndStoreApiKey } from '../Api';
+import { saveApiKey } from '../Api';
 
 function SetUpPage() {
   const [apiKey, setApiKey] = useState('');
@@ -13,7 +13,7 @@ function SetUpPage() {
     setErrorMessage(`Error: message}`);
 
     try {
-      await setAndStoreApiKey({ apiKey });
+      await saveApiKey({ apiKey });
       setErrorMessage(null);
     } catch (err: Error | any) {
       setErrorMessage(`Error: ${err.message}`);
@@ -31,7 +31,7 @@ function SetUpPage() {
       <label htmlFor="apiKey" className="block mb-2 text-sm font-medium text-white-100">YouTube API Key</label>
       <input
         id="apiKey"
-        type="text"
+        type="password"
         value={apiKey}
         onChange={(e) => setApiKey(e.target.value)}
         placeholder="API Key"
