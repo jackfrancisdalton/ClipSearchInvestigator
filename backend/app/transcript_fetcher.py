@@ -6,7 +6,6 @@ from youtube_transcript_api._api import YouTubeTranscriptApi
 from youtube_transcript_api._transcripts import FetchedTranscript
 from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
 import asyncio
-import json
 
 async def fetch_transcript(video_id: str) -> Optional[FetchedTranscript]:
     try:
