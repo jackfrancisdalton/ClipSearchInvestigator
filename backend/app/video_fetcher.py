@@ -55,7 +55,7 @@ def search_youtube(
         params["channelId"] = get_channel_id(channel_name)
 
     try:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
         videos = response.json()
 

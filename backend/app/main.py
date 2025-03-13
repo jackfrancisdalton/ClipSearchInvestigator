@@ -93,14 +93,20 @@ async def search(
     channel_name: Optional[str] = Query(None, alias="channelName"),
     max_results: int = Query(10, alias="maxResults")
 ):
-    videos = search_youtube(
-        video_search_query,
-        sort_order,
-        published_before,
-        published_after,
-        channel_name,
-        max_results
-    )
+    try:
+        videos = search_youtube(
+            video_search_query,
+            sort_order,
+            published_before,
+            published_after,
+            channel_name,
+            max_results
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to search for videos: {e}"
+        ) from e
 
     if not videos:
         raise HTTPException(
@@ -108,7 +114,13 @@ async def search(
             detail="No videos found."
         )
     
-    transcriptResults = await fetch_transcript_matches(videos, match_terms)
+    try: 
+        transcriptResults = await fetch_transcript_matches(videos, match_terms)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch transcripts: {e}"
+        ) from e
 
     if not transcriptResults:
         raise HTTPException(
