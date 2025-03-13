@@ -1,8 +1,10 @@
-# Library imports
+# Native imports
 from typing import Optional
+from datetime import date
+
+# 3rd Party Library imports
 from fastapi import Depends, FastAPI, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from datetime import date
 
 # App imports
 from app.transcript_fetcher import fetch_transcript_matches
@@ -75,7 +77,7 @@ def delete_all_api_keys(db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Failed to delete API keys: {e}"
-        )
+        ) from e
 
 @app.get(    
     "/search-transcripts",

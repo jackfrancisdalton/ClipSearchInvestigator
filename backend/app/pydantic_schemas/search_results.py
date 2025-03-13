@@ -17,3 +17,11 @@ class TranscriptResult(NormalisedBaseModel):
 
 class TranscriptSearchResponse(NormalisedBaseModel):
     results: List[TranscriptResult]
+
+class YoutubeVideoData(NormalisedBaseModel):
+    videoId: str
+    title: str
+    description: str
+    channelTitle: str
+    publishedAt: str
+    thumbnailUrl: str

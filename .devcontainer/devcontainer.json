@@ -38,7 +38,8 @@
                 "dsznajder.es7-react-js-snippets",
                 "redhat.vscode-yaml",
                 "ms-python.python",
-                "EQuimper.react-native-react-redux"
+                "EQuimper.react-native-react-redux",
+                "ms-python.pylint"
             ]
         }
     }

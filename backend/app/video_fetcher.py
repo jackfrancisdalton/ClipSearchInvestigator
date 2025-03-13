@@ -1,16 +1,18 @@
 import os
 import requests
+from datetime import datetime, timezone, date
+from typing import Optional
+
 from dotenv import load_dotenv
-from datetime import datetime, timezone
+
+from app.pydantic_schemas.search_results import YoutubeVideoData
+from app.exceptions.shared import VideoSearchError
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_path)
-from typing import Optional
 
 API_KEY: Optional[str] = os.getenv('API_KEY')
 
-from typing import Optional
-from datetime import date
 
 # TODO: add typing for the input and output of this method
 def search_youtube(
@@ -20,7 +22,12 @@ def search_youtube(
     published_after: Optional[date],
     channel_name: Optional[str],
     max_results: int = 10
-):
+) -> list[YoutubeVideoData]:
+    """
+    Search for YouTube videos.
+
+    :raises VideoSearchError: If the YouTube API call fails.
+    """
     
     url = "https://www.googleapis.com/youtube/v3/search"
 
@@ -54,20 +61,18 @@ def search_youtube(
         videos = response.json()
 
         return [
-            {
-                "videoId": item["id"]["videoId"], 
-                "title": item["snippet"]["title"],
-                "description": item["snippet"]["description"],
-                "channelTitle": item["snippet"]["channelTitle"],
-                "publishedAt": item["snippet"]["publishedAt"],
-                "thumbnailUrl": item["snippet"]["thumbnails"]["default"]["url"]
-            }
+            YoutubeVideoData(
+                videoId = item["id"]["videoId"], 
+                title = item["snippet"]["title"],
+                description = item["snippet"]["description"],
+                channelTitle = item["snippet"]["channelTitle"],
+                publishedAt = item["snippet"]["publishedAt"],
+                thumbnailUrl = item["snippet"]["thumbnails"]["default"]["url"]
+            )
             for item in videos.get("items", [])
         ]
-    except requests.exceptions.RequestException as e:
-        print(f"Request error: {e}")
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        raise VideoSearchError("YouTube search failed due to a network issue") from e
 
 def get_channel_id(channel_name: str) -> str:
     url = "https://www.googleapis.com/youtube/v3/search"
