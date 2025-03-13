@@ -22,7 +22,7 @@ async def fetch_video_transcript_matches(video: Dict[str, Any], search_terms: Li
     if transcript_list:
         matching_entries = [
             Match(
-                startTime=int(phrase.start),
+                startTime=phrase.start,
                 text=phrase.text,
                 link=f"https://www.youtube.com/watch?v={video['videoId']}&t={int(phrase.start)}"
             )

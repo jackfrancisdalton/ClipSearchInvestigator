@@ -3,10 +3,10 @@ import { VideoTranscriptResult } from "../../../types/video";
 function SearchResult({ result }: { result: VideoTranscriptResult }) {
 
     return(
-        <div className="bg-background-500 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex justify-between items-center mb-4">
+        <div className="p-6 transition-shadow rounded-lg shadow-lg bg-background-500 hover:shadow-xl">
+            <div className="flex items-center justify-between mb-4">
                 <div>
-                    <h3 className="text-md text-white-100 font-semibold overflow-hidden whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '13em' }} title={result.videoTitle}>
+                    <h3 className="overflow-hidden font-semibold text-md text-white-100 whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '13em' }} title={result.videoTitle}>
                         {result.videoTitle}
                     </h3>
                     <p className="text-sm text-gray-400">{result.channelTitle}</p>
@@ -20,16 +20,16 @@ function SearchResult({ result }: { result: VideoTranscriptResult }) {
                         })}
                     </p>
                 </div>
-                <img className="ml-4 w-28 h-24 bg-gray-300 rounded-lg" src={result.thumbnailUrl} alt="thumbnial"/>
+                <img className="h-24 ml-4 bg-gray-300 rounded-lg w-28" src={result.thumbnailUrl} alt="thumbnial"/>
             </div>
             <ul className="space-y-2">
                 {result.matches.map((quote) => (
                     <li
                         key={quote.startTime}
-                        className="text-sm bg-primary-600 p-2 rounded-lg cursor-pointer"
+                        className="p-2 text-sm rounded-lg cursor-pointer bg-primary-600"
                         onClick={() => window.open(quote.link, '_blank')}
                     >
-                        <strong>"{quote.text}"</strong> - {quote.startTime}
+                        <strong>"{quote.text}"</strong> - {new Date(quote.startTime * 1000).toISOString().substr(11, 8)}
                     </li>
                 ))}
             </ul>

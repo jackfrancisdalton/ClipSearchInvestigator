@@ -2,7 +2,7 @@ from typing import List
 from app.pydantic_schemas.shared import NormalisedBaseModel
 
 class Match(NormalisedBaseModel):
-    startTime: int
+    startTime: float
     text: str
     link: str
 

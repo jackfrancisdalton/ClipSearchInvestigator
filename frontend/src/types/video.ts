@@ -7,7 +7,7 @@ export type Video = {
   
 export type Match = { 
     text: string; 
-    startTime: string, 
+    startTime: number, 
     link: string 
   };
   
