@@ -12,6 +12,7 @@ API_KEY: Optional[str] = os.getenv('API_KEY')
 from typing import Optional
 from datetime import date
 
+# TODO: add typing for the input and output of this method
 def search_youtube(
     video_search_query: str, 
     sort_order: str, 

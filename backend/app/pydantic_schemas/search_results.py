@@ -15,5 +15,5 @@ class TranscriptResult(NormalisedBaseModel):
     thumbnailUrl: str
     matches: List[Match]
 
-class SearchResponse(NormalisedBaseModel):
+class TranscriptSearchResponse(NormalisedBaseModel):
     results: List[TranscriptResult]
