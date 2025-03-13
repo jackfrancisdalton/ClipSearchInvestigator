@@ -49,7 +49,7 @@ def create_api_key(
 )
 def is_app_configured(db: Session = Depends(get_db)):
     youtube_api_key = db.query(models.YoutubeSearchApiKey) \
-                        .filter(models.YoutubeSearchApiKey.is_active == True) \
+                        .filter(models.YoutubeSearchApiKey.is_active) \
                         .first()
     
     return isAppConfiguredResponse(
@@ -94,9 +94,9 @@ async def search(
     max_results: int = Query(10, alias="maxResults")
 ):
     videos = search_youtube(
-        video_search_query, 
-        sort_order, 
-        published_before, 
+        video_search_query,
+        sort_order,
+        published_before,
         published_after,
         channel_name,
         max_results

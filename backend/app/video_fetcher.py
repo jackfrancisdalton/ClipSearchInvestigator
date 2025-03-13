@@ -1,8 +1,7 @@
 import os
-import requests
 from datetime import datetime, timezone, date
 from typing import Optional
-
+import requests
 from dotenv import load_dotenv
 
 from app.pydantic_schemas.search_results import YoutubeVideoData
@@ -16,8 +15,8 @@ API_KEY: Optional[str] = os.getenv('API_KEY')
 
 # TODO: add typing for the input and output of this method
 def search_youtube(
-    video_search_query: str, 
-    sort_order: str, 
+    video_search_query: str,
+    sort_order: str,
     published_before: Optional[date],
     published_after: Optional[date],
     channel_name: Optional[str],
