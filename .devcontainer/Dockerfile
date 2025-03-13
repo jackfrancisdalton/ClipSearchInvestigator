@@ -10,9 +10,13 @@ RUN apt-get update && apt-get install -y curl && \
 # Set the working directory inside the container
 WORKDIR /workspace
 
-# Copy requirements for Python (optional, depends on your needs)
-# COPY requirements.txt /workspace/
-# RUN pip3 install --user -r requirements.txt
+# # Copy and install backend Python dependencies
+# COPY ../backend/requirements.txt ./backend/requirements.txt
+# RUN pip install --user -r ./backend/requirements.txt
+
+# # Copy and install frontend Node dependencies
+# COPY ../frontend/package.json ./frontend/package.json
+# RUN cd frontend && npm install
 
 # Expose ports (if needed for your application)
 EXPOSE 3000 8000
