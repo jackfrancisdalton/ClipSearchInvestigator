@@ -2,33 +2,39 @@ import os
 import requests
 from dotenv import load_dotenv
 from datetime import datetime, timezone
-from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
-import asyncio
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_path)
-API_KEY = os.getenv('API_KEY')
+from typing import Optional
+
+API_KEY: Optional[str] = os.getenv('API_KEY')
+
+from typing import Optional
+from datetime import date
 
 def search_youtube(
-    video_search_query, 
-    sort_order, 
-    published_before,
-    published_after,
-    channel_name,
-    max_results=10):
+    video_search_query: str, 
+    sort_order: str, 
+    published_before: Optional[date],
+    published_after: Optional[date],
+    channel_name: Optional[str],
+    max_results: int = 10
+):
     
     url = "https://www.googleapis.com/youtube/v3/search"
 
-    params = {
+    # TODO: define a specific model for this instead of using a dict
+    params: dict[str, str | int] = {
         "part": "snippet",
         "q": video_search_query,
         "type": "video",
         "maxResults": max_results,
         "safeSearch": "none",
         "order": sort_order,
-        "key": API_KEY,
     }
+
+    if API_KEY:
+        params["key"] = API_KEY
 
     if published_before:
         published_before = datetime.combine(published_before, datetime.min.time(), tzinfo=timezone.utc)
@@ -59,20 +65,20 @@ def search_youtube(
         ]
     except requests.exceptions.RequestException as e:
         print(f"Request error: {e}")
-    except requests.exceptions.HTTPError as e:
-        print(f"HTTP error: {e.response.status_code} - {e.response.text}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 
-def get_channel_id(channel_name):
+def get_channel_id(channel_name: str) -> str:
     url = "https://www.googleapis.com/youtube/v3/search"
     
-    params = {
+    params: dict[str, str] = {
         "part": "snippet",
         "q": channel_name,
         "type": "channel",
-        "key": API_KEY,
     }
+    
+    if API_KEY:
+        params["key"] = API_KEY
     
     response = requests.get(url, params=params)
     

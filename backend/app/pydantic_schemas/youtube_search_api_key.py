@@ -1,5 +1,4 @@
 from app.pydantic_schemas.shared import NormalisedBaseModel
-from pydantic import BaseModel
 
 # ------ Shared Models ------
 class YoutubeSearchApiKeyBase(NormalisedBaseModel):
