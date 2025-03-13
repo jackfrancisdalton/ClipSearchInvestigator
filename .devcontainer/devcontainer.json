@@ -36,7 +36,9 @@
                 "bradlc.vscode-tailwindcss",
                 "heybourn.headwind",
                 "dsznajder.es7-react-js-snippets",
-                "redhat.vscode-yaml"
+                "redhat.vscode-yaml",
+                "ms-python.python",
+                "EQuimper.react-native-react-redux"
             ]
         }
     }

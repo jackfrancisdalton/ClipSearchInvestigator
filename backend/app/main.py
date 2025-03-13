@@ -62,6 +62,7 @@ def delete_all_api_keys(db: Session = Depends(get_db)):
     try:
         db.query(models.YoutubeSearchApiKey).delete()
         db.commit()
+
         return ActionResultResponse(
             success=True, 
             message="All API keys deleted successfully"
