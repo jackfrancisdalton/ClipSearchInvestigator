@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { saveApiKey } from '../Api';
 import { useNavigate } from 'react-router-dom';
 import { CSSTransition, SwitchTransition } from 'react-transition-group';
+import { saveApiKey } from '../api';
 
 function SetUpPage() {
   const [apiKey, setApiKey] = useState('');

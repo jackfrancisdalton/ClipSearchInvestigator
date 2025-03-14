@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { deleteAllApiKeys, searchForTermsInTranscripts } from '../Api';
-import { SearchState, VideoTranscriptResult } from '../types/video';
 import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
 import MasonryGrid from '../components/Layouts/MasonryGrid/MasonryGrid';
+import { deleteAllApiKeys, searchForTermsInTranscripts } from '../api';
+import { SearchState, VideoTranscriptResult } from '../types';
 
 function SearchPage() {
   const [loading, setLoading] = useState(false);

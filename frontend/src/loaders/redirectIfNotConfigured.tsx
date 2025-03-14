@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import { isAppConfigured } from "../Api";
+import { isAppConfigured } from "../api";
 
 export async function redirectIfNotConfigured() {
   const { isApiKeySet } = (await isAppConfigured())
