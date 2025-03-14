@@ -1,5 +1,5 @@
 {
-    "name": "YoutubeSearchDevContainer",
+    "name": "CSIDevContainer",
     "build": {
         "dockerfile": "Dockerfile",
         "context": ".."

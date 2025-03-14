@@ -23,7 +23,7 @@ const SideBar: React.FC<SideBarProps> = ({ children }) => {
       {/* Sidebar container */}
       <div
         className={`fixed top-0 left-0 h-full w-128 bg-background-700 shadow-lg z-50 transform transition-transform duration-300 
-          ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 border-r-4 border-primary-600`}
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 border-r-2 border-primary-600`}
       >
         <div className="p-4">
           {/* Optional close button inside sidebar for mobile */}

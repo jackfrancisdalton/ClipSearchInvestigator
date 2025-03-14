@@ -84,7 +84,7 @@ function SetUpPage() {
       <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg shadow-md">
         <SwitchTransition>
           <CSSTransition key={success ? 'success' : 'form'} timeout={200} classNames="fade">
-            <>{!success ? renderSuccess() : renderForm()}</>
+            <>{success ? renderSuccess() : renderForm()}</>
           </CSSTransition>
         </SwitchTransition>
       </div>

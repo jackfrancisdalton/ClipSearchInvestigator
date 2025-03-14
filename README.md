@@ -72,3 +72,8 @@ psql -U youtubeSearchUser YoutubeSearchDb: to connect to pql client
 SELECT * FROM mytable; : to select all keys
 TRUNCATE table_name; : to drop all records
 
+
+
+# Future features
+- remember last searches and allow for replay
+- show statistics on results like most commonon terms, range of pasted dates
