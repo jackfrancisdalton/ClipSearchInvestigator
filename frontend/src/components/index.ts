@@ -4,3 +4,4 @@ export { default as SearchBox } from './Search/SearchBox/SearchBox';
 export { default as ResultsPlaceHolder } from './Search/ResultsPlaceHolder/ResultsPlaceHolder';
 export { default as ErrorMessage } from './Shared/ErrorMessage/ErrorMessage';
 export { default as SideBar } from './Layouts/SideBar/SideBar';
+export { default as Header } from './Navigation/Header';
