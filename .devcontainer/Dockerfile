@@ -10,11 +10,12 @@ RUN apt-get update && apt-get install -y curl && \
 # Set the working directory inside the container
 WORKDIR /workspace
 
-# # Copy and install backend Python dependencies
-# COPY ../backend/requirements.txt ./backend/requirements.txt
-# RUN pip install --user -r ./backend/requirements.txt
+# Copy backend requirements into the container and install dependencies
+COPY backend/requirements.txt /workspace/backend/requirements.txt
+RUN pip install -r /workspace/backend/requirements.txt
 
-# # Copy and install frontend Node dependencies
+
+# # Copy and install frontend Node dependencies TODO: consider doing this instead of volume mounting
 # COPY ../frontend/package.json ./frontend/package.json
 # RUN cd frontend && npm install
 
