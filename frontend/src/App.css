@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* fade.css */
+.fade-enter {
+  @apply opacity-0;
+}
+.fade-enter-active {
+  @apply transition-opacity duration-300 opacity-100;
+}
+.fade-exit {
+  @apply opacity-100;
+}
+.fade-exit-active {
+  @apply transition-opacity duration-300 opacity-0;
+}
