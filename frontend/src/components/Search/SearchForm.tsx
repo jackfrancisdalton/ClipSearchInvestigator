@@ -13,8 +13,8 @@ interface SearchFormProps {
 
 const SearchForm: React.FC<SearchFormProps> = ({ handleSubmit, videoSearchState, transcriptFilterState, loading, updateVideoSearchState, updateTranscriptFilterState }) => {
     return (
-      <div className="p-4 space-y-3">
-        <form onSubmit={handleSubmit}>
+      <div className="p-4 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <VideoSearchSubForm
             videoSearchState={videoSearchState}
             setVideoSearchState={updateVideoSearchState}
