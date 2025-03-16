@@ -1,4 +1,4 @@
-import { VideoSearchState } from "../../types";
+import { VideoSearchSortOrder, VideoSearchState } from "../../types";
 
 
 interface VideoSearchFormProps {
@@ -54,17 +54,18 @@ function VideoSearchSubForm({ videoSearchState, setVideoSearchState, disableForm
       <div className="mb-6">
         <label className="block mb-2 font-medium text-l text-white-100">Sort By</label>
         <select
-          value={videoSearchState.sortOrder}
-          onChange={(e) => setVideoSearchState({ sortOrder: e.target.value })}
-          className="w-full p-3 border rounded-lg text-white-100 bg-white-700 border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
-        >
-          <option value="date">Date</option>
-          <option value="rating">Rating</option>
-          <option value="relevance">Relevance</option>
-          <option value="title">Title</option>
-          <option value="videoCount">Video Count</option>
-          <option value="viewCount">View Count</option>
-        </select>
+        value={videoSearchState.sortOrder}
+        onChange={(e) =>
+          setVideoSearchState({ sortOrder: e.target.value as VideoSearchSortOrder })
+        }
+        className="w-full p-3 border rounded-lg text-white-100 bg-white-700 border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
+      >
+        {Object.values(VideoSearchSortOrder).map((order) => (
+          <option key={order} value={order}>
+            {order}
+          </option>
+        ))}
+      </select>
       </div>
 
       {/* Published After Date Picker */}

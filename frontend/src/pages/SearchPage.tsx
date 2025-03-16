@@ -1,7 +1,7 @@
 // src/components/SearchPage.jsx
 import { useReducer } from "react";
 import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu } from "../components";
-import { TranscriptFilterState, VideoSearchState, VideoTranscriptResult } from "../types";
+import { TranscriptFilterState, VideoSearchSortOrder, VideoSearchState, VideoTranscriptResult } from "../types";
 import { searchForTermsInTranscripts } from "../api";
 import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
 
@@ -22,7 +22,7 @@ const initialState: SearchPageState = {
   videoSearchState: {
     videoSearchQuery: "",
     maxResults: 10,
-    sortOrder: "relevance", // TODO: add specific enum for sort types
+    sortOrder: VideoSearchSortOrder.Relevance, // TODO: add specific enum for sort types
     publishedAfter: "",
     publishedBefore: "",
     channelName: "",
@@ -108,6 +108,8 @@ const SearchPage = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
+
+      {/* Side Bar */}
       <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-700">
         <SearchForm
             handleSubmit={handleSubmit}
