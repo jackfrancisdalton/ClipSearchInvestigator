@@ -3,8 +3,7 @@ export { default as NavigationTab } from './Navigation/NavigationTab';
 
 export { default as RootLayout } from './Layouts/RootLayout';
 export { default as MasonryGridLayout } from './Layouts/MasonryGridLayout';
-export { default as SideBar } from './Layouts/SideBar';
-export { default as SideBarMobile } from './Layouts/SideBarMobile';
+export { default as MobilePopOutMenu } from './Layouts/MobilePopOutMenu';
 
 export { default as SearchForm } from './Search/SearchForm';
 export { default as ResultsPlaceHolder } from './Search/ResultsPlaceHolder';

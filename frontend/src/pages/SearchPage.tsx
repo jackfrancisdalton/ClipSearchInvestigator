@@ -1,14 +1,9 @@
 // src/components/SearchPage.jsx
 import { useReducer } from "react";
-import SearchSidebarTwo from "../components/Layouts/SideBar";
-import MasonryGridTwo from "../components/Layouts/MasonryGridLayout";
-import SideBarTwoMobile from "../components/Layouts/SideBarMobile";
-import { SearchResult } from "../components";
+import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu } from "../components";
 import { TranscriptFilterState, VideoSearchState, VideoTranscriptResult } from "../types";
 import { searchForTermsInTranscripts } from "../api";
 import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
-import SearchForm from "../components/Search/SearchForm";
-
 
 interface SearchPageState {
   isMobileSidebarOpen: boolean;
@@ -114,55 +109,49 @@ const SearchPage = () => {
   return (
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
       <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-700">
-        <SearchSidebarTwo>
-          <SearchForm
-              handleSubmit={handleSubmit}
-              videoSearchState={videoSearchState}
-              transcriptFilterState={transcriptFilterState}
-              loading={loading}
-              updateVideoSearchState={(stateUpdate) =>
-                dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
-              }
-              updateTranscriptFilterState={(stateUpdate) =>
-                dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
-              }
-            />
-        </SearchSidebarTwo>
+        <SearchForm
+            handleSubmit={handleSubmit}
+            videoSearchState={videoSearchState}
+            transcriptFilterState={transcriptFilterState}
+            loading={loading}
+            updateVideoSearchState={(stateUpdate) =>
+              dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
+            }
+            updateTranscriptFilterState={(stateUpdate) =>
+              dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
+            }
+          />
       </div>
       
 
       {/* Main Results Area */}
       <div className="flex-1 p-4 overflow-auto bg-background-700">
-        <MasonryGridTwo>
+        <MasonryGridLayout>
           {results.map((result, index) => (
             <SearchResult key={index} result={result} />
           ))}
-        </MasonryGridTwo>
+        </MasonryGridLayout>
       </div>
 
 
       {/* Mobile: Sliding sidebar from bottom */}
-      <SideBarTwoMobile
+      <MobilePopOutMenu
         isOpen={isMobileSidebarOpen}
         toggleSidebar={() => dispatch({ type: SearchPageActionTypes.TOGGLE_SIDEBAR })}
       >
-        <div className="bg-background-700">
-          <SearchSidebarTwo>
-            <SearchForm
-              handleSubmit={handleSubmit}
-              videoSearchState={videoSearchState}
-              transcriptFilterState={transcriptFilterState}
-              loading={loading}
-              updateVideoSearchState={(stateUpdate) =>
-                dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
-              }
-              updateTranscriptFilterState={(stateUpdate) =>
-                dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
-              }
-            />
-          </SearchSidebarTwo>
-        </div>
-      </SideBarTwoMobile>
+        <SearchForm
+          handleSubmit={handleSubmit}
+          videoSearchState={videoSearchState}
+          transcriptFilterState={transcriptFilterState}
+          loading={loading}
+          updateVideoSearchState={(stateUpdate) =>
+            dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
+          }
+          updateTranscriptFilterState={(stateUpdate) =>
+            dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
+          }
+        />
+      </MobilePopOutMenu>
 
       {/* Mobile: Toggle Button */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden">
