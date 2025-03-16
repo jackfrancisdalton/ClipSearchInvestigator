@@ -1,11 +1,11 @@
 // src/components/MasonryGrid.jsx
 import React from "react";
 
-interface MasonryGridProps {
+interface MasonryGridLayoutProps {
   children: React.ReactNode;
 }
 
-const MasonryGrid: React.FC<MasonryGridProps> = ({ children }) => {
+const MasonryGridLayout: React.FC<MasonryGridLayoutProps> = ({ children }) => {
   return (
     <div className="gap-4 columns-1 sm:columns-1 md:columns-1 lg:columns-1 xl:columns-2 2xl:columns-3">
       {React.Children.map(children, child => (
@@ -17,4 +17,4 @@ const MasonryGrid: React.FC<MasonryGridProps> = ({ children }) => {
   );
 };
 
-export default MasonryGrid;
+export default MasonryGridLayout;

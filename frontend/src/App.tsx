@@ -1,14 +1,10 @@
-import SetUpPage from './pages/SetUpPage';
-import SearchPage from './pages/SearchPage';
-
 import './App.css';
 
 import { StrictMode, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { redirectIfNotConfigured } from './loaders/redirectIfNotConfigured';
-import { redirectIfAlreadyConfigured } from './loaders/redirectIfAlreadyConfigured';
-import OptionsPage from './pages/OptionsPage';
 import { RootLayout } from './components';
+import { OptionsPage, SearchPage, SetUpPage } from './pages';
+import { redirectIfAlreadyConfigured, redirectIfNotConfigured } from './loaders';
 
 function App() {
   const router = createBrowserRouter([
