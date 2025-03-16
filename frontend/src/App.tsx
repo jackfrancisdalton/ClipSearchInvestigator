@@ -5,11 +5,10 @@ import './App.css';
 
 import { StrictMode, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RootLayout from './components/Layouts/RootLayout/RootLayout';
 import { redirectIfNotConfigured } from './loaders/redirectIfNotConfigured';
 import { redirectIfAlreadyConfigured } from './loaders/redirectIfAlreadyConfigured';
 import OptionsPage from './pages/OptionsPage';
-import SearchPageTwo from './pages/SearchPageTwo';
+import { RootLayout } from './components';
 
 function App() {
   const router = createBrowserRouter([
@@ -20,7 +19,7 @@ function App() {
         {
           path: 'search',
           loader: redirectIfNotConfigured,
-          element: <SearchPageTwo />
+          element: <SearchPage />
         },
         {
           path: 'setup',

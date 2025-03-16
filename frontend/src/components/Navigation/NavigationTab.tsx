@@ -18,8 +18,8 @@ const NavTabs: React.FC<NavTabsProps> = ({ activeTab }) => {
         <Link
           key={tab.path}
           to={tab.path}
-          className={`px-3 py-1 rounded-md hover:bg-gray-700 ${
-            activeTab === tab.path ? "bg-gray-700" : ""
+          className={`px-3 py-1 rounded-md hover:bg-primary-700 ${
+            activeTab === tab.path ? "bg-primary-600" : ""
           }`}
         >
           {tab.name}

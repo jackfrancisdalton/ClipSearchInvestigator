@@ -1,14 +1,14 @@
 import React from "react";
-import SideBarTwo from "./SideBarTwo";
+import SideBarTwo from "./SideBar";
 
 
-interface MobileSearchSidebarProps {
+interface MobileSideBarProps {
   children: React.ReactNode;
   isOpen: boolean;
   toggleSidebar: () => void;
 }
 
-const MobileSearchSidebar: React.FC<MobileSearchSidebarProps> = ({ children, isOpen, toggleSidebar }) => {
+const MobileSideBar: React.FC<MobileSideBarProps> = ({ children, isOpen, toggleSidebar }) => {
   return (
     <div
       className={`fixed inset-x-0 bottom-0 bg-white border-t border-gray-200 transition-transform duration-300 md:hidden ${
@@ -26,4 +26,4 @@ const MobileSearchSidebar: React.FC<MobileSearchSidebarProps> = ({ children, isO
   );
 };
 
-export default MobileSearchSidebar;
+export default MobileSideBar;

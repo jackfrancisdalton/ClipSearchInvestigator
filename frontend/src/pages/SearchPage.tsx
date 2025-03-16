@@ -1,13 +1,11 @@
 // src/components/SearchPage.jsx
 import { useReducer } from "react";
-import SearchSidebarTwo from "../components/Shared/SideBarTwo";
-import MasonryGridTwo from "../components/Layouts/MasonryGrid/MasonryGridTwo";
-import SideBarTwoMobile from "../components/Shared/SideBarTwoMobile";
+import SearchSidebarTwo from "../components/Shared/SideBar";
+import MasonryGridTwo from "../components/Layouts/MasonryGrid";
+import SideBarTwoMobile from "../components/Shared/SideBarMobile";
 import { SearchResult } from "../components";
 import { TranscriptFilterState, VideoSearchState, VideoTranscriptResult } from "../types";
 import { searchForTermsInTranscripts } from "../api";
-import VideoSearchSubForm from "../components/Search/VideoSearchSubForm";
-import TranscriptFilterForm from "../components/Search/TranscriptFilterForm";
 import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
 import SearchForm from "../components/Search/SearchForm";
 
