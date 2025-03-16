@@ -3,11 +3,12 @@ import SideBarTwo from "./SideBarTwo";
 
 
 interface MobileSearchSidebarProps {
+  children: React.ReactNode;
   isOpen: boolean;
   toggleSidebar: () => void;
 }
 
-const MobileSearchSidebar: React.FC<MobileSearchSidebarProps> = ({ isOpen, toggleSidebar }) => {
+const MobileSearchSidebar: React.FC<MobileSearchSidebarProps> = ({ children, isOpen, toggleSidebar }) => {
   return (
     <div
       className={`fixed inset-x-0 bottom-0 bg-white border-t border-gray-200 transition-transform duration-300 md:hidden ${
@@ -15,8 +16,8 @@ const MobileSearchSidebar: React.FC<MobileSearchSidebarProps> = ({ isOpen, toggl
       }`}
       style={{ maxHeight: "70%" }}
     >
-      <div className="h-full overflow-auto">
-        <SideBarTwo />
+      <div className="h-full overflow-auto bg-black">
+        { children }
       </div>
       <button onClick={toggleSidebar} className="w-full p-2 text-white bg-blue-600">
         {isOpen ? "Close" : "Open"}

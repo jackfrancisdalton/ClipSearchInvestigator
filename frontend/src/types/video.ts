@@ -29,3 +29,16 @@ export interface SearchState {
     publishedBefore: string;
     channelName: string;
 }
+
+export interface VideoSearchState {
+    videoSearchQuery: string;
+    maxResults: number;
+    sortOrder: string;
+    publishedAfter: string;
+    publishedBefore: string;
+    channelName: string;
+}
+
+export interface TranscriptFilterState {
+    matchTerms: string[];
+}
