@@ -27,7 +27,7 @@ const initialState: SearchPageState = {
   videoSearchState: {
     videoSearchQuery: "",
     maxResults: 10,
-    sortOrder: "relevance",
+    sortOrder: "relevance", // TODO: add specific enum for sort types
     publishedAfter: "",
     publishedBefore: "",
     channelName: "",
@@ -113,7 +113,7 @@ const SearchPage = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
-      <div className="hidden overflow-auto border-r border-gray-200 w-84 md:block bg-background-700">
+      <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-700">
         <SearchSidebarTwo>
           <SearchForm
               handleSubmit={handleSubmit}

@@ -4,27 +4,30 @@ import { StrictMode, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RootLayout } from './components';
 import { OptionsPage, SearchPage, SetUpPage } from './pages';
-import { redirectIfAlreadyConfigured, redirectIfNotConfigured } from './loaders';
+import { redirectBasedOnAppConfigState } from './loaders';
 
 function App() {
   const router = createBrowserRouter([
     {
       path: '/',
       element: <RootLayout />,
+      loader: redirectBasedOnAppConfigState,
       children: [
         {
-          path: 'search',
-          loader: redirectIfNotConfigured,
+          index: true,
           element: <SearchPage />
         },
         {
-          path: 'setup',
-          loader: redirectIfAlreadyConfigured,
-          element: <SetUpPage />
+          path: 'search',
+          element: <SearchPage />
         },
         {
           path: 'options',
           element: <OptionsPage />
+        },
+        {
+          path: 'setup',
+          element: <SetUpPage />
         }
       ]
     }

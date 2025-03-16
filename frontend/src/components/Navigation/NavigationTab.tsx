@@ -13,12 +13,12 @@ interface NavTabsProps {
 
 const NavTabs: React.FC<NavTabsProps> = ({ activeTab }) => {
   return (
-    <nav className="flex space-x-4">
+    <nav className="flex">
       {tabs.map((tab) => (
         <Link
           key={tab.path}
           to={tab.path}
-          className={`px-3 py-1 rounded-md hover:bg-primary-700 ${
+          className={`px-3 py-3 text-white-50 hover:bg-primary-700 ${
             activeTab === tab.path ? "bg-primary-600" : ""
           }`}
         >

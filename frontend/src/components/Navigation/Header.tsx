@@ -6,7 +6,7 @@ const Header = () => {
   const activeTab = location.pathname; // Simple active check
 
   return (
-    <header className="flex items-center justify-between px-4 py-2 text-white bg-background-500">
+    <header className="flex items-center justify-between text-white bg-background-500">
       <NavigationTab activeTab={activeTab} />
       <div className="text-lg font-bold">
         <Link to="/">LOGO</Link>
