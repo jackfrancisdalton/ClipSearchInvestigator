@@ -65,6 +65,9 @@ psql -U youtubeSearchUser YoutubeSearchDb: to connect to pql client
 SELECT * FROM mytable; : to select all keys
 TRUNCATE table_name; : to drop all records
 
+# Bugs:
+- does not work with VPN
+- does not work if video not premiered yet: "Failed to fetch transcripts: \nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=cwish35WV4I! This is most likely caused by:\n\nThe video is unplayable for the following reason: Premieres in 36 hours\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
 
 
 # Future features

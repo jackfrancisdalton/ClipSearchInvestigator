@@ -1,4 +1,4 @@
-import { TranscriptFilterState, VideoSearchState } from "../../types";
+import { FormErrors, TranscriptFilterState, VideoSearchState } from "../../types";
 import TranscriptFilterForm from "./TranscriptFilterForm";
 import VideoSearchSubForm from "./VideoSearchSubForm";
 
@@ -9,9 +9,18 @@ interface SearchFormProps {
     loading: boolean;
     updateVideoSearchState: (state: Partial<VideoSearchState>) => void;
     updateTranscriptFilterState: (state: Partial<TranscriptFilterState>) => void;
+    formErrors: FormErrors;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ handleSubmit, videoSearchState, transcriptFilterState, loading, updateVideoSearchState, updateTranscriptFilterState }) => {
+const SearchForm: React.FC<SearchFormProps> = ({ 
+  handleSubmit, 
+  videoSearchState, 
+  transcriptFilterState, 
+  loading, 
+  updateVideoSearchState, 
+  updateTranscriptFilterState,
+  formErrors
+}) => {
     return (
       <div className="p-4 space-y-4">
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -19,11 +28,13 @@ const SearchForm: React.FC<SearchFormProps> = ({ handleSubmit, videoSearchState,
             videoSearchState={videoSearchState}
             setVideoSearchState={updateVideoSearchState}
             disableForm={loading}
+            formErrors={formErrors.videoSearch}
           />
           <TranscriptFilterForm
             transcriptFilterState={transcriptFilterState}
             setTranscriptFilterState={updateTranscriptFilterState}
             disableForm={loading}
+            formErrors={formErrors.transcriptFilter}
           />
           <div className="text-center">
             <button

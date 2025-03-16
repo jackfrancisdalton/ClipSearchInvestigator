@@ -1,19 +1,20 @@
 import { useState } from "react";
-import { VideoSearchSortOrder, VideoSearchState } from "../../types";
+import { VideoSearchFormErrors, VideoSearchSortOrder, VideoSearchState } from "../../types";
 
 interface VideoSearchFormProps {
   videoSearchState: VideoSearchState;
   setVideoSearchState: (state: Partial<VideoSearchState>) => void;
   disableForm: boolean;
+  formErrors: VideoSearchFormErrors;
 }
 
-function VideoSearchSubForm({ videoSearchState, setVideoSearchState, disableForm }: VideoSearchFormProps) {
+function VideoSearchSubForm({ videoSearchState, setVideoSearchState, disableForm, formErrors }: VideoSearchFormProps) {
   const [showMore, setShowMore] = useState(false);
 
   return (
     <div className="border border-primary-600">
       <div className="items-center justify-start p-2 bg-background-600">
-        <h3 className="font-bold text-white-50">Video Search</h3>
+        <h3 className="font-bold text-center text-white-50">Video Search</h3>
       </div>
       <div className="w-auto h-0.5 bg-primary-600"></div>
         <div className="p-3 bg-background-500">
@@ -22,11 +23,15 @@ function VideoSearchSubForm({ videoSearchState, setVideoSearchState, disableForm
           <label className="block mb-2 font-medium text-l text-white-100">Search for videos you want to scan</label>
           <input
             type="text"
-            className="w-full p-3 border rounded-lg bg-white-700 text-white-100 border-primary-800 focus:ring-2 focus:ring-primary-500 focus:outline-none"
+            className={`w-full p-3 border rounded-lg bg-white-700 text-white-100 focus:ring-2 focus:ring-primary-500 focus:outline-none ${
+              formErrors.videoSearchQuery ? "border-red-500" : "border-primary-800"
+            }`}
             placeholder="Enter your search query"
             value={videoSearchState.videoSearchQuery}
             onChange={(e) => setVideoSearchState({ videoSearchQuery: e.target.value })}
+            disabled={disableForm}
           />
+          {formErrors.videoSearchQuery && <p className="mt-1 text-sm text-red-500">{formErrors.videoSearchQuery}</p>}
         </div>
 
         {/* Slider for Number of Videos */}

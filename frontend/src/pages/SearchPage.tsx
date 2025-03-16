@@ -1,7 +1,7 @@
 // src/components/SearchPage.jsx
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu, LoadingSpinner, ResultsPlaceHolder } from "../components";
-import { TranscriptFilterState, VideoSearchSortOrder, VideoSearchState, VideoTranscriptResult } from "../types";
+import { FormErrors, TranscriptFilterState, VideoSearchSortOrder, VideoSearchState, VideoTranscriptResult } from "../types";
 import { searchForTermsInTranscripts } from "../api";
 import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
 
@@ -24,7 +24,7 @@ const initialState: SearchPageState = {
   videoSearchState: {
     videoSearchQuery: "",
     maxResults: 10,
-    sortOrder: VideoSearchSortOrder.Relevance, // TODO: add specific enum for sort types
+    sortOrder: VideoSearchSortOrder.Relevance,
     publishedAfter: "",
     publishedBefore: "",
     channelName: "",
@@ -61,7 +61,9 @@ function reducer(state: SearchPageState, action: SearchPageAction) {
   }
 }
 
+
 const SearchPage = () => {
+  
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
     isMobileSidebarOpen,
@@ -73,13 +75,40 @@ const SearchPage = () => {
     transcriptFilterState,
   } = state;
 
+  const [formErrors, setFormErrors] = useState<FormErrors>({
+    transcriptFilter: {},
+    videoSearch: {},
+  });
+
+  const validateForm = () => {
+    const errors: FormErrors = {
+      videoSearch: {},
+      transcriptFilter: {},
+    };
+    let valid = true;
+
+    // Validate video search query
+    if (!videoSearchState.videoSearchQuery.trim()) {
+      errors.videoSearch!.videoSearchQuery = "Search query is required";
+      valid = false;
+    }
+
+    // Validate transcript match terms
+    if (transcriptFilterState.matchTerms.length === 0 || transcriptFilterState.matchTerms.every(term => !term.trim())) {
+      errors.transcriptFilter!.matchTerms = "At least one search term is required";
+      valid = false;
+    }
+
+    setFormErrors(errors);
+    return valid;
+  };
+
   const fetchVideoResults = async () => {
     const { videoSearchQuery, sortOrder, publishedBefore, publishedAfter, maxResults, channelName } = videoSearchState;
     const { matchTerms } = transcriptFilterState;
 
-
-    if (!videoSearchQuery || matchTerms.length === 0) {
-      alert('Please fill out both the search query and search terms.');
+    if (!validateForm()) {
+      // Don’t perform search if validation fails
       return;
     }
 
@@ -128,6 +157,7 @@ const SearchPage = () => {
             updateTranscriptFilterState={(stateUpdate) =>
               dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
             }
+            formErrors={formErrors}
           />
       </div>
       
@@ -155,6 +185,7 @@ const SearchPage = () => {
         </div>
       )}
 
+      {/* TODO: do no result response or error message showing like "no result" */}
 
       {/* Mobile: Sliding sidebar from bottom */}
       <MobilePopOutMenu
@@ -172,6 +203,7 @@ const SearchPage = () => {
           updateTranscriptFilterState={(stateUpdate) =>
             dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
           }
+          formErrors={formErrors}
         />
       </MobilePopOutMenu>
 
