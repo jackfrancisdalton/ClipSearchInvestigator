@@ -10,11 +10,11 @@ interface TranscriptFilterFormProps {
 function TranscriptFilterForm({ transcriptFilterState, setTranscriptFilterState, disableForm }: TranscriptFilterFormProps) {
 
   return (
-    <div>
-      <div className="items-center justify-start inline-block p-2 bg-primary-600">
-        <h3 className="text-white-50">Search transcripts for</h3>
+    <div className="border border-primary-700">
+      <div className="items-center justify-start p-2 bg-background-600">
+        <h3 className="font-bold text-white-50">Transcript Search</h3>
       </div>
-      <div className="w-auto h-0.5 bg-primary-600"></div>
+      <div className="w-auto h-0.5 bg-primary-700"></div>
       <div className="p-3 bg-background-500">
           {/* Dynamic List of Input Boxes for Search Terms */}
         <div className="mb-6">

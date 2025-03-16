@@ -11,9 +11,9 @@ function VideoSearchSubForm({ videoSearchState, setVideoSearchState, disableForm
   const [showMore, setShowMore] = useState(false);
 
   return (
-    <div>
-      <div className="items-center justify-start inline-block p-2 bg-primary-600">
-        <h3 className="text-white-50">Videos to search</h3>
+    <div className="border border-primary-600">
+      <div className="items-center justify-start p-2 bg-background-600">
+        <h3 className="font-bold text-white-50">Video Search</h3>
       </div>
       <div className="w-auto h-0.5 bg-primary-600"></div>
         <div className="p-3 bg-background-500">

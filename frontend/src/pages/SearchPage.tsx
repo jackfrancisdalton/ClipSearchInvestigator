@@ -1,6 +1,6 @@
 // src/components/SearchPage.jsx
 import { useReducer } from "react";
-import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu } from "../components";
+import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu, LoadingSpinner, ResultsPlaceHolder } from "../components";
 import { TranscriptFilterState, VideoSearchSortOrder, VideoSearchState, VideoTranscriptResult } from "../types";
 import { searchForTermsInTranscripts } from "../api";
 import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
@@ -9,6 +9,7 @@ interface SearchPageState {
   isMobileSidebarOpen: boolean;
   results: VideoTranscriptResult[];
   loading: boolean;
+  hasSearched: boolean;
   error: string | null;
   videoSearchState: VideoSearchState;
   transcriptFilterState: TranscriptFilterState;
@@ -18,6 +19,7 @@ const initialState: SearchPageState = {
   isMobileSidebarOpen: false,
   results: [],
   loading: false,
+  hasSearched: false,
   error: null,
   videoSearchState: {
     videoSearchQuery: "",
@@ -38,6 +40,8 @@ function reducer(state: SearchPageState, action: SearchPageAction) {
       return { ...state, isMobileSidebarOpen: !state.isMobileSidebarOpen };
     case SearchPageActionTypes.SET_LOADING:
       return { ...state, loading: action.payload };
+    case SearchPageActionTypes.SET_HAS_SEARCHED:
+      return { ...state, hasSearched: true };
     case SearchPageActionTypes.SET_ERROR:
       return { ...state, error: action.payload };
     case SearchPageActionTypes.SET_RESULTS:
@@ -63,6 +67,7 @@ const SearchPage = () => {
     isMobileSidebarOpen,
     results,
     loading,
+    hasSearched,
     error,
     videoSearchState,
     transcriptFilterState,
@@ -103,6 +108,7 @@ const SearchPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    dispatch({ type: SearchPageActionTypes.SET_HAS_SEARCHED });
     fetchVideoResults();
   };
 
@@ -110,7 +116,7 @@ const SearchPage = () => {
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
 
       {/* Side Bar */}
-      <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-700">
+      <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-800">
         <SearchForm
             handleSubmit={handleSubmit}
             videoSearchState={videoSearchState}
@@ -126,14 +132,28 @@ const SearchPage = () => {
       </div>
       
 
-      {/* Main Results Area */}
-      <div className="flex-1 p-4 overflow-auto bg-background-700">
-        <MasonryGridLayout>
-          {results.map((result, index) => (
-            <SearchResult key={index} result={result} />
-          ))}
-        </MasonryGridLayout>
-      </div>
+      {/* Placeholder for first render */}
+      {!hasSearched && !loading && (
+        <ResultsPlaceHolder />
+      )}
+
+      {/* Loading Spinner */}
+      {loading && (
+        <div className="flex items-center justify-center flex-1 p-4 bg-background-700">
+          <LoadingSpinner />
+        </div>
+      )}
+
+      {/* Results */}
+      {!loading && hasSearched && results.length > 0 && (
+        <div className="flex-1 p-4 overflow-auto bg-background-800">
+          <MasonryGridLayout>
+            {results.map((result, index) => (
+              <SearchResult key={index} result={result} />
+            ))}
+          </MasonryGridLayout>
+        </div>
+      )}
 
 
       {/* Mobile: Sliding sidebar from bottom */}

@@ -16,6 +16,11 @@ Ever find it annoying not being able to find "that video". This script aims to s
 
 # ------------------ NOTES TO SELF
 
+
+# TODO:
+- add in "highlight red when not set" for search boxes
+- add place holder before first search
+
 # Clean up
 1. ensure all exceptions are handled on backend
 -- handle eceptions and returning appropriate message

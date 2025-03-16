@@ -3,7 +3,7 @@ import { VideoTranscriptResult } from "../../types";
 function SearchResult({ result }: { result: VideoTranscriptResult }) {
 
     return(
-        <div className="p-6 transition-shadow rounded-lg shadow-lg bg-background-500 hover:shadow-xl">
+        <div className="p-6 transition-shadow shadow-lg bg-background-500 hover:shadow-xl">
             <div className="flex items-center justify-between mb-4">
                 <div>
                     <h3 className="overflow-hidden font-semibold text-md text-white-100 whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '13em' }} title={result.videoTitle}>
