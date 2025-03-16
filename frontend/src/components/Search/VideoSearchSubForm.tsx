@@ -45,7 +45,7 @@ function VideoSearchSubForm({ videoSearchState, setVideoSearchState, disableForm
         </div>
 
         {/* Show More Toggle */}
-        <div className="mb-6">
+        <div mb-4>
           <button
             type="button"
             className="text-primary-500"
