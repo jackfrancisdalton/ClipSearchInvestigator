@@ -5,3 +5,6 @@ export { default as ResultsPlaceHolder } from './Search/ResultsPlaceHolder/Resul
 export { default as ErrorMessage } from './Shared/ErrorMessage/ErrorMessage';
 export { default as SideBar } from './Layouts/SideBar/SideBar';
 export { default as Header } from './Navigation/Header';
+export { default as RootLayout } from './Layouts/RootLayout/RootLayout';
+export { default as NavigationTab } from './Navigation/NavigationTab';
+export { default as SearchSidebar } from './Shared/SideBarTwo';

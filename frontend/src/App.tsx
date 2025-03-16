@@ -8,6 +8,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootLayout from './components/Layouts/RootLayout/RootLayout';
 import { redirectIfNotConfigured } from './loaders/redirectIfNotConfigured';
 import { redirectIfAlreadyConfigured } from './loaders/redirectIfAlreadyConfigured';
+import OptionsPage from './pages/OptionsPage';
+import SearchPageTwo from './pages/SearchPageTwo';
 
 function App() {
   const router = createBrowserRouter([
@@ -16,14 +18,18 @@ function App() {
       element: <RootLayout />,
       children: [
         {
-          index: true,
+          path: 'search',
           loader: redirectIfNotConfigured,
-          element: <SearchPage />
+          element: <SearchPageTwo />
         },
         {
           path: 'setup',
           loader: redirectIfAlreadyConfigured,
           element: <SetUpPage />
+        },
+        {
+          path: 'options',
+          element: <OptionsPage />
         }
       ]
     }
