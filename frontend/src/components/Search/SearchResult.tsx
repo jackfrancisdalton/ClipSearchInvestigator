@@ -1,4 +1,4 @@
-import { VideoTranscriptResult } from "../../../types/video";
+import { VideoTranscriptResult } from "../../types";
 
 function SearchResult({ result }: { result: VideoTranscriptResult }) {
 

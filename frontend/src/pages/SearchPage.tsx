@@ -1,33 +1,85 @@
-import { useState } from 'react';
-import { ErrorMessage, LoadingSpinner, ResultsPlaceHolder, SearchBox, SearchResult, SideBar } from '../components';
-import MasonryGrid from '../components/Layouts/MasonryGrid/MasonryGrid';
-import { deleteAllApiKeys, searchForTermsInTranscripts } from '../api';
-import { SearchState, VideoTranscriptResult } from '../types';
+// src/components/SearchPage.jsx
+import { useReducer } from "react";
+import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu } from "../components";
+import { TranscriptFilterState, VideoSearchSortOrder, VideoSearchState, VideoTranscriptResult } from "../types";
+import { searchForTermsInTranscripts } from "../api";
+import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
 
-function SearchPage() {
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<VideoTranscriptResult[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [searchState, setSearchState] = useState<SearchState>({
-    videoSearchQuery: '',
+interface SearchPageState {
+  isMobileSidebarOpen: boolean;
+  results: VideoTranscriptResult[];
+  loading: boolean;
+  error: string | null;
+  videoSearchState: VideoSearchState;
+  transcriptFilterState: TranscriptFilterState;
+}
+
+const initialState: SearchPageState = {
+  isMobileSidebarOpen: false,
+  results: [],
+  loading: false,
+  error: null,
+  videoSearchState: {
+    videoSearchQuery: "",
     maxResults: 10,
-    matchTerms: [''],
-    sortOrder: 'relevance',
-    publishedAfter: '',
-    publishedBefore: '',
-    channelName: '',
-  });
+    sortOrder: VideoSearchSortOrder.Relevance, // TODO: add specific enum for sort types
+    publishedAfter: "",
+    publishedBefore: "",
+    channelName: "",
+  },
+  transcriptFilterState: {
+    matchTerms: [""],
+  },
+};
+
+function reducer(state: SearchPageState, action: SearchPageAction) {
+  switch (action.type) {
+    case SearchPageActionTypes.TOGGLE_SIDEBAR:
+      return { ...state, isMobileSidebarOpen: !state.isMobileSidebarOpen };
+    case SearchPageActionTypes.SET_LOADING:
+      return { ...state, loading: action.payload };
+    case SearchPageActionTypes.SET_ERROR:
+      return { ...state, error: action.payload };
+    case SearchPageActionTypes.SET_RESULTS:
+      return { ...state, results: action.payload };
+    case SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE:
+      return {
+        ...state,
+        videoSearchState: { ...state.videoSearchState, ...action.payload },
+      };
+    case SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE:
+      return {
+        ...state,
+        transcriptFilterState: { ...state.transcriptFilterState, ...action.payload },
+      };
+    default:
+      return state;
+  }
+}
+
+const SearchPage = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    isMobileSidebarOpen,
+    results,
+    loading,
+    error,
+    videoSearchState,
+    transcriptFilterState,
+  } = state;
 
   const fetchVideoResults = async () => {
-    const { videoSearchQuery, matchTerms, sortOrder, publishedBefore, publishedAfter, maxResults, channelName } = searchState;
+    const { videoSearchQuery, sortOrder, publishedBefore, publishedAfter, maxResults, channelName } = videoSearchState;
+    const { matchTerms } = transcriptFilterState;
+
 
     if (!videoSearchQuery || matchTerms.length === 0) {
       alert('Please fill out both the search query and search terms.');
       return;
     }
 
-    setError(null);
-    setLoading(true);
+    dispatch({ type: SearchPageActionTypes.SET_ERROR, payload: null });
+    dispatch({ type: SearchPageActionTypes.SET_LOADING, payload: true });
 
     try {
       const result = await searchForTermsInTranscripts({
@@ -40,54 +92,80 @@ function SearchPage() {
         channelName
       });
       
-      setResults(result);
+      dispatch({ type: SearchPageActionTypes.SET_RESULTS, payload: result });
     } catch (error: Error | any) {
-      setError(error.message);
-      setResults([]);
+      dispatch({ type: SearchPageActionTypes.SET_ERROR, payload: error.message });
+      dispatch({ type: SearchPageActionTypes.SET_RESULTS, payload: [] });
     } finally {
-      setLoading(false);
+      dispatch({ type: SearchPageActionTypes.SET_LOADING, payload: false });
     }
   };
 
-  const onDeleteApiKeys = async () => {
-    await deleteAllApiKeys();
-  }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchVideoResults();
+  };
 
   return (
-    <div className="flex min-h-screen text-white bg-background-700">
+    <div className="flex flex-col h-full overflow-hidden md:flex-row">
 
-      <SideBar>
-        <SearchBox
+      {/* Side Bar */}
+      <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-700">
+        <SearchForm
+            handleSubmit={handleSubmit}
+            videoSearchState={videoSearchState}
+            transcriptFilterState={transcriptFilterState}
+            loading={loading}
+            updateVideoSearchState={(stateUpdate) =>
+              dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
+            }
+            updateTranscriptFilterState={(stateUpdate) =>
+              dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
+            }
+          />
+      </div>
+      
+
+      {/* Main Results Area */}
+      <div className="flex-1 p-4 overflow-auto bg-background-700">
+        <MasonryGridLayout>
+          {results.map((result, index) => (
+            <SearchResult key={index} result={result} />
+          ))}
+        </MasonryGridLayout>
+      </div>
+
+
+      {/* Mobile: Sliding sidebar from bottom */}
+      <MobilePopOutMenu
+        isOpen={isMobileSidebarOpen}
+        toggleSidebar={() => dispatch({ type: SearchPageActionTypes.TOGGLE_SIDEBAR })}
+      >
+        <SearchForm
+          handleSubmit={handleSubmit}
+          videoSearchState={videoSearchState}
+          transcriptFilterState={transcriptFilterState}
           loading={loading}
-          searchState={searchState}
-          setSearchState={(state) => setSearchState((prev) => ({ ...prev, ...state }))}
-          fetchVideoResults={fetchVideoResults}
+          updateVideoSearchState={(stateUpdate) =>
+            dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
+          }
+          updateTranscriptFilterState={(stateUpdate) =>
+            dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
+          }
         />
-      </SideBar>
+      </MobilePopOutMenu>
 
-      <div className="ml-[20%] w-[80%] p-6 overflow-auto">
-        {!loading && !error && results.length === 0 && (
-          <ResultsPlaceHolder />
-        )}
-
-        {!!error && (
-          <ErrorMessage errorMessage={error}></ErrorMessage>
-        )}
-
-        {loading && <LoadingSpinner />}
-
-        <button className="text-white-50" onClick={onDeleteApiKeys}>Delete All API Keys</button>
-
-        {!loading && results.length > 0 && (
-          <MasonryGrid columns={3}>
-            {results.map((result, index) => (
-              <SearchResult key={index} result={result} />
-            ))}
-          </MasonryGrid>
-        )}
+      {/* Mobile: Toggle Button */}
+      <div className="fixed bottom-0 left-0 right-0 md:hidden">
+        <button
+          onClick={() => dispatch({ type: SearchPageActionTypes.TOGGLE_SIDEBAR })}  
+          className="w-full p-3 text-center text-white bg-blue-600"
+        >
+          {isMobileSidebarOpen ? "Hide Filters" : "Show Filters"}
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default SearchPage;

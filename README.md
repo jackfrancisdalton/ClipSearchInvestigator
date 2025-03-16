@@ -1,4 +1,4 @@
-# YoutubeTranscriptSearch
+# CSI: ClipSearchInvestigator
 Ever find it annoying not being able to find "that video". This script aims to search for key phrases via youtube transcripts to help!
 
 ## Set up
@@ -27,25 +27,13 @@ Ever find it annoying not being able to find "that video". This script aims to s
 
 4. search term only works on matching a single snippet atm, figure out a way to make it work across snippets
 
-
-
-# To Add
-4. add a top bar above the results that allows you to:
--- sort bar by: date of video, number of total matches, number of matches matched (ie term 1,2,3) 
--- total number of results found
--- total number of matches found
--- range of dates the videos are from
-
 # UI
 - Split up the left search into two section
 -- specify videos to search for
 -- specify terms to find in those videos
-- add a summary box:
--- total videos found
--- total videos matched
--- total matches
--- chart with distrobution of word used based on video upload?
-- make left bar scrollable
+- add pretty error message
+- add pretty place holder
+- add pretty loading result
 
 # Dev enviornment
 - add debug support for react and python

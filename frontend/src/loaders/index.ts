@@ -1,1 +1,1 @@
-export { redirectIfNotConfigured as isAppConfigured } from './redirectIfNotConfigured'; 
+export { redirectBasedOnAppConfigState } from './redirectBasedOnAppConfigState'; 
