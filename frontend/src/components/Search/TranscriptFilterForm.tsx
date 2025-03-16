@@ -35,7 +35,7 @@ function TranscriptFilterForm({ transcriptFilterState, setTranscriptFilterState,
                 setTranscriptFilterState({ matchTerms: newTerms });
               }}
             >
-              Remove
+              [X]
             </button>
           </div>
         ))}

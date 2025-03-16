@@ -9,6 +9,7 @@ import { searchForTermsInTranscripts } from "../api";
 import VideoSearchSubForm from "../components/Search/VideoSearchSubForm";
 import TranscriptFilterForm from "../components/Search/TranscriptFilterForm";
 import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
+import SearchForm from "../components/Search/SearchForm";
 
 
 interface SearchPageState {
@@ -114,39 +115,20 @@ const SearchPage = () => {
 
   return (
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
-
-      <div className="hidden overflow-auto border-r border-gray-200 w-84 md:block">
+      <div className="hidden overflow-auto border-r border-gray-200 w-84 md:block bg-background-700">
         <SearchSidebarTwo>
-          <form onSubmit={handleSubmit}>
-            <VideoSearchSubForm
+          <SearchForm
+              handleSubmit={handleSubmit}
               videoSearchState={videoSearchState}
-              setVideoSearchState={
-                (stateUpdate) =>
-                  dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
-                }
-              disableForm={loading}
-            ></VideoSearchSubForm>
-            <TranscriptFilterForm
               transcriptFilterState={transcriptFilterState}
-              setTranscriptFilterState={(stateUpdate) =>
+              loading={loading}
+              updateVideoSearchState={(stateUpdate) =>
+                dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
+              }
+              updateTranscriptFilterState={(stateUpdate) =>
                 dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
               }
-              disableForm={loading}
-            ></TranscriptFilterForm>
-            <div className="text-center">
-              <button
-                type="submit"
-                disabled={loading} // Disable button during loading
-                className={`px-6 py-3 ${
-                  loading
-                    ? 'bg-gray-500 cursor-not-allowed'
-                    : 'bg-primary-600 hover:bg-primary-300'
-                } text-white font-semibold rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-primary-500`}
-              >
-                {loading ? 'Searching...' : 'Search'}
-              </button>
-            </div>
-          </form>
+            />
         </SearchSidebarTwo>
       </div>
       
@@ -166,38 +148,22 @@ const SearchPage = () => {
         isOpen={isMobileSidebarOpen}
         toggleSidebar={() => dispatch({ type: SearchPageActionTypes.TOGGLE_SIDEBAR })}
       >
-        <SearchSidebarTwo>
-          <form onSubmit={handleSubmit}>
-            <VideoSearchSubForm
+        <div className="bg-background-700">
+          <SearchSidebarTwo>
+            <SearchForm
+              handleSubmit={handleSubmit}
               videoSearchState={videoSearchState}
-              setVideoSearchState={
-                (stateUpdate) =>
-                  dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
-                }
-              disableForm={loading}
-            ></VideoSearchSubForm>
-            <TranscriptFilterForm
               transcriptFilterState={transcriptFilterState}
-              setTranscriptFilterState={(stateUpdate) =>
+              loading={loading}
+              updateVideoSearchState={(stateUpdate) =>
+                dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
+              }
+              updateTranscriptFilterState={(stateUpdate) =>
                 dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
               }
-              disableForm={loading}
-            ></TranscriptFilterForm>
-            <div className="text-center">
-              <button
-                type="submit"
-                disabled={loading} // Disable button during loading
-                className={`px-6 py-3 ${
-                  loading
-                    ? 'bg-gray-500 cursor-not-allowed'
-                    : 'bg-primary-600 hover:bg-primary-300'
-                } text-white font-semibold rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-primary-500`}
-              >
-                {loading ? 'Searching...' : 'Search'}
-              </button>
-            </div>
-          </form>
-        </SearchSidebarTwo>
+            />
+          </SearchSidebarTwo>
+        </div>
       </SideBarTwoMobile>
 
       {/* Mobile: Toggle Button */}
