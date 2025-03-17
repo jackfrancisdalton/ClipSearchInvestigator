@@ -1,171 +1,38 @@
-// src/components/SearchPage.jsx
-import { useReducer, useState } from "react";
-import { MasonryGridLayout, SearchForm, SearchResult, MobilePopOutMenu, LoadingSpinner, ResultsPlaceHolder } from "../components";
-import { FormErrors, TranscriptFilterState, VideoSearchSortOrder, VideoSearchState, VideoTranscriptResult } from "../types";
+// src/components/SearchPage.tsx
+import React, { useState } from "react";
+import { MasonryGridLayout, LoadingSpinner, ResultsPlaceHolder, MobilePopOutMenu, SearchResult } from "../components";
 import { searchForTermsInTranscripts } from "../api";
-import { SearchPageActionTypes, SearchPageAction } from "../actions/SearchPageActions";
+import { VideoTranscriptResult } from "../types";
+import SearchForm, { SearchFormData } from "../components/Search/SearchForm";
 
-interface SearchPageState {
-  isMobileSidebarOpen: boolean;
-  results: VideoTranscriptResult[];
-  loading: boolean;
-  hasSearched: boolean;
-  error: string | null;
-  videoSearchState: VideoSearchState;
-  transcriptFilterState: TranscriptFilterState;
-}
+const SearchPage: React.FC = () => {
+  const [results, setResults] = useState<VideoTranscriptResult[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
-const initialState: SearchPageState = {
-  isMobileSidebarOpen: false,
-  results: [],
-  loading: false,
-  hasSearched: false,
-  error: null,
-  videoSearchState: {
-    videoSearchQuery: "",
-    maxResults: 10,
-    sortOrder: VideoSearchSortOrder.Relevance,
-    publishedAfter: "",
-    publishedBefore: "",
-    channelName: "",
-  },
-  transcriptFilterState: {
-    matchTerms: [""],
-  },
-};
-
-function reducer(state: SearchPageState, action: SearchPageAction) {
-  switch (action.type) {
-    case SearchPageActionTypes.TOGGLE_SIDEBAR:
-      return { ...state, isMobileSidebarOpen: !state.isMobileSidebarOpen };
-    case SearchPageActionTypes.SET_LOADING:
-      return { ...state, loading: action.payload };
-    case SearchPageActionTypes.SET_HAS_SEARCHED:
-      return { ...state, hasSearched: true };
-    case SearchPageActionTypes.SET_ERROR:
-      return { ...state, error: action.payload };
-    case SearchPageActionTypes.SET_RESULTS:
-      return { ...state, results: action.payload };
-    case SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE:
-      return {
-        ...state,
-        videoSearchState: { ...state.videoSearchState, ...action.payload },
-      };
-    case SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE:
-      return {
-        ...state,
-        transcriptFilterState: { ...state.transcriptFilterState, ...action.payload },
-      };
-    default:
-      return state;
-  }
-}
-
-
-const SearchPage = () => {
-  
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const {
-    isMobileSidebarOpen,
-    results,
-    loading,
-    hasSearched,
-    error,
-    videoSearchState,
-    transcriptFilterState,
-  } = state;
-
-  const [formErrors, setFormErrors] = useState<FormErrors>({
-    transcriptFilter: {},
-    videoSearch: {},
-  });
-
-  const validateForm = () => {
-    const errors: FormErrors = {
-      videoSearch: {},
-      transcriptFilter: {},
-    };
-    let valid = true;
-
-    // Validate video search query
-    if (!videoSearchState.videoSearchQuery.trim()) {
-      errors.videoSearch!.videoSearchQuery = "Search query is required";
-      valid = false;
-    }
-
-    // Validate transcript match terms
-    if (transcriptFilterState.matchTerms.length === 0 || transcriptFilterState.matchTerms.every(term => !term.trim())) {
-      errors.transcriptFilter!.matchTerms = "At least one search term is required";
-      valid = false;
-    }
-
-    setFormErrors(errors);
-    return valid;
-  };
-
-  const fetchVideoResults = async () => {
-    const { videoSearchQuery, sortOrder, publishedBefore, publishedAfter, maxResults, channelName } = videoSearchState;
-    const { matchTerms } = transcriptFilterState;
-
-    if (!validateForm()) {
-      // Don’t perform search if validation fails
-      return;
-    }
-
-    dispatch({ type: SearchPageActionTypes.SET_ERROR, payload: null });
-    dispatch({ type: SearchPageActionTypes.SET_LOADING, payload: true });
-
+  const onSubmit = async (data: SearchFormData) => {
+    setHasSearched(true);
+    setLoading(true);
     try {
-      const result = await searchForTermsInTranscripts({
-        videoSearchQuery,
-        matchTerms,
-        sortOrder,
-        publishedBefore,
-        publishedAfter,
-        maxResults,
-        channelName
-      });
-      
-      dispatch({ type: SearchPageActionTypes.SET_RESULTS, payload: result });
-    } catch (error: Error | any) {
-      dispatch({ type: SearchPageActionTypes.SET_ERROR, payload: error.message });
-      dispatch({ type: SearchPageActionTypes.SET_RESULTS, payload: [] });
+      const result = await searchForTermsInTranscripts(data);
+      setResults(result);
+    } catch (err: any) {
+      setResults([]);
     } finally {
-      dispatch({ type: SearchPageActionTypes.SET_LOADING, payload: false });
+      setLoading(false);
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    dispatch({ type: SearchPageActionTypes.SET_HAS_SEARCHED });
-    fetchVideoResults();
   };
 
   return (
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
-
-      {/* Side Bar */}
+      {/* Desktop Sidebar */}
       <div className="hidden overflow-auto border-r-4 border-background-500 w-84 md:block bg-background-800">
-        <SearchForm
-            handleSubmit={handleSubmit}
-            videoSearchState={videoSearchState}
-            transcriptFilterState={transcriptFilterState}
-            loading={loading}
-            updateVideoSearchState={(stateUpdate) =>
-              dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
-            }
-            updateTranscriptFilterState={(stateUpdate) =>
-              dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
-            }
-            formErrors={formErrors}
-          />
+        <SearchForm onSubmit={onSubmit} loading={loading} />
       </div>
-      
 
       {/* Placeholder for first render */}
-      {!hasSearched && !loading && (
-        <ResultsPlaceHolder />
-      )}
+      {!hasSearched && !loading && <ResultsPlaceHolder />}
 
       {/* Loading Spinner */}
       {loading && (
@@ -179,38 +46,26 @@ const SearchPage = () => {
         <div className="flex-1 p-4 overflow-auto bg-background-800">
           <MasonryGridLayout>
             {results.map((result, index) => (
-              <SearchResult key={index} result={result} />
+              <div key={index}>
+                <SearchResult result={result} />
+              </div>
             ))}
           </MasonryGridLayout>
         </div>
       )}
 
-      {/* TODO: do no result response or error message showing like "no result" */}
-
-      {/* Mobile: Sliding sidebar from bottom */}
+      {/* Mobile: Sliding sidebar */}
       <MobilePopOutMenu
         isOpen={isMobileSidebarOpen}
-        toggleSidebar={() => dispatch({ type: SearchPageActionTypes.TOGGLE_SIDEBAR })}
+        toggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
       >
-        <SearchForm
-          handleSubmit={handleSubmit}
-          videoSearchState={videoSearchState}
-          transcriptFilterState={transcriptFilterState}
-          loading={loading}
-          updateVideoSearchState={(stateUpdate) =>
-            dispatch({ type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE, payload: stateUpdate })
-          }
-          updateTranscriptFilterState={(stateUpdate) =>
-            dispatch({ type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE, payload: stateUpdate })
-          }
-          formErrors={formErrors}
-        />
+        <SearchForm onSubmit={onSubmit} loading={loading} />
       </MobilePopOutMenu>
 
       {/* Mobile: Toggle Button */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden">
         <button
-          onClick={() => dispatch({ type: SearchPageActionTypes.TOGGLE_SIDEBAR })}  
+          onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           className="w-full p-3 text-center text-white bg-blue-600"
         >
           {isMobileSidebarOpen ? "Hide Filters" : "Show Filters"}

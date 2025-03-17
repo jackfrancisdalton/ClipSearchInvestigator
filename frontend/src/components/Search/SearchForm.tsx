@@ -1,55 +1,65 @@
-import { FormErrors, TranscriptFilterState, VideoSearchState } from "../../types";
-import TranscriptFilterForm from "./TranscriptFilterForm";
+import { z } from "zod";
+import { VideoSearchSortOrder } from "../../types";
+import TranscriptFilterSubForm from "./TranscriptFilterSubForm";
 import VideoSearchSubForm from "./VideoSearchSubForm";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+export const searchFormSchema = z.object({
+  videoSearchQuery: z.string().nonempty("Search query is required"),
+  maxResults: z.number().min(1).max(50),
+  sortOrder: z.nativeEnum(VideoSearchSortOrder),
+  publishedAfter: z.string().optional(),
+  publishedBefore: z.string().optional(),
+  channelName: z.string().optional(),
+  matchTerms: z.array(z.object({ value: z.string() })).refine(
+    (terms) => terms.some(term => term.value.trim() !== ""),
+    { message: "At least one search term is required" }
+  ),
+});
+
+export type SearchFormData = z.infer<typeof searchFormSchema>;
 
 interface SearchFormProps {
-    handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-    videoSearchState: VideoSearchState; // Assuming VideoSearchState is defined in the project
-    transcriptFilterState: TranscriptFilterState; // Assuming TranscriptFilterState is defined in the project
-    loading: boolean;
-    updateVideoSearchState: (state: Partial<VideoSearchState>) => void;
-    updateTranscriptFilterState: (state: Partial<TranscriptFilterState>) => void;
-    formErrors: FormErrors;
+  onSubmit: (data: SearchFormData) => void;
+  loading: boolean;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ 
-  handleSubmit, 
-  videoSearchState, 
-  transcriptFilterState, 
-  loading, 
-  updateVideoSearchState, 
-  updateTranscriptFilterState,
-  formErrors
-}) => {
-    return (
-      <div className="p-4 space-y-4">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <VideoSearchSubForm
-            videoSearchState={videoSearchState}
-            setVideoSearchState={updateVideoSearchState}
-            disableForm={loading}
-            formErrors={formErrors.videoSearch}
-          />
-          <TranscriptFilterForm
-            transcriptFilterState={transcriptFilterState}
-            setTranscriptFilterState={updateTranscriptFilterState}
-            disableForm={loading}
-            formErrors={formErrors.transcriptFilter}
-          />
-          <div className="text-center">
-            <button
-              type="submit"
-              disabled={loading}
-              className={`px-6 py-3 ${
-                loading ? 'bg-gray-500 cursor-not-allowed' : 'bg-primary-600 hover:bg-primary-300'
-              } text-white font-semibold rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-primary-500`}
-            >
-              {loading ? 'Searching...' : 'Search'}
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  };
-  
-  export default SearchForm;
+const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, loading }) => {
+  const methods = useForm<SearchFormData>({
+    resolver: zodResolver(searchFormSchema),
+    defaultValues: {
+      videoSearchQuery: "",
+      maxResults: 10,
+      sortOrder: VideoSearchSortOrder.Relevance,
+      publishedAfter: "",
+      publishedBefore: "",
+      channelName: "",
+      matchTerms: [{ value: "" }],
+    },
+  });
+
+  const { handleSubmit } = methods;
+
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-6">
+        <VideoSearchSubForm disableForm={loading} />
+        <TranscriptFilterSubForm disableForm={loading} />
+        <div className="text-center">
+          <button
+            type="submit"
+            disabled={loading}
+            className={`px-6 py-3 ${
+              loading ? "bg-gray-500 cursor-not-allowed" : "bg-primary-600 hover:bg-primary-300"
+            } text-white font-semibold rounded-lg shadow-md w-full focus:outline-none focus:ring-2 focus:ring-primary-500`}
+          >
+            {loading ? "Searching..." : "Search"}
+          </button>
+        </div>
+      </form>
+    </FormProvider>
+  );
+};
+
+export default SearchForm;

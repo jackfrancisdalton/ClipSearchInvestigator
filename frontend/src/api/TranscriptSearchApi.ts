@@ -5,7 +5,7 @@ const API_BASE = '/api/'
 
 type TranscriptSearchParams = {
     videoSearchQuery: string;
-    matchTerms: string[];
+    matchTerms: { value: string }[];
     sortOrder?: string;
     publishedBefore?: string;
     publishedAfter?: string;
@@ -26,7 +26,7 @@ export const searchForTermsInTranscripts = async ({
     const params = new URLSearchParams();
 
     params.append("videoSearchQuery", videoSearchQuery);
-    matchTerms.forEach((term) => params.append("matchTerms", term));
+    matchTerms.forEach((termObj) => params.append("matchTerms", termObj.value));
     params.append("sortOrder", sortOrder);
     params.append("maxResults", maxResults.toString());
 
