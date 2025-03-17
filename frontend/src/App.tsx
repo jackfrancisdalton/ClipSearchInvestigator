@@ -6,39 +6,19 @@ import { RootLayout } from './components';
 import { OptionsPage, SearchPage, SetUpPage } from './pages';
 import { redirectBasedOnAppConfigState } from './loaders';
 
+const routerConfig = [
+  { path: '/', element: <RootLayout />, loader: redirectBasedOnAppConfigState, children: [
+    { index: true, element: <SearchPage /> },
+    { path: 'search', element: <SearchPage /> },
+    { path: 'options', element: <OptionsPage /> },
+    { path: 'setup', element: <SetUpPage /> }
+  ]}
+];
+
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <RootLayout />,
-      loader: redirectBasedOnAppConfigState,
-      children: [
-        {
-          index: true,
-          element: <SearchPage />
-        },
-        {
-          path: 'search',
-          element: <SearchPage />
-        },
-        {
-          path: 'options',
-          element: <OptionsPage />
-        },
-        {
-          path: 'setup',
-          element: <SetUpPage />
-        }
-      ]
-    }
-  ]);
-
-  // TODO:
-  // - Wrap with <ErrorBoundary>
-  // - set up so that search page is lazy loaded based on iff the API is actually returning a true value
-  // - replace suspense with an actual component for loading
-  // TODO: Configure a smooth transition and proper loading rooute
-
+  const router = createBrowserRouter(routerConfig);
+ 
+  // TODO: replace fallback component 
   return (
     <StrictMode>
       <Suspense fallback={<div>Loading route...</div>}>

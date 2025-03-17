@@ -1,3 +1,5 @@
+import { deleteAllApiKeys } from "../api";
+
 const options = [
   "Option 1",
   "Option 2",
@@ -7,6 +9,12 @@ const options = [
 ];
 
 const OptionsPage = () => {
+
+  const deleteApiKeys = async () => {
+    const result = await deleteAllApiKeys()
+  }
+
+
   return (
     <div className="h-full p-4 overflow-auto">
       <h2 className="mb-4 text-2xl font-semibold">Options</h2>
@@ -17,6 +25,7 @@ const OptionsPage = () => {
           </li>
         ))}
       </ul>
+      <button onClick={() => deleteApiKeys()}>Delete All API Keys</button>
     </div>
   );
 };

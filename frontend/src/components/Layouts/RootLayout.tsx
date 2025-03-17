@@ -1,14 +1,17 @@
 import { Outlet } from "react-router-dom";
 import Header from "../Navigation/Header";
+import { AppConfigProvider } from "../../contexts/AppConfigContext";
 
 const RootLayout = () => {
   return (
-    <div className="flex flex-col h-screen">
-      <Header />
-      <main className="flex-1 overflow-hidden">
-        <Outlet />
-      </main>
-    </div>
+    <AppConfigProvider>
+      <div className="flex flex-col h-screen">
+        <Header />
+        <main className="flex-1 overflow-hidden">
+          <Outlet />
+        </main>
+      </div>
+    </AppConfigProvider>
   );
 };
 

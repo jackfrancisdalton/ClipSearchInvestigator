@@ -6,11 +6,11 @@ export const redirectBasedOnAppConfigState: LoaderFunction = async ({ request })
   const isConfigured = await isAppConfigured();
   const { pathname } = new URL(request.url);
 
-  if (!isConfigured && pathname !== '/setup') {
+  if (!isConfigured.isApiKeySet && pathname !== '/setup') {
     return redirect('/setup');
   }
 
-  if (isConfigured && pathname === '/setup') {
+  if (isConfigured.isApiKeySet && pathname === '/setup') {
     return redirect('/search');
   }
 

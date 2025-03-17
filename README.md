@@ -18,8 +18,14 @@ Ever find it annoying not being able to find "that video". This script aims to s
 
 
 # TODO:
-- add in "highlight red when not set" for search boxes
+- add a check that ensures the youtube api key is valid both frontend and backend
 - add place holder before first search
+- swap to using reactquery instead of axios
+- clean up header bar 
+- clean up pop out bar
+- clean up setup page
+- add error page
+- create generic error box
 
 # Clean up
 1. ensure all exceptions are handled on backend
