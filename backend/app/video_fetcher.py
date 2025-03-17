@@ -15,19 +15,20 @@ API_KEY: Optional[str] = os.getenv('API_KEY')
 
 # TODO: add typing for the input and output of this method
 def search_youtube(
+    api_key: str,
     video_search_query: str,
     sort_order: str,
     published_before: Optional[date],
     published_after: Optional[date],
     channel_name: Optional[str],
-    max_results: int = 10
+    max_results: int = 10,
 ) -> list[YoutubeVideoData]:
     """
     Search for YouTube videos.
 
     :raises VideoSearchError: If the YouTube API call fails.
     """
-    
+
     url = "https://www.googleapis.com/youtube/v3/search"
 
     # TODO: define a specific model for this instead of using a dict
@@ -40,8 +41,8 @@ def search_youtube(
         "order": sort_order,
     }
 
-    if API_KEY:
-        params["key"] = API_KEY
+    if api_key:
+        params["key"] = api_key
 
     if published_before:
         published_before = datetime.combine(published_before, datetime.min.time(), tzinfo=timezone.utc)

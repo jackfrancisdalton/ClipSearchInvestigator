@@ -1,12 +1,13 @@
 import os
 from cryptography.fernet import Fernet
 
-# Ideally, you generate the encryption key once and store it securely (e.g., as an environment variable).
 fernet_key = os.environ.get("FERNET_KEY")
 
 if not fernet_key:
-    # In production, do NOT generate a new key on startup; set FERNET_KEY in your environment.
+    # TODO: THROW EXCEPTION
     fernet_key = Fernet.generate_key()
+else:
+    fernet_key = fernet_key.encode()  # convert string to bytes
 
 cipher_suite = Fernet(fernet_key)
 

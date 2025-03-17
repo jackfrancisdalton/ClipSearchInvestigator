@@ -17,6 +17,7 @@ from app.data.database_service import get_db, store_model_in_db
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
 from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
 from app.pydantic_schemas.search_results import TranscriptSearchResponse
+from app.utility.fetch_api_key import fetch_api_key
 
 app = FastAPI()
 
@@ -30,10 +31,12 @@ def create_api_key(
     db: Session = Depends(get_db)
 ):
     try:
-        encrypted_api_key = models.YoutubeSearchApiKey(
-            api_key=password_encryptor.encrypt(request.api_key.encode())
+        encrypted_api_key = password_encryptor.encrypt(request.api_key.encode()).decode()
+
+        api_key_model = models.YoutubeSearchApiKey(
+            api_key=encrypted_api_key
         )
-        store_model_in_db(db, encrypted_api_key)    
+        store_model_in_db(db, api_key_model)    
         return ActionResultResponse(success=True, message="API key stored successfully")
 
     except Exception as e:
@@ -47,10 +50,11 @@ def create_api_key(
     "/is_app_configured", 
     response_model=isAppConfiguredResponse
 )
-def is_app_configured(db: Session = Depends(get_db)):
-    youtube_api_key = db.query(models.YoutubeSearchApiKey) \
-                        .filter(models.YoutubeSearchApiKey.is_active) \
-                        .first()
+def is_app_configured(db: Session = Depends(get_db)):  
+    try:
+        youtube_api_key = fetch_api_key(db=db)
+    except Exception:
+        youtube_api_key = None
     
     return isAppConfiguredResponse(
         is_api_key_set=youtube_api_key is not None
@@ -91,16 +95,32 @@ async def search(
     published_before: Optional[date] = Query(None, alias="publishedBefore"),
     published_after: Optional[date] = Query(None, alias="publishedAfter"),
     channel_name: Optional[str] = Query(None, alias="channelName"),
-    max_results: int = Query(10, alias="maxResults")
+    max_results: int = Query(10, alias="maxResults"),
+    db: Session = Depends(get_db)
 ):
+    # TODO: convert to helper function that also de-encrypts the key
+    youtube_api_key = db.query(models.YoutubeSearchApiKey) \
+                    .filter(models.YoutubeSearchApiKey.is_active) \
+                    .first()
+    
+    string_Test = get_api_key_string()
+    
+    
+    if not youtube_api_key:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No API key is set."
+        )
+
     try:
         videos = search_youtube(
+            youtube_api_key.api_key,
             video_search_query,
             sort_order,
             published_before,
             published_after,
             channel_name,
-            max_results
+            max_results,
         )
     except Exception as e:
         raise HTTPException(
