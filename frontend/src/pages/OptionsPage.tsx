@@ -1,4 +1,4 @@
-import { deleteAllApiKeys } from "../api";
+import { deleteAllApiKeys, getAllKeys } from "../api";
 
 const options = [
   "Option 1",
@@ -14,6 +14,10 @@ const OptionsPage = () => {
     const result = await deleteAllApiKeys()
   }
 
+  const fetchAllKeys = async () => {
+    const result = await getAllKeys()
+  }
+
 
   return (
     <div className="h-full p-4 overflow-auto">
@@ -26,6 +30,7 @@ const OptionsPage = () => {
         ))}
       </ul>
       <button onClick={() => deleteApiKeys()}>Delete All API Keys</button>
+      <button onClick={() => fetchAllKeys()}>fetch All API Keys</button>
     </div>
   );
 };

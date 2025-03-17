@@ -1,4 +1,4 @@
-import { ActionResultResponse, isAppConfiguredResponse, SetAPIKeyRequest } from "../types";
+import { ActionResultResponse, AllApiKeys, isAppConfiguredResponse, SetAPIKeyRequest } from "../types";
 
 const API_BASE = '/api/'
 
@@ -31,6 +31,21 @@ export const saveApiKey = async (body: SetAPIKeyRequest): Promise<ActionResultRe
     }
 
     return await response.json();
+}
+
+export const getAllKeys = async (): Promise<AllApiKeys> => {
+    const response = await fetch(
+        `${API_BASE}get_all_api_keys`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Failed to get all keys');
+    }
+
+    return response.json();
 }
 
 export const deleteAllApiKeys = async (): Promise<ActionResultResponse> => {

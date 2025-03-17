@@ -27,3 +27,11 @@ export interface FormErrors {
     videoSearch: VideoSearchFormErrors;
     transcriptFilter: TranscriptFilterErrors;
 }
+
+export interface ApiKey {
+    apiKey: string;
+}
+
+export interface AllApiKeys {
+    keys: ApiKey[];
+}

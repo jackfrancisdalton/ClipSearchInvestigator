@@ -43,7 +43,10 @@ async def fetch_video_transcript_matches(video: YoutubeVideoData, search_terms: 
     return None
 
 
-async def fetch_transcript_matches(videos: list[YoutubeVideoData], search_terms: List[str]) -> List[TranscriptResult]:
+async def fetch_transcript_matches(
+    videos: list[YoutubeVideoData], 
+    search_terms: List[str]
+) -> List[TranscriptResult]:
     tasks = [fetch_video_transcript_matches(video, search_terms) for video in videos]
 
     processed_results = await asyncio.gather(*tasks)

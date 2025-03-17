@@ -14,7 +14,7 @@ from app.utility import password_encryptor
 from app.data.database_service import get_db, store_model_in_db
 
 # Pydantic imports
-from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
+from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyBase, YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse
 from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
 from app.pydantic_schemas.search_results import TranscriptSearchResponse
 from app.utility.fetch_api_key import fetch_api_key
@@ -30,20 +30,21 @@ def create_api_key(
     request: YoutubeSearchApiKeyCreate, 
     db: Session = Depends(get_db)
 ):
+    # TODO: check if the api works first before storing it and return error if not 
+
     try:
         encrypted_api_key = password_encryptor.encrypt(request.api_key.encode()).decode()
-
         api_key_model = models.YoutubeSearchApiKey(
             api_key=encrypted_api_key
         )
-        store_model_in_db(db, api_key_model)    
+        store_model_in_db(db, api_key_model) # TODO: clean up how this storage works
         return ActionResultResponse(success=True, message="API key stored successfully")
 
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to store API key: {e}"
-        )
+        ) from e
 
 
 @app.get(
@@ -59,6 +60,27 @@ def is_app_configured(db: Session = Depends(get_db)):
     return isAppConfiguredResponse(
         is_api_key_set=youtube_api_key is not None
     )
+
+@app.get(
+    "/get_all_api_keys",
+    response_model=YoutubeSearchApiKeyResponse,
+    status_code=status.HTTP_200_OK
+)
+def get_all_api_keys(db: Session = Depends(get_db)):
+    try:
+        api_keys = db.query(models.YoutubeSearchApiKey).all()
+        masked_keys = [
+            YoutubeSearchApiKeyBase(
+                api_key='*' * (len(api_key.api_key) - 5) + api_key.api_key[-5:]
+            )
+            for api_key in api_keys
+        ]
+        return YoutubeSearchApiKeyResponse(api_keys=masked_keys)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to retrieve API keys: {e}"
+        ) from e
 
 
 @app.delete(
@@ -99,12 +121,7 @@ async def search(
     db: Session = Depends(get_db)
 ):
     # TODO: convert to helper function that also de-encrypts the key
-    youtube_api_key = db.query(models.YoutubeSearchApiKey) \
-                    .filter(models.YoutubeSearchApiKey.is_active) \
-                    .first()
-    
-    string_Test = get_api_key_string()
-    
+    youtube_api_key = fetch_api_key(db=db)
     
     if not youtube_api_key:
         raise HTTPException(
@@ -114,7 +131,7 @@ async def search(
 
     try:
         videos = search_youtube(
-            youtube_api_key.api_key,
+            youtube_api_key,
             video_search_query,
             sort_order,
             published_before,
@@ -135,17 +152,17 @@ async def search(
         )
     
     try: 
-        transcriptResults = await fetch_transcript_matches(videos, match_terms)
+        transcript_results = await fetch_transcript_matches(videos, match_terms)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to fetch transcripts: {e}"
         ) from e
 
-    if not transcriptResults:
+    if not transcript_results:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No transcripts found."
         )
 
-    return TranscriptSearchResponse(results=transcriptResults)
+    return TranscriptSearchResponse(results=transcript_results)
