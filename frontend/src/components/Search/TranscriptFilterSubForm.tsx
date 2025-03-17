@@ -13,7 +13,7 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
     name: "matchTerms",
     control,
   });
-
+  
   return (
     <div className="border border-primary-700">
       <div className="items-center justify-start p-2 bg-background-600">
@@ -49,7 +49,7 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
           ))}
           {errors.matchTerms && (
             <p className="mt-1 text-sm text-red-500">
-              {errors.matchTerms.message as string}
+              {errors.matchTerms?.root?.message}
             </p>
           )}
           <button

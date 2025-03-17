@@ -6,17 +6,23 @@ import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export const searchFormSchema = z.object({
-  videoSearchQuery: z.string().nonempty("Search query is required"),
-  maxResults: z.number().min(1).max(50),
-  sortOrder: z.nativeEnum(VideoSearchSortOrder),
-  publishedAfter: z.string().optional(),
-  publishedBefore: z.string().optional(),
-  channelName: z.string().optional(),
-  matchTerms: z.array(z.object({ value: z.string() })).refine(
-    (terms) => terms.some(term => term.value.trim() !== ""),
-    { message: "At least one search term is required" }
-  ),
-});
+    videoSearchQuery: z.string().nonempty("Search query is required"),
+    maxResults: z.number().min(1).max(50),
+    sortOrder: z.nativeEnum(VideoSearchSortOrder),
+    publishedAfter: z.string().optional(),
+    publishedBefore: z.string().optional(),
+    channelName: z.string().optional(),
+    matchTerms: z.array(z.object({ value: z.string() })),
+  })
+  .superRefine((data, ctx) => {
+    if (!data.matchTerms.some(term => term.value.trim() !== "")) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "At least one search term is required",
+        path: ["matchTerms"],
+      });
+    }
+  });
 
 export type SearchFormData = z.infer<typeof searchFormSchema>;
 
