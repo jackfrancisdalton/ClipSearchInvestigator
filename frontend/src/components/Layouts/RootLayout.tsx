@@ -7,7 +7,7 @@ const RootLayout = () => {
     <AppConfigProvider>
       <div className="flex flex-col h-screen">
         <Header />
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 min-w-full overflow-hidden bg-background-700">
           <Outlet />
         </main>
       </div>

@@ -30,8 +30,11 @@ export interface FormErrors {
 
 export interface ApiKey {
     apiKey: string;
+    isActive: boolean;
+    id: number;
 }
 
+// TODO: rename this to APIKeysListResponse
 export interface AllApiKeys {
-    keys: ApiKey[];
+    apiKeys: ApiKey[];
 }

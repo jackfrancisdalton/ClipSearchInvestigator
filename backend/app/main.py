@@ -14,7 +14,7 @@ from app.utility import password_encryptor
 from app.data.database_service import get_db, store_model_in_db
 
 # Pydantic imports
-from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyBase, YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse
+from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyListResponse, YoutubeSearchApiKeyResponse
 from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
 from app.pydantic_schemas.search_results import TranscriptSearchResponse
 from app.utility.fetch_api_key import fetch_api_key
@@ -63,25 +63,79 @@ def is_app_configured(db: Session = Depends(get_db)):
 
 @app.get(
     "/get_all_api_keys",
-    response_model=YoutubeSearchApiKeyResponse,
+    response_model=YoutubeSearchApiKeyListResponse,
     status_code=status.HTTP_200_OK
 )
 def get_all_api_keys(db: Session = Depends(get_db)):
     try:
         api_keys = db.query(models.YoutubeSearchApiKey).all()
         masked_keys = [
-            YoutubeSearchApiKeyBase(
-                api_key='*' * (len(api_key.api_key) - 5) + api_key.api_key[-5:]
+            YoutubeSearchApiKeyResponse(
+                id=api_key.id,
+                api_key='*' * (len(api_key.api_key) - 5) + api_key.api_key[-5:],
+                is_active=api_key.is_active
             )
             for api_key in api_keys
         ]
-        return YoutubeSearchApiKeyResponse(api_keys=masked_keys)
+        return YoutubeSearchApiKeyListResponse(api_keys=masked_keys)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to retrieve API keys: {e}"
         ) from e
 
+@app.patch(
+    "/api_key/{api_key_id}/activate",
+    response_model=ActionResultResponse,
+    status_code=status.HTTP_200_OK
+)
+def activate_api_key(api_key_id: int, db: Session = Depends(get_db)):
+    try:
+        api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.id == api_key_id).first()
+        if not api_key:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="API key not found."
+            )
+        api_key.is_active = True
+        db.commit()
+        return ActionResultResponse(success=True, message="API key activated successfully")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to activate API key: {e}"
+        ) from e
+
+@app.patch(
+    "/api_key/{api_key_id}/deactivate",
+    response_model=ActionResultResponse,
+    status_code=status.HTTP_200_OK
+)
+def deactivate_api_key(api_key_id: int, db: Session = Depends(get_db)):
+    try:
+        active_keys_count = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).count()
+        if active_keys_count <= 1:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot deactivate the last active API key."
+            )
+        
+        api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.id == api_key_id).first()
+        if not api_key:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="API key not found."
+            )
+        api_key.is_active = False
+        db.commit()
+        return ActionResultResponse(success=True, message="API key deactivated successfully")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to deactivate API key: {e}"
+        ) from e
 
 @app.delete(
     "/delete_all_api_keys",

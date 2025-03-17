@@ -14,4 +14,9 @@ class YoutubeSearchApiKeyUpdate(NormalisedBaseModel):
 
 
 class YoutubeSearchApiKeyResponse(NormalisedBaseModel):
-    api_keys: List[YoutubeSearchApiKeyBase]
+    id: int
+    api_key: str
+    is_active: bool
+
+class YoutubeSearchApiKeyListResponse(NormalisedBaseModel):
+    api_keys: List[YoutubeSearchApiKeyResponse]
