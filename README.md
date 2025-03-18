@@ -16,6 +16,14 @@ Ever find it annoying not being able to find "that video". This script aims to s
 
 # ------------------ NOTES TO SELF
 
+# TODO Today:
+- refactor form to have state outside the form
+- clean up error messages in each and convert add key to a form
+- improve exception handling for backend and frontend
+- create an error result component and an error page for fail to load
+- clean up TODO comments
+- rename types to better type names
+
 
 # TODO:
 - add a check that ensures the youtube api key is valid both frontend and backend

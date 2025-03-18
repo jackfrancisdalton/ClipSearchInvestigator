@@ -30,14 +30,16 @@ def create_api_key(
     request: YoutubeSearchApiKeyCreate, 
     db: Session = Depends(get_db)
 ):
-    # TODO: check if the api works first before storing it and return error if not 
-
     try:
+        # Check if there is already an active API key
+        active_api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active == True).first()
+        
         encrypted_api_key = password_encryptor.encrypt(request.api_key.encode()).decode()
         api_key_model = models.YoutubeSearchApiKey(
-            api_key=encrypted_api_key
+            api_key=encrypted_api_key,
+            is_active=False if active_api_key else True
         )
-        store_model_in_db(db, api_key_model) # TODO: clean up how this storage works
+        store_model_in_db(db, api_key_model)
         return ActionResultResponse(success=True, message="API key stored successfully")
 
     except Exception as e:
@@ -45,7 +47,6 @@ def create_api_key(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to store API key: {e}"
         ) from e
-
 
 @app.get(
     "/is_app_configured", 
@@ -71,9 +72,9 @@ def get_all_api_keys(db: Session = Depends(get_db)):
         api_keys = db.query(models.YoutubeSearchApiKey).all()
         masked_keys = [
             YoutubeSearchApiKeyResponse(
-                id=api_key.id,
-                api_key='*' * (len(api_key.api_key) - 5) + api_key.api_key[-5:],
-                is_active=api_key.is_active
+            id=api_key.id,
+            api_key='*' * (len(password_encryptor.decrypt(api_key.api_key.encode()).decode()) - 5) + password_encryptor.decrypt(api_key.api_key.encode()).decode()[-5:],
+            is_active=api_key.is_active
             )
             for api_key in api_keys
         ]
@@ -84,6 +85,7 @@ def get_all_api_keys(db: Session = Depends(get_db)):
             detail=f"Failed to retrieve API keys: {e}"
         ) from e
 
+# TODO: integrate with the frontend
 @app.patch(
     "/api_key/{api_key_id}/activate",
     response_model=ActionResultResponse,
@@ -97,14 +99,52 @@ def activate_api_key(api_key_id: int, db: Session = Depends(get_db)):
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="API key not found."
             )
+        
+        # Deactivate all other API keys
+        db.query(models.YoutubeSearchApiKey).filter(
+            models.YoutubeSearchApiKey.id != api_key_id,
+            models.YoutubeSearchApiKey.is_active
+        ).update({models.YoutubeSearchApiKey.is_active: False})
+
+        # Activate the target API key
         api_key.is_active = True
         db.commit()
-        return ActionResultResponse(success=True, message="API key activated successfully")
+        return ActionResultResponse(success=True, message="API key activated and others deactivated successfully")
     except Exception as e:
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to activate API key: {e}"
+        ) from e
+    
+@app.delete(
+    "/api_key/{api_key_id}",
+    response_model=ActionResultResponse,
+    status_code=status.HTTP_200_OK
+)
+def delete_api_key(api_key_id: int, db: Session = Depends(get_db)):
+    try:
+        api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.id == api_key_id).first()
+        if not api_key:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="API key not found."
+            )
+        
+        if api_key.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot delete an active API key."
+            )
+        
+        db.delete(api_key)
+        db.commit()
+        return ActionResultResponse(success=True, message="API key deleted successfully")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to delete API key: {e}"
         ) from e
 
 @app.patch(
