@@ -54,6 +54,7 @@ export const useApiKeysManagagment = () => {
 
   const deleteAllKeys = async () => {
     try {
+      // TODO: rename and change these to factory reset and add a navigate to home page after success
       await deleteAllApiKeys();
       setErrors(prev => ({ ...prev, deleteAll: "" }));
     } catch (error: any) {
