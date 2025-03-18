@@ -1,7 +1,7 @@
 from typing import List, Optional
 import asyncio
 
-from app.pydantic_schemas.search_results import Match, TranscriptResult, YoutubeVideoData
+from app.pydantic_schemas.search_results import TranscriptMatch, TranscriptSearchResult, YoutubeVideoData
 from youtube_transcript_api._api import YouTubeTranscriptApi
 from youtube_transcript_api._transcripts import FetchedTranscript
 from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
@@ -15,12 +15,12 @@ async def fetch_transcript(video_id: str) -> Optional[FetchedTranscript]:
         print(f"Error fetching transcript for video {video_id}: {e}")
         return None
 
-async def fetch_video_transcript_matches(video: YoutubeVideoData, search_terms: List[str]) -> Optional[TranscriptResult]:
+async def fetch_video_transcript_matches(video: YoutubeVideoData, search_terms: List[str]) -> Optional[TranscriptSearchResult]:
     transcript_list = await fetch_transcript(video.videoId)
 
     if transcript_list:
         matching_entries = [
-            Match(
+            TranscriptMatch(
                 startTime=phrase.start,
                 text=phrase.text,
                 link=f"https://www.youtube.com/watch?v={video.videoId}&t={int(phrase.start)}"
@@ -30,7 +30,7 @@ async def fetch_video_transcript_matches(video: YoutubeVideoData, search_terms: 
         ]
                 
         if matching_entries:
-            return TranscriptResult(
+            return TranscriptSearchResult(
                 videoTitle=video.title,
                 description=video.description,
                 channelTitle=video.channelTitle,
@@ -46,7 +46,7 @@ async def fetch_video_transcript_matches(video: YoutubeVideoData, search_terms: 
 async def fetch_transcript_matches(
     videos: list[YoutubeVideoData], 
     search_terms: List[str]
-) -> List[TranscriptResult]:
+) -> List[TranscriptSearchResult]:
     tasks = [fetch_video_transcript_matches(video, search_terms) for video in videos]
 
     processed_results = await asyncio.gather(*tasks)

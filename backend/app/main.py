@@ -16,8 +16,8 @@ from app.data.database_service import get_db, store_model_in_db
 # Pydantic imports
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse
 from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
-from app.pydantic_schemas.search_results import TranscriptSearchResponse
 from app.utility.fetch_api_key import fetch_api_key
+from app.pydantic_schemas.search_results import TranscriptSearchResult
 
 app = FastAPI()
 
@@ -201,7 +201,7 @@ def delete_all_api_keys(db: Session = Depends(get_db)):
 
 @app.get(    
     "/search-transcripts",
-    response_model=TranscriptSearchResponse,
+    response_model=list[TranscriptSearchResult],
     status_code=status.HTTP_200_OK
 )
 async def search(
@@ -259,4 +259,4 @@ async def search(
             detail="No transcripts found."
         )
 
-    return TranscriptSearchResponse(results=transcript_results)
+    return transcript_results

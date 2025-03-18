@@ -46,5 +46,5 @@ export const searchForTermsInTranscripts = async ({
     }
 
     const results: any = await response.json()
-    return results.results;
+    return results;
 };

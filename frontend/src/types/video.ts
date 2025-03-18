@@ -3,6 +3,7 @@ export interface Video {
     title: string;
     description: string;
     publishedAt: string;
+    // TODO add video thumbnail URL
 }
 
 export interface TranscriptMatch {
