@@ -11,16 +11,13 @@ const OptionsPage = () => {
       <div className="p-4 rounded bg-background-600">
         <h3>Manage API Keys</h3>
         {errors.fetch && <div className="mb-2 text-sm text-red-500">{errors.fetch}</div>}
-
         <ApiKeyManagementTable
           apiKeys={apiKeys.apiKeys}
           errors={errors.row}
           onActivate={activateKey}
           onDelete={deleteKey}
         />
-
         <AddNewApiKey onSave={saveKey} errorMessage={errors.newApiKey} />
-
         <FactoryResetApp onDeleteAll={deleteAllKeys} errorMessage={errors.deleteAll} />
       </div>
     </div>

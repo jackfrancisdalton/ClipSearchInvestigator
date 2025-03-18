@@ -49,6 +49,7 @@ const ApiKeyManagementTable: React.FC<ApiKeyTableProps> = ({ apiKeys, errors, on
                 className="px-2 py-1 text-sm font-medium bg-red-500 rounded text-white-50"
                 onClick={() => onDelete(key.id)}
                 disabled={apiKeys.length === 1 && !key.isActive}
+                title={apiKeys.length === 1 && !key.isActive ? "You must have at least one API key, add a new one if you wish to delete this one" : ""}
               >
                 Delete
               </button>
