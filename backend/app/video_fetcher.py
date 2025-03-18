@@ -83,6 +83,7 @@ def get_channel_id(channel_name: str) -> str:
         "type": "channel",
     }
     
+    # TODO: Replace this with a param instead
     if API_KEY:
         params["key"] = API_KEY
     
