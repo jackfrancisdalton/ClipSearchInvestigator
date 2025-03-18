@@ -65,7 +65,7 @@ const SearchPage: React.FC = () => {
       <div className="fixed bottom-0 left-0 right-0 md:hidden">
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          className="w-full p-3 text-center text-white bg-primary-600"
+          className="w-full p-3 text-center text-white shadow-lg bg-primary-600"
         >
           {isMobileSidebarOpen ? "Hide Filters" : "Show Filters"}
         </button>

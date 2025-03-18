@@ -87,3 +87,10 @@ TRUNCATE table_name; : to drop all records
 # Future features
 - remember last searches and allow for replay
 - show statistics on results like most commonon terms, range of pasted dates
+
+
+
+TEMP: existing api key:
+API_KEY="AIzaSyCVk0zFQem35Pts83tl2do6PcZJ4RWlKO8"
+
+# TODO: DELETE THIS FILE

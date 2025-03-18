@@ -10,9 +10,6 @@ from app.exceptions.shared import VideoSearchError
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-API_KEY: Optional[str] = os.getenv('API_KEY')
-
-
 # TODO: add typing for the input and output of this method
 def search_youtube(
     api_key: str,
@@ -53,7 +50,7 @@ def search_youtube(
         params["publishedAfter"] = published_after.isoformat(timespec='seconds').replace('+00:00', 'Z')
 
     if channel_name: 
-        params["channelId"] = get_channel_id(channel_name)
+        params["channelId"] = get_channel_id(api_key, channel_name)
 
     try:
         response = requests.get(url, params=params, timeout=10)
@@ -74,18 +71,18 @@ def search_youtube(
     except Exception as e:
         raise VideoSearchError("YouTube search failed due to a network issue") from e
 
-def get_channel_id(channel_name: str) -> str:
+def get_channel_id(
+    api_key: str,
+    channel_name: str
+) -> str:
     url = "https://www.googleapis.com/youtube/v3/search"
     
     params: dict[str, str] = {
         "part": "snippet",
         "q": channel_name,
         "type": "channel",
+        "key": api_key
     }
-    
-    # TODO: Replace this with a param instead
-    if API_KEY:
-        params["key"] = API_KEY
     
     response = requests.get(url, params=params)
     

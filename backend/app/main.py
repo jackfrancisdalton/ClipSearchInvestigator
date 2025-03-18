@@ -69,7 +69,7 @@ def is_app_configured(db: Session = Depends(get_db)):
 )
 def get_all_api_keys(db: Session = Depends(get_db)):
     try:
-        api_keys = db.query(models.YoutubeSearchApiKey).all()
+        api_keys = db.query(models.YoutubeSearchApiKey).order_by(models.YoutubeSearchApiKey.date_created).all()
         masked_keys = [
             YoutubeSearchApiKeyResponse(
                 id=api_key.id,
