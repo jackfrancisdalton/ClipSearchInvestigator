@@ -5,6 +5,7 @@ from app.data import models
 from app.utility import password_encryptor
 
 def fetch_api_key(db: Session) -> str:
+    # NOTE: there should only ever be one active primary key in the db at one time
     encrypted_api_key = db.query(models.YoutubeSearchApiKey) \
                         .filter(models.YoutubeSearchApiKey.is_active == True) \
                         .first()

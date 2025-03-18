@@ -1,11 +1,4 @@
-export interface Video {
-    id: string;
-    title: string;
-    description: string;
-    publishedAt: string;
-    // TODO add video thumbnail URL
-}
-
+// TODO: rename this file to transcript search
 export interface TranscriptMatch {
     text: string;
     startTime: number;

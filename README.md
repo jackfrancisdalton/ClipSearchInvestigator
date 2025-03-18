@@ -17,55 +17,28 @@ Ever find it annoying not being able to find "that video". This script aims to s
 # ------------------ NOTES TO SELF
 
 # TODO Today:
-- refactor form to have state outside the form
-- clean up error messages in each and convert add key to a form
-- improve exception handling for backend and frontend
-- create an error result component and an error page for fail to load
-- clean up TODO comments
-- rename types to better type names
+1. clean up TODOs
+2. add a dedicated exception error message box for search page
+2. Normalise the exceptions and error messages being displayed
+3. Improve exception handling, for example ensure clear error messages wh
+4. add defined error instead of </...loading> in root layout
+5. add in litmus tests so that we check api keys work before allowing them to be added
+5. clean up the options page to look better and give better feedback
+6. clean up the pop up on mobile both in terms of behaviour but also how it overlays on top of the app and animates
+7. update favicon
+8. add testing suite
+9. test the prouduction version of the app works
+10. add continous integration to the build process
+11. clean up the readme
+12. double check for no private date
+13. clean up for making public
 
 
-# TODO:
-- add a check that ensures the youtube api key is valid both frontend and backend
-- add place holder before first search
-- swap to using reactquery instead of axios
-- clean up header bar 
-- clean up pop out bar
-- clean up setup page
-- add error page
-- create generic error box
-
-# Clean up
-1. ensure all exceptions are handled on backend
--- handle eceptions and returning appropriate message
-
-2. ensure all exceptions are handled on frontend 
--- error boundaries
-
-3. update the tab name and mini icon
-
-4. search term only works on matching a single snippet atm, figure out a way to make it work across snippets
-
-# UI
-- Split up the left search into two section
--- specify videos to search for
--- specify terms to find in those videos
-- add pretty error message
-- add pretty place holder
-- add pretty loading result
-
-# Dev enviornment
-- add debug support for react and python
-- add testing frameworks as well
-
-## Add support for:
-- channel only searching https://developers.google.com/youtube/v3/docs/search/list
-- video length filtering
-- display meaningful error messages and clear results 
-- search inclusive vs exclusive of all results (ie (bing or bong) or (bing and bong))
-- add filter for terms bar to filter for specific results    
-- display full transcript in pop up on click 
-- searching but substring or exact match
+# Post release features
+1. Bar on search page to allow for filtering by match condition
+2. faster rendering
+3. add saving specific
+4. make search results persistant between page swaps
 
 
 # Maintaining:
@@ -83,14 +56,6 @@ TRUNCATE table_name; : to drop all records
 - does not work with VPN
 - does not work if video not premiered yet: "Failed to fetch transcripts: \nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=cwish35WV4I! This is most likely caused by:\n\nThe video is unplayable for the following reason: Premieres in 36 hours\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
 
-
-# Future features
-- remember last searches and allow for replay
-- show statistics on results like most commonon terms, range of pasted dates
-
-
-
+# TODO: DELETE THIS FILE
 TEMP: existing api key:
 API_KEY="AIzaSyCVk0zFQem35Pts83tl2do6PcZJ4RWlKO8"
-
-# TODO: DELETE THIS FILE

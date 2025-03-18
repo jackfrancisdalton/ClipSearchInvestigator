@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getAllKeys, activateApiKey, deleteApiKey, saveApiKey, deleteAllApiKeys } from '../api';
 import { ApiKey } from '../types';
 
+// TODO: review and clean up this context file, in particular look into how we refetch things
 export const useApiKeysManagagment = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [errors, setErrors] = useState({

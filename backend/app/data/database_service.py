@@ -6,6 +6,7 @@ from typing import TypeVar
 # TODO: look into how this works and if it's valid
 T = TypeVar('T')
 
+# TODO: make this mor generic and add more methods for slimming down the rest of the code base
 def store_model_in_db(db: Session, db_model: T) -> T:
     db.add(db_model)
     
