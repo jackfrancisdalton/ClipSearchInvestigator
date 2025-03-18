@@ -1,4 +1,3 @@
-// src/components/TranscriptFilterForm.tsx
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { SearchFormData } from "./SearchForm";

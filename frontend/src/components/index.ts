@@ -5,7 +5,7 @@ export { default as RootLayout } from './Layouts/RootLayout';
 export { default as MasonryGridLayout } from './Layouts/MasonryGridLayout';
 export { default as MobilePopOutMenu } from './Layouts/MobilePopOutMenu';
 
-export { default as SearchForm } from './Search/SearchForm';
+export *  from './Search/SearchForm';
 export { default as ResultsPlaceHolder } from './Search/ResultsPlaceHolder';
 export { default as SearchResult } from './Search/SearchResult';
 

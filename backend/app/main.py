@@ -14,7 +14,7 @@ from app.utility import password_encryptor
 from app.data.database_service import get_db, store_model_in_db
 
 # Pydantic imports
-from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyListResponse, YoutubeSearchApiKeyResponse
+from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse
 from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
 from app.pydantic_schemas.search_results import TranscriptSearchResponse
 from app.utility.fetch_api_key import fetch_api_key
@@ -64,7 +64,7 @@ def is_app_configured(db: Session = Depends(get_db)):
 
 @app.get(
     "/get_all_api_keys",
-    response_model=YoutubeSearchApiKeyListResponse,
+    response_model=list[YoutubeSearchApiKeyResponse],
     status_code=status.HTTP_200_OK
 )
 def get_all_api_keys(db: Session = Depends(get_db)):
@@ -72,13 +72,13 @@ def get_all_api_keys(db: Session = Depends(get_db)):
         api_keys = db.query(models.YoutubeSearchApiKey).all()
         masked_keys = [
             YoutubeSearchApiKeyResponse(
-            id=api_key.id,
-            api_key='*' * (len(password_encryptor.decrypt(api_key.api_key.encode()).decode()) - 5) + password_encryptor.decrypt(api_key.api_key.encode()).decode()[-5:],
-            is_active=api_key.is_active
+                id=api_key.id,
+                api_key='*' * (len(password_encryptor.decrypt(api_key.api_key.encode()).decode()) - 5) + password_encryptor.decrypt(api_key.api_key.encode()).decode()[-5:],
+                is_active=api_key.is_active
             )
             for api_key in api_keys
         ]
-        return YoutubeSearchApiKeyListResponse(api_keys=masked_keys)
+        return masked_keys
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

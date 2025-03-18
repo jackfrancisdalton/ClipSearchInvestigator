@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-interface SelectedTermsBarProps {
+interface SelectedTermsBarParams {
     terms: string[];
     onTermClick: (term: string, isActive: boolean) => void;
 }
 
-const SelectedTermsBar: React.FC<SelectedTermsBarProps> = ({ terms, onTermClick }) => {
+const SelectedTermsBar: React.FC<SelectedTermsBarParams> = ({ terms, onTermClick }) => {
     const [activeTerms, setActiveTerms] = useState<string[]>([]);
 
     const handleTermClick = (term: string) => {
@@ -19,7 +19,7 @@ const SelectedTermsBar: React.FC<SelectedTermsBarProps> = ({ terms, onTermClick 
     };
 
     return (
-        <div className="flex gap-2 mt-0 mb-4 p-4 rounded-lg bg-background-500 items-center">
+        <div className="flex items-center gap-2 p-4 mt-0 mb-4 rounded-lg bg-background-500">
             <span className="mr-4">Filter by term:</span>
             {terms.map(term => (
             <div

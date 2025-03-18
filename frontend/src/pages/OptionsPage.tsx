@@ -12,7 +12,7 @@ const OptionsPage = () => {
         <h3>Manage API Keys</h3>
         {errors.fetch && <div className="mb-2 text-sm text-red-500">{errors.fetch}</div>}
         <ApiKeyManagementTable
-          apiKeys={apiKeys.apiKeys}
+          apiKeys={apiKeys}
           errors={errors.row}
           onActivate={activateKey}
           onDelete={deleteKey}

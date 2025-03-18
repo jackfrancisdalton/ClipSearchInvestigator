@@ -1,8 +1,8 @@
-import { ActionResultResponse, AllApiKeys, isAppConfiguredResponse, SetAPIKeyRequest } from "../types";
+import { ApiActionResultResponse, ApiKey, AppConfigurationResponse, SetApiKeyRequest } from "../types";
 
 const API_BASE = '/api'
 
-export const isAppConfigured = async (): Promise<isAppConfiguredResponse> => {
+export const isAppConfigured = async (): Promise<AppConfigurationResponse> => {
     const response = await fetch(
         `${API_BASE}/is_app_configured`, {
             method: 'GET',
@@ -17,7 +17,7 @@ export const isAppConfigured = async (): Promise<isAppConfiguredResponse> => {
     return await response.json();
 }
 
-export const saveApiKey = async (body: SetAPIKeyRequest): Promise<ActionResultResponse> => {
+export const saveApiKey = async (body: SetApiKeyRequest): Promise<ApiActionResultResponse> => {
     const response = await fetch(
         `${API_BASE}/store_api_key`, {
             method: 'POST',
@@ -33,7 +33,7 @@ export const saveApiKey = async (body: SetAPIKeyRequest): Promise<ActionResultRe
     return await response.json();
 }
 
-export const deleteApiKey = async (keyId: number): Promise<ActionResultResponse> => {
+export const deleteApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
     const response = await fetch(
         `${API_BASE}/api_key/${keyId}`, {
             method: 'DELETE',
@@ -48,7 +48,7 @@ export const deleteApiKey = async (keyId: number): Promise<ActionResultResponse>
     return response.json();
 }
 
-export const getAllKeys = async (): Promise<AllApiKeys> => {
+export const getAllKeys = async (): Promise<ApiKey[]> => {
     const response = await fetch(
         `${API_BASE}/get_all_api_keys`, {
             method: 'GET',
@@ -63,7 +63,7 @@ export const getAllKeys = async (): Promise<AllApiKeys> => {
     return response.json();
 }
 
-export const activateApiKey = async (keyId: number): Promise<ActionResultResponse> => {
+export const activateApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
     const response = await fetch(
         `${API_BASE}/api_key/${keyId}/activate`, {
             method: 'PATCH',
@@ -78,7 +78,7 @@ export const activateApiKey = async (keyId: number): Promise<ActionResultRespons
     return response.json();
 }
 
-export const deactivateApiKey = async (keyId: number): Promise<ActionResultResponse> => {
+export const deactivateApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
     const response = await fetch(
         `${API_BASE}/api_key/${keyId}/deactivate`, {
             method: 'PATCH',
@@ -94,7 +94,7 @@ export const deactivateApiKey = async (keyId: number): Promise<ActionResultRespo
 }
 
 
-export const deleteAllApiKeys = async (): Promise<ActionResultResponse> => {
+export const deleteAllApiKeys = async (): Promise<ApiActionResultResponse> => {
     const response = await fetch(
         `${API_BASE}/delete_all_api_keys`, {
             method: 'DELETE',

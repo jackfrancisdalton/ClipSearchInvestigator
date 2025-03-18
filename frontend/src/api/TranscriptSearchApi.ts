@@ -1,4 +1,4 @@
-import { ApiErrorResponse, VideoTranscriptResult } from "../types";
+import { ApiGenericErrorResponse, TranscriptSearchResult } from "../types";
 
 // TODO: move to shared value
 const API_BASE = '/api/'
@@ -21,7 +21,7 @@ export const searchForTermsInTranscripts = async ({
     publishedAfter,
     channelName, 
     maxResults = 10
-}: TranscriptSearchParams): Promise<VideoTranscriptResult[]> => {
+}: TranscriptSearchParams): Promise<TranscriptSearchResult[]> => {
 
     const params = new URLSearchParams();
 
@@ -41,8 +41,8 @@ export const searchForTermsInTranscripts = async ({
     const response = await fetch(`${API_BASE}search-transcripts?${params.toString()}`);
 
     if (!response.ok) {
-        const errorData: ApiErrorResponse = await response.json();
-        throw new Error(errorData.detail);
+        const errorData: ApiGenericErrorResponse = await response.json();
+        throw new Error(errorData.message);
     }
 
     const results: any = await response.json()

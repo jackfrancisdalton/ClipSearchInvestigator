@@ -1,4 +1,4 @@
-import { TranscriptFilterState, VideoSearchState, VideoTranscriptResult } from "../types";
+import { TranscriptFilterState, TranscriptSearchResult, VideoSearchState } from "../types";
 
 // actionTypes.ts
 export enum SearchPageActionTypes {
@@ -18,6 +18,6 @@ export type SearchPageAction =
   | { type: SearchPageActionTypes.SET_LOADING; payload: boolean }
   | { type: SearchPageActionTypes.SET_HAS_SEARCHED; }
   | { type: SearchPageActionTypes.SET_ERROR; payload: string | null }
-  | { type: SearchPageActionTypes.SET_RESULTS; payload: VideoTranscriptResult[] }
+  | { type: SearchPageActionTypes.SET_RESULTS; payload: TranscriptSearchResult[] }
   | { type: SearchPageActionTypes.UPDATE_VIDEO_SEARCH_STATE; payload: Partial<VideoSearchState> }
   | { type: SearchPageActionTypes.UPDATE_TRANSCRIPT_FILTER_STATE; payload: Partial<TranscriptFilterState> };

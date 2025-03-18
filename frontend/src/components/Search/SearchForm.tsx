@@ -32,7 +32,7 @@ interface SearchFormProps {
   loading: boolean;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, loading }) => {
+export const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, loading }) => {
   const methods = useForm<SearchFormData>({
     resolver: zodResolver(searchFormSchema),
     defaultValues: {
@@ -62,5 +62,3 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, loading }) => {
     </FormProvider>
   );
 };
-
-export default SearchForm;

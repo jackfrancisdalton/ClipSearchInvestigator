@@ -1,12 +1,10 @@
-// src/components/SearchPage.tsx
 import React, { useState } from "react";
-import { MasonryGridLayout, LoadingSpinner, ResultsPlaceHolder, MobilePopOutMenu, SearchResult } from "../components";
+import { MasonryGridLayout, LoadingSpinner, ResultsPlaceHolder, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm } from "../components";
 import { searchForTermsInTranscripts } from "../api";
-import { VideoTranscriptResult } from "../types";
-import SearchForm, { SearchFormData } from "../components/Search/SearchForm";
+import { TranscriptSearchResult } from "../types"; // Import the correct type
 
 const SearchPage: React.FC = () => {
-  const [results, setResults] = useState<VideoTranscriptResult[]>([]);
+  const [results, setResults] = useState<TranscriptSearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
@@ -21,6 +19,7 @@ const SearchPage: React.FC = () => {
       setResults([]);
     } finally {
       setLoading(false);
+      setIsMobileSidebarOpen(false); // hide the mobile sidebar after action is complete
     }
   };
 
@@ -66,7 +65,7 @@ const SearchPage: React.FC = () => {
       <div className="fixed bottom-0 left-0 right-0 md:hidden">
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-          className="w-full p-3 text-center text-white bg-blue-600"
+          className="w-full p-3 text-center text-white bg-primary-600"
         >
           {isMobileSidebarOpen ? "Hide Filters" : "Show Filters"}
         </button>

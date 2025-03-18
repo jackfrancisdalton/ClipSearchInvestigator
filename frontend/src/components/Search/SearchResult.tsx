@@ -1,6 +1,6 @@
-import { VideoTranscriptResult } from "../../types";
+import { TranscriptSearchResult } from "../../types";
 
-function SearchResult({ result }: { result: VideoTranscriptResult }) {
+function SearchResult({ result }: { result: TranscriptSearchResult }) {
 
     return(
         <div className="p-6 transition-shadow shadow-lg bg-background-500 hover:shadow-xl">

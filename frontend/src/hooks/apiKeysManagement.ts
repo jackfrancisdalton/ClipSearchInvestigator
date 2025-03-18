@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { getAllKeys, activateApiKey, deleteApiKey, saveApiKey, deleteAllApiKeys } from '../api';
-import { AllApiKeys } from '../types';
+import { ApiKey } from '../types';
 
 export const useApiKeysManagagment = () => {
-  const [apiKeys, setApiKeys] = useState<AllApiKeys>({ apiKeys: [] });
+  const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [errors, setErrors] = useState({
     fetch: '',
     newApiKey: '',
