@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useState, useEffect } from 'react';
-import { isAppConfigured } from '../api';
+import { fetchAppConfigState } from '../api';
 import { useLocation } from 'react-router-dom';
 
 export const AppConfigContext = createContext({
@@ -12,7 +12,7 @@ export const AppConfigProvider = ({ children }: { children: ReactNode }) => {
     const location = useLocation();
   
     const refreshConfig = async () => {
-      const config = await isAppConfigured();
+      const config = await fetchAppConfigState();
       setIsConfigured(config.isApiKeySet);
     };
   

@@ -33,19 +33,6 @@ def create_youtube_api_key(request: YoutubeSearchApiKeyCreate, db: Session = Dep
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to store API key: {e}"
         ) from e
-    
-
-# Check if a YouTube API key is configured (i.e. if an active key exists)
-@router.get("/youtube-api-keys/configured", response_model=isAppConfiguredResponse)
-def check_youtube_api_key_configured(db: Session = Depends(get_db)):
-    try:
-        youtube_api_key = get_currently_active_api_key(db=db)
-    except Exception:
-        youtube_api_key = None
-    
-    return isAppConfiguredResponse(
-        is_api_key_set=youtube_api_key is not None
-    )
 
 # Retrieve all YouTube API keys
 @router.get("/youtube-api-keys", response_model=list[YoutubeSearchApiKeyResponse], status_code=status.HTTP_200_OK)

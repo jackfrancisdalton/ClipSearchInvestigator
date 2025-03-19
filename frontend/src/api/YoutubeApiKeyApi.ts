@@ -1,22 +1,6 @@
-import { ApiActionResultResponse, ApiKey, AppConfigurationResponse, SetApiKeyRequest } from "../types";
+import { ApiActionResultResponse, ApiKey, SetApiKeyRequest } from "../types";
 
 const API_BASE = '/api/youtube-api-keys'
-
-export const isAppConfigured = async (): Promise<AppConfigurationResponse> => {
-    // TODO: move this out of the api keys file as well as in python backend and into it's own folders
-    const response = await fetch(
-        `${API_BASE}/configured`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json'},
-        }
-    );
-
-    if (!response.ok) {
-        throw new Error('Failed to check if API key is set');
-    }
-
-    return await response.json();
-}
 
 export const saveApiKey = async (body: SetApiKeyRequest): Promise<ApiActionResultResponse> => {
     const response = await fetch(
