@@ -1,10 +1,11 @@
 import { ApiActionResultResponse, ApiKey, AppConfigurationResponse, SetApiKeyRequest } from "../types";
 
-const API_BASE = '/api'
+const API_BASE = '/api/youtube-api-keys'
 
 export const isAppConfigured = async (): Promise<AppConfigurationResponse> => {
+    // TODO: move this out of the api keys file as well as in python backend and into it's own folders
     const response = await fetch(
-        `${API_BASE}/is_app_configured`, {
+        `${API_BASE}/configured`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json'},
         }
@@ -19,7 +20,7 @@ export const isAppConfigured = async (): Promise<AppConfigurationResponse> => {
 
 export const saveApiKey = async (body: SetApiKeyRequest): Promise<ApiActionResultResponse> => {
     const response = await fetch(
-        `${API_BASE}/store_api_key`, {
+        `${API_BASE}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body),
@@ -33,24 +34,9 @@ export const saveApiKey = async (body: SetApiKeyRequest): Promise<ApiActionResul
     return await response.json();
 }
 
-export const deleteApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
-    const response = await fetch(
-        `${API_BASE}/api_key/${keyId}`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-
-    if (!response.ok) {
-        throw new Error('Failed to delete API key');
-    }
-
-    return response.json();
-}
-
 export const getAllKeys = async (): Promise<ApiKey[]> => {
     const response = await fetch(
-        `${API_BASE}/get_all_api_keys`, {
+        `${API_BASE}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         }
@@ -63,36 +49,20 @@ export const getAllKeys = async (): Promise<ApiKey[]> => {
     return response.json();
 }
 
-export const activateApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
+export const deleteApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
     const response = await fetch(
-        `${API_BASE}/api_key/${keyId}/activate`, {
-            method: 'PATCH',
+        `${API_BASE}/${keyId}`, {
+            method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
         }
     );
 
     if (!response.ok) {
-        throw new Error('Failed to activate API key');
+        throw new Error('Failed to delete API key');
     }
 
     return response.json();
 }
-
-export const deactivateApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
-    const response = await fetch(
-        `${API_BASE}/api_key/${keyId}/deactivate`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-        }
-    );
-
-    if (!response.ok) {
-        throw new Error('Failed to activate API key');
-    }
-
-    return response.json();
-}
-
 
 export const deleteAllApiKeys = async (): Promise<ApiActionResultResponse> => {
     const response = await fetch(
@@ -104,6 +74,21 @@ export const deleteAllApiKeys = async (): Promise<ApiActionResultResponse> => {
 
     if (!response.ok) {
         throw new Error('Failed to delete all API keys');
+    }
+
+    return response.json();
+}
+
+export const activateApiKey = async (keyId: number): Promise<ApiActionResultResponse> => {
+    const response = await fetch(
+        `${API_BASE}/${keyId}/activate`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error('Failed to activate API key');
     }
 
     return response.json();

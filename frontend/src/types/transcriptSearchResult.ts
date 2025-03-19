@@ -1,4 +1,3 @@
-// TODO: rename this file to transcript search
 export interface TranscriptMatch {
     text: string;
     startTime: number;

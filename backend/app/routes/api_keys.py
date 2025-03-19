@@ -12,10 +12,9 @@ from app.utility.fetch_api_key import get_currently_active_api_key
 router = APIRouter()
 youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)
 
-# TODO: FIX the routes here and in the frontend so that they match CRUD standards
-
-@router.post("/store_api_key", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
-def create_api_key(request: YoutubeSearchApiKeyCreate, db: Session = Depends(get_db)):
+# Create a new YouTube API key
+@router.post("/youtube-api-keys", response_model=ActionResultResponse, status_code=status.HTTP_201_CREATED)
+def create_youtube_api_key(request: YoutubeSearchApiKeyCreate, db: Session = Depends(get_db)):
     try:
         # Check if there is already an active API key
         active_api_key = db.query(models.YoutubeSearchApiKey).filter(
@@ -36,8 +35,9 @@ def create_api_key(request: YoutubeSearchApiKeyCreate, db: Session = Depends(get
         ) from e
     
 
-@router.get("/is_app_configured", response_model=isAppConfiguredResponse)
-def is_app_configured(db: Session = Depends(get_db)):
+# Check if a YouTube API key is configured (i.e. if an active key exists)
+@router.get("/youtube-api-keys/configured", response_model=isAppConfiguredResponse)
+def check_youtube_api_key_configured(db: Session = Depends(get_db)):
     try:
         youtube_api_key = get_currently_active_api_key(db=db)
     except Exception:
@@ -47,14 +47,15 @@ def is_app_configured(db: Session = Depends(get_db)):
         is_api_key_set=youtube_api_key is not None
     )
 
-@router.get("/get_all_api_keys", response_model=list[YoutubeSearchApiKeyResponse], status_code=status.HTTP_200_OK)
-def get_all_api_keys(db: Session = Depends(get_db)):
+# Retrieve all YouTube API keys
+@router.get("/youtube-api-keys", response_model=list[YoutubeSearchApiKeyResponse], status_code=status.HTTP_200_OK)
+def get_youtube_api_keys(db: Session = Depends(get_db)):
     try:
         api_keys = db.query(models.YoutubeSearchApiKey).order_by(models.YoutubeSearchApiKey.date_created).all()
         masked_keys = [
             YoutubeSearchApiKeyResponse(
                 id=api_key.id,
-                api_key='*' * (len(password_encryptor.decrypt(api_key.api_key.encode()).decode()) - 5) + 
+                api_key='*' * (len(password_encryptor.decrypt(api_key.api_key.encode()).decode()) - 5) +
                         password_encryptor.decrypt(api_key.api_key.encode()).decode()[-5:],
                 is_active=api_key.is_active
             )
@@ -67,8 +68,9 @@ def get_all_api_keys(db: Session = Depends(get_db)):
             detail=f"Failed to retrieve API keys: {e}"
         ) from e
 
-@router.patch("/api_key/{api_key_id}/activate", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
-def activate_api_key(api_key_id: int, db: Session = Depends(get_db)):
+# Activate a specific YouTube API key (and deactivate the others)
+@router.patch("/youtube-api-keys/{api_key_id}/activate", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
+def activate_youtube_api_key(api_key_id: int, db: Session = Depends(get_db)):
     try:
         api_key = youtube_api_key_crud.get(db, api_key_id)
         if not api_key:
@@ -93,8 +95,9 @@ def activate_api_key(api_key_id: int, db: Session = Depends(get_db)):
             detail=f"Failed to activate API key: {e}"
         ) from e
 
-@router.delete("/api_key/{api_key_id}", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
-def delete_api_key(api_key_id: int, db: Session = Depends(get_db)):
+# Delete a specific YouTube API key (only if it is not active)
+@router.delete("/youtube-api-keys/{api_key_id}", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
+def delete_youtube_api_key(api_key_id: int, db: Session = Depends(get_db)):
     try:
         api_key = youtube_api_key_crud.get(db, api_key_id)
         if not api_key:
@@ -117,8 +120,9 @@ def delete_api_key(api_key_id: int, db: Session = Depends(get_db)):
             detail=f"Failed to delete API key: {e}"
         ) from e
 
-@router.delete("/delete_all_api_keys", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
-def delete_all_api_keys(db: Session = Depends(get_db)):
+# Delete all YouTube API keys
+@router.delete("/youtube-api-keys", response_model=ActionResultResponse, status_code=status.HTTP_200_OK)
+def delete_all_youtube_api_keys(db: Session = Depends(get_db)):
     try:
         db.query(models.YoutubeSearchApiKey).delete()
         db.commit()
