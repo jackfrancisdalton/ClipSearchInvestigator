@@ -10,7 +10,6 @@ from app.exceptions.shared import VideoSearchError
 dotenv_path = os.path.join(os.path.dirname(__file__), '../.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-# TODO: add typing for the input and output of this method
 def search_youtube(
     api_key: str,
     video_search_query: str,
@@ -28,7 +27,6 @@ def search_youtube(
 
     url = "https://www.googleapis.com/youtube/v3/search"
 
-    # TODO: define a specific model for this instead of using a dict
     params: dict[str, str | int] = {
         "part": "snippet",
         "q": video_search_query,

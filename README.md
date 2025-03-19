@@ -30,8 +30,9 @@ Ever find it annoying not being able to find "that video". This script aims to s
 9. test the prouduction version of the app works
 10. add continous integration to the build process
 11. clean up the readme
-12. double check for no private date
-13. clean up for making public
+12. verify that migrations on db work as intended
+13. double check for no private date
+14. clean up for making public
 
 
 # Post release features
