@@ -3,7 +3,6 @@ import { AppConfigurationResponse } from "../types";
 const API_BASE = '/api/general'
 
 export const fetchAppConfigState = async (): Promise<AppConfigurationResponse> => {
-    // TODO: move this out of the api keys file as well as in python backend and into it's own folders
     const response = await fetch(
         `${API_BASE}/app_config_state`, {
             method: 'GET',

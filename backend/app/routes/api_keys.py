@@ -6,8 +6,8 @@ from app.data.database_CRUDer import CRUDBase
 from app.data import models
 from app.utility import password_encryptor
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse
-from app.pydantic_schemas.shared import ActionResultResponse, isAppConfiguredResponse
-from app.utility.fetch_api_key import get_currently_active_api_key
+from app.pydantic_schemas.shared import ActionResultResponse
+from app.utility.validators import validate_youtube_api_key
 
 router = APIRouter()
 youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)
@@ -16,11 +16,13 @@ youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)
 @router.post("/youtube-api-keys", response_model=ActionResultResponse, status_code=status.HTTP_201_CREATED)
 def create_youtube_api_key(request: YoutubeSearchApiKeyCreate, db: Session = Depends(get_db)):
     try:
-        # Check if there is already an active API key
+        validate_youtube_api_key(request.api_key)
+
+        # Determine if there is already an active API key
         active_api_key = db.query(models.YoutubeSearchApiKey).filter(
             models.YoutubeSearchApiKey.is_active == True
         ).first()
-        
+
         encrypted_api_key = password_encryptor.encrypt(request.api_key.encode()).decode()
         api_key_model = models.YoutubeSearchApiKey(
             api_key=encrypted_api_key,

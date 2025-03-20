@@ -18,6 +18,7 @@ export const AppConfigProvider = ({ children }: { children: ReactNode }) => {
   
     // Re-run refreshConfig on every location change
     useEffect(() => {
+      console.log('refreshing config');
       refreshConfig();
     }, [location]);
   
