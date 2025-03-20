@@ -22,6 +22,26 @@ async def search_transcripts(
     max_results: int = Query(10, alias="maxResults"),
     db: Session = Depends(get_db)
 ):
+    """
+    Search for YouTube video transcripts based on various query parameters and match terms.
+    Args:
+        video_search_query (str): The search query for YouTube videos.
+        match_terms (List[str]): A list of terms to match within the video transcripts.
+        sort_order (str): The order in which to sort the search results.
+        published_before (Optional[date]): Filter videos published before this date.
+        published_after (Optional[date]): Filter videos published after this date.
+        channel_name (Optional[str]): Filter videos by channel name.
+        max_results (int): The maximum number of search results to return.
+        db (Session): The database session dependency.
+    Returns:
+        List[Dict]: A list of dictionaries containing the transcript search results.
+    Raises:
+        HTTPException: If no API key is set.
+        HTTPException: If the YouTube search fails.
+        HTTPException: If no videos are found.
+        HTTPException: If fetching transcripts fails.
+        HTTPException: If no transcripts are found.
+    """
     youtube_api_key = get_currently_active_api_key(db=db)
     
     if not youtube_api_key:
