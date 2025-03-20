@@ -47,7 +47,7 @@ async def search_transcripts(
     if not youtube_api_key:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="No API key is set."
+            detail="Could not search as no active Youtube API key is set"
         )
 
     try:
@@ -63,7 +63,7 @@ async def search_transcripts(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error when searching for videos: {e}"
+            detail=f"Error when searching for videos because... {e}"
         ) from e
 
     if not videos:
@@ -77,13 +77,13 @@ async def search_transcripts(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to fetch transcripts: {e}"
+            detail=f"Failed to fetch video transcript results because... {e}"
         ) from e
 
     if not transcript_results:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="No transcripts found."
+            detail="No transcripts were found for these videos."
         )
 
     return transcript_results

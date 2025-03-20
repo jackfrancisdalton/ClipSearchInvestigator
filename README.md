@@ -17,12 +17,8 @@ Ever find it annoying not being able to find "that video". This script aims to s
 # ------------------ NOTES TO SELF
 
 # TODO Today:
-1. clean up TODOs
 2. add a dedicated exception error message box for search page
-2. Normalise the exceptions and error messages being displayed
-3. Improve exception handling, for example ensure clear error messages wh
 4. add defined error instead of </...loading> in root layout
-5. add in litmus tests so that we check api keys work before allowing them to be added
 5. clean up the options page to look better and give better feedback
 6. clean up the pop up on mobile both in terms of behaviour but also how it overlays on top of the app and animates
 7. update favicon
