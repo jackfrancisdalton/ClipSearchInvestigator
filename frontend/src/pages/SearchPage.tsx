@@ -2,20 +2,26 @@ import React, { useState } from "react";
 import { MasonryGridLayout, LoadingSpinner, ResultsPlaceHolder, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm } from "../components";
 import { searchForTermsInTranscripts } from "../api";
 import { TranscriptSearchResult } from "../types"; // Import the correct type
+import SearchErrorMessage from "../components/Search/SearchErrorMessage";
 
 const SearchPage: React.FC = () => {
   const [results, setResults] = useState<TranscriptSearchResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
 
   const onSubmit = async (data: SearchFormData) => {
     setHasSearched(true);
     setLoading(true);
+    setError(null);
+
     try {
       const result = await searchForTermsInTranscripts(data);
       setResults(result);
     } catch (err: any) {
+      setError(err.message);
       setResults([]);
     } finally {
       setLoading(false);
@@ -38,6 +44,11 @@ const SearchPage: React.FC = () => {
         <div className="flex items-center justify-center flex-1 p-4 bg-background-700">
           <LoadingSpinner />
         </div>
+      )}
+
+      {/* Error Message */}
+      {error && (
+        <SearchErrorMessage errorMessage={error}/>
       )}
 
       {/* Results */}
