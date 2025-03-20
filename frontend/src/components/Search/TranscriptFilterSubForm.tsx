@@ -42,7 +42,7 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
                 onClick={() => remove(index)}
                 disabled={disableForm}
               >
-                [X]
+                X
               </button>
             </div>
           ))}

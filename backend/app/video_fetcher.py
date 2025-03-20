@@ -67,7 +67,7 @@ def search_youtube(
             for item in videos.get("items", [])
         ]
     except Exception as e:
-        raise VideoSearchError("YouTube search failed due to a network issue") from e
+        raise VideoSearchError(f"YouTube search failed due to a network issue: {str(e)}") from e
 
 def get_channel_id(
     api_key: str,

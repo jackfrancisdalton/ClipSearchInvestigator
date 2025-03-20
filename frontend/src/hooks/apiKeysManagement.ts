@@ -18,7 +18,7 @@ export const useApiKeysManagagment = () => {
       setApiKeys(result);
       setErrors(prev => ({ ...prev, fetch: '' }));
     } catch (error: any) {
-      setErrors(prev => ({ ...prev, fetch: "Error fetching keys: " + error.message }));
+      setErrors(prev => ({ ...prev, fetch: error.message }));
     }
   }, []);
 
@@ -27,7 +27,7 @@ export const useApiKeysManagagment = () => {
       await activateApiKey(keyId);
       setErrors(prev => ({ ...prev, row: { ...prev.row, [keyId]: "" } }));
     } catch (error: any) {
-      setErrors(prev => ({ ...prev, row: { ...prev.row, [keyId]: "Failed to activate API key: " + error.message } }));
+      setErrors(prev => ({ ...prev, row: { ...prev.row, [keyId]: error.message } }));
     }
     fetchAllKeys();
   };
@@ -37,7 +37,7 @@ export const useApiKeysManagagment = () => {
       await deleteApiKey(keyId);
       setErrors(prev => ({ ...prev, row: { ...prev.row, [keyId]: "" } }));
     } catch (error: any) {
-      setErrors(prev => ({ ...prev, row: { ...prev.row, [keyId]: "Failed to delete API key: " + error.message } }));
+      setErrors(prev => ({ ...prev, row: { ...prev.row, [keyId]: error.message } }));
     }
     fetchAllKeys();
   };
@@ -47,7 +47,7 @@ export const useApiKeysManagagment = () => {
       await saveApiKey({ apiKey });
       setErrors(prev => ({ ...prev, newApiKey: "" }));
     } catch (error: any) {
-      setErrors(prev => ({ ...prev, newApiKey: "Failed to save new API key: " + error.message }));
+      setErrors(prev => ({ ...prev, newApiKey: error.message }));
     }
     fetchAllKeys();
   };
@@ -58,7 +58,7 @@ export const useApiKeysManagagment = () => {
       await deleteAllApiKeys();
       setErrors(prev => ({ ...prev, deleteAll: "" }));
     } catch (error: any) {
-      setErrors(prev => ({ ...prev, deleteAll: "Failed to delete all API keys: " + error.message }));
+      setErrors(prev => ({ ...prev, deleteAll: error.message }));
     }
     fetchAllKeys();
   };

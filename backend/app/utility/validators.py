@@ -19,4 +19,4 @@ def validate_youtube_api_key(api_key: str) -> None:
     response = requests.get(url, params=params, timeout=10)
     
     if response.status_code != 200:
-        raise ValueError("Invalid YouTube API key")
+        raise ValueError("Api Key Failed to validate with Google APIs")

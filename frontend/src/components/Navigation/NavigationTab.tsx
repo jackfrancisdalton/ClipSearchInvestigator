@@ -3,8 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const tabs = [
-  { name: "Options", path: "/options" },
   { name: "Search", path: "/search" },
+  { name: "Options", path: "/options" },
 ];
 
 interface NavTabsProps {

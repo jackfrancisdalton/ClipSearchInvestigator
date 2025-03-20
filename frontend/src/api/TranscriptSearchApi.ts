@@ -1,4 +1,5 @@
-import { ApiGenericErrorResponse, TranscriptSearchResult } from "../types";
+import { TranscriptSearchResult } from "../types";
+import { apiRequest } from "./ApiUtilities";
 
 type TranscriptSearchApiParams = {
     videoSearchQuery: string;
@@ -34,14 +35,8 @@ export const searchForTermsInTranscripts = async ({
     if (channelName) 
         params.append("channelName", channelName);
 
-
-    const response = await fetch(`/api/search-transcripts?${params.toString()}`);
-
-    if (!response.ok) {
-        const errorData: ApiGenericErrorResponse = await response.json();
-        throw new Error(errorData.message);
-    }
-
-    const results: any = await response.json()
-    return results;
+    return apiRequest(
+        `/api/search-transcripts?${params.toString()}`, 
+        { method: 'GET' }
+    );
 };

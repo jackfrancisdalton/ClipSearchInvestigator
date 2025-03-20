@@ -63,7 +63,7 @@ async def search_transcripts(
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to search for videos: {e}"
+            detail=f"Error when searching for videos: {e}"
         ) from e
 
     if not videos:

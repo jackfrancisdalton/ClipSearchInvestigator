@@ -34,22 +34,20 @@ def create_youtube_api_key(request: YoutubeSearchApiKeyCreate, db: Session = Dep
     try:
         validate_youtube_api_key(request.api_key)
 
-        # Determine if there is already an active API key
-        active_api_key = db.query(models.YoutubeSearchApiKey).filter(
-            models.YoutubeSearchApiKey.is_active == True
-        ).first()
-
+        active_api_key = db.query(models.YoutubeSearchApiKey).filter(models.YoutubeSearchApiKey.is_active).first()
         encrypted_api_key = password_encryptor.encrypt(request.api_key.encode()).decode()
+
         api_key_model = models.YoutubeSearchApiKey(
             api_key=encrypted_api_key,
             is_active=False if active_api_key else True
         )
         youtube_api_key_crud.create(db, api_key_model)
+
         return ActionResultResponse(success=True, message="API key stored successfully")
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to store API key: {e}"
+            detail=f"Failed to create API key: {e}"
         ) from e
 
 @router.get("/youtube-api-keys", response_model=list[YoutubeSearchApiKeyResponse], status_code=status.HTTP_200_OK)
