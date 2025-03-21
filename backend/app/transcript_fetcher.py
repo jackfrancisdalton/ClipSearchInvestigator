@@ -4,9 +4,8 @@ import asyncio
 from app.pydantic_schemas.search_results import TranscriptMatch, TranscriptSearchResult, YoutubeVideoData
 from youtube_transcript_api._api import YouTubeTranscriptApi
 from youtube_transcript_api._transcripts import FetchedTranscript
-from youtube_transcript_api._errors import TranscriptsDisabled, NoTranscriptFound
 
-async def fetch_video_transcript(video_id: str) -> Optional[FetchedTranscript]:
+async def fetch_video_transcript(video_id: str) -> FetchedTranscript:
     """
     Fetches the transcript for a given YouTube video.
 
@@ -14,19 +13,15 @@ async def fetch_video_transcript(video_id: str) -> Optional[FetchedTranscript]:
         video_id (str): The ID of the YouTube video.
 
     Returns:
-        Optional[FetchedTranscript]: The fetched transcript if available, otherwise None.
+        FetchedTranscript: The fetched transcript if available.
 
     Raises:
         TranscriptsDisabled: If transcripts are disabled for the video.
         NoTranscriptFound: If no transcript is found for the video.
     """
-    try:
-        yt_api = YouTubeTranscriptApi()
-        result = await asyncio.to_thread(yt_api.fetch, video_id)
-        return result
-    except (TranscriptsDisabled, NoTranscriptFound) as e:
-        print(f"Error fetching transcript for video {video_id}: {e}")
-        return None
+    yt_api = YouTubeTranscriptApi()
+    result = await asyncio.to_thread(yt_api.fetch, video_id)
+    return result
 
 async def find_matches_in_video_transcript(video: YoutubeVideoData, search_terms: List[str]) -> Optional[TranscriptSearchResult]:
     """
