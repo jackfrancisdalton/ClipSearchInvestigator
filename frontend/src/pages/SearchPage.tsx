@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MasonryGridLayout, LoadingSpinner, ResultsPlaceHolder, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm } from "../components";
+import { MasonryGridLayout, LoadingSpinner, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm, SearchInfoBox } from "../components";
 import { searchForTermsInTranscripts } from "../api";
 import { TranscriptSearchResult } from "../types"; // Import the correct type
 import SearchErrorMessage from "../components/Search/SearchErrorMessage";
@@ -37,7 +37,7 @@ const SearchPage: React.FC = () => {
       </div>
 
       {/* Placeholder for first render */}
-      {!hasSearched && !loading && <ResultsPlaceHolder />}
+      {!hasSearched && !loading && <SearchInfoBox />}
 
       {/* Loading Spinner */}
       {loading && (

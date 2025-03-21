@@ -11,7 +11,7 @@ export const fetchAppConfigState = async (): Promise<AppConfigurationResponse> =
     );
 
     if (!response.ok) {
-        throw new Error('Failed to check if API key is set');
+        throw new Error('Failed to fetch App configuration state, check the API is running');
     }
 
     return await response.json();

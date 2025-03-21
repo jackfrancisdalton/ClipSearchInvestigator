@@ -6,9 +6,8 @@ export { default as MasonryGridLayout } from './Layouts/MasonryGridLayout';
 export { default as MobilePopOutMenu } from './Layouts/MobilePopOutMenu';
 
 export *  from './Search/SearchForm';
-export { default as ResultsPlaceHolder } from './Search/ResultsPlaceHolder';
+export { default as SearchInfoBox } from './Search/SearchInfoBox';
 export { default as SearchResult } from './Search/SearchResult';
 
 export { default as LoadingSpinner } from './Shared/LoadingSpinner';
-export { default as ErrorMessage } from './Shared/ErrorMessage';
 export { default as BigButton } from './Shared/BigButton';

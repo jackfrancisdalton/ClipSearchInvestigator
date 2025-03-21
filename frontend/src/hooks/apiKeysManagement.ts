@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { getAllKeys, activateApiKey, deleteApiKey, saveApiKey, deleteAllApiKeys } from '../api';
 import { ApiKey } from '../types';
 
-// TODO: review and clean up this context file, in particular look into how we refetch things
 export const useApiKeysManagagment = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [errors, setErrors] = useState({
@@ -54,7 +53,6 @@ export const useApiKeysManagagment = () => {
 
   const deleteAllKeys = async () => {
     try {
-      // TODO: rename and change these to factory reset and add a navigate to home page after success
       await deleteAllApiKeys();
       setErrors(prev => ({ ...prev, deleteAll: "" }));
     } catch (error: any) {

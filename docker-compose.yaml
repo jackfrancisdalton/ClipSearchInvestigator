@@ -20,7 +20,7 @@ services:
     environment:
       - PORT=8000
       - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
-      - FERNET_KEY=SlmmcLKoDGWkPMh_D84nbz-hCyP5dqGvFzi07W_LPgE=
+      - FERNET_KEY=${FERNET_KEY}
     volumes:
       - ./backend:/app
     depends_on:

@@ -16,9 +16,7 @@ export const AppConfigProvider = ({ children }: { children: ReactNode }) => {
       setIsConfigured(config.isApiKeySet);
     };
   
-    // Re-run refreshConfig on every location change
     useEffect(() => {
-      console.log('refreshing config');
       refreshConfig();
     }, [location]);
   

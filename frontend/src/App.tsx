@@ -5,14 +5,20 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { RootLayout } from './components';
 import { OptionsPage, SearchPage, SetUpPage } from './pages';
 import { redirectBasedOnAppConfigState } from './loaders';
+import ErrorBoundary from './pages/ErrorBoundary';
 
 const routerConfig = [
-  { path: '/', element: <RootLayout />, loader: redirectBasedOnAppConfigState, children: [
-    { index: true, element: <SearchPage /> },
-    { path: 'search', element: <SearchPage /> },
-    { path: 'options', element: <OptionsPage /> },
-    { path: 'setup', element: <SetUpPage /> }
-  ]}
+  { 
+    path: '/', 
+    element: <RootLayout />, 
+    errorElement: <ErrorBoundary />,
+    loader: redirectBasedOnAppConfigState, children: 
+    [
+      { index: true, element: <SearchPage /> },
+      { path: 'search', element: <SearchPage /> },
+      { path: 'options', element: <OptionsPage /> },
+      { path: 'setup', element: <SetUpPage /> }
+    ]}
 ];
 
 function App() {
