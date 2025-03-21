@@ -17,8 +17,6 @@ Ever find it annoying not being able to find "that video". This script aims to s
 # ------------------ NOTES TO SELF
 
 # TODO Today:
-5. clean up the options page to look better and give better feedback
-6. clean up the pop up on mobile both in terms of behaviour but also how it overlays on top of the app and animates
 7. update favicon
 8. add testing suite
 9. test the prouduction version of the app works
