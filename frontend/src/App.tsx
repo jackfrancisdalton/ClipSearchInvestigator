@@ -27,7 +27,7 @@ function App() {
   // TODO: replace fallback component 
   return (
     <StrictMode>
-      <Suspense fallback={<div>Loading route...</div>}>
+      <Suspense fallback={<div>Loading app...</div>}>
         <RouterProvider router={router} />
       </Suspense>
     </StrictMode>

@@ -26,22 +26,22 @@ const AddNewApiKey: React.FC<ApiKeyFormProps> = ({ onSave, errorMessage }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
-      <h3>Add a new API Key</h3>
-      <h4>Add a new API key you'd like to use</h4>
       <input
         type="text"
         {...register('apiKey')}
-        className="px-4 py-2 mr-2 text-sm bg-gray-800 border border-gray-600 rounded text-white-50"
-        placeholder="Enter new API key"
+        className="px-4 py-2 mr-2 text-sm bg-gray-800 border border-gray-600 rounded text-white-50 focus:outline-primary-600"
+        placeholder="Enter new API key here..."
+        style={{ height: '40px' }}
       />
-      {errors.apiKey && <div className="mt-1 text-sm text-red-500">{errors.apiKey.message}</div>}
       <button
         type="submit"
         disabled={isSubmitting || (watch('apiKey')?.length || 0) < 10}
-        className="px-4 py-2 font-medium bg-blue-600 rounded text-white-50"
+        className="px-4 py-2 font-medium rounded bg-primary-600 text-white-50"
+        style={{ height: '40px' }}
       >
-        {isSubmitting ? 'Adding...' : 'Add API Key'}
+        {isSubmitting ? 'Adding...' : 'Add an API Key'}
       </button>
+      {errors.apiKey && <div className="mt-1 text-sm text-red-500">{errors.apiKey.message}</div>}
       {errorMessage && <div className="mt-1 text-sm text-red-500">{errorMessage}</div>}
     </form>
   );

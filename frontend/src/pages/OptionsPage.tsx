@@ -9,8 +9,12 @@ const OptionsPage = () => {
   return (
     <div className="flex p-4 bg-background-700">
       <div className="p-4 rounded bg-background-600">
-        <h3>Manage API Keys</h3>
-        {errors.fetch && <div className="mb-2 text-sm text-red-500">{errors.fetch}</div>}
+        <h3 className="mb-2 text-xl text-white-50">Manage API Keys</h3>
+        {errors.fetch && (
+          <div className="p-2 mb-2 text-sm text-white bg-red-500 rounded">
+            {errors.fetch}
+          </div>
+        )}
         <ApiKeyManagementTable
           apiKeys={apiKeys}
           errors={errors.row}

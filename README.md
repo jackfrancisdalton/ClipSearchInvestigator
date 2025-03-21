@@ -17,8 +17,6 @@ Ever find it annoying not being able to find "that video". This script aims to s
 # ------------------ NOTES TO SELF
 
 # TODO Today:
-2. add a dedicated exception error message box for search page
-4. add defined error instead of </...loading> in root layout
 5. clean up the options page to look better and give better feedback
 6. clean up the pop up on mobile both in terms of behaviour but also how it overlays on top of the app and animates
 7. update favicon
