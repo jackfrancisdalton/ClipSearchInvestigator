@@ -33,8 +33,11 @@ async def find_matches_in_video_transcript(video: YoutubeVideoData, search_terms
         Optional[TranscriptSearchResult]: An object containing the video's metadata and a list of matching transcript entries,
                                           or None if no matches are found or the transcript could not be fetched.
     """
-    video_transcript = await fetch_video_transcript(video.videoId)
-
+    try:
+        video_transcript = await fetch_video_transcript(video.videoId)
+    except Exception:
+        video_transcript = None
+        
     if video_transcript:
         matching_entries = [
             TranscriptMatch(
