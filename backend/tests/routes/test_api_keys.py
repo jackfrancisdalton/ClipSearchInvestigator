@@ -24,6 +24,7 @@ def override_get_db():
     app.dependency_overrides[get_db] = lambda: mock_session
     yield mock_session
     app.dependency_overrides.clear()
+    
 @pytest.fixture
 def valid_api_key_request() -> YoutubeSearchApiKeyCreate:
     return YoutubeSearchApiKeyCreate(api_key="valid_api_key")
