@@ -15,7 +15,7 @@ youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)
 def get_app_config_state(db: Session = Depends(get_db)):
     try:
         youtube_api_key = get_currently_active_api_key(db=db)
-    except Exception:
+    except Exception as e:
         youtube_api_key = None
     
     return isAppConfiguredResponse(
