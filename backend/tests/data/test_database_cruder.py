@@ -64,3 +64,76 @@ def test_get_all_no_records(setup_database: Session):
     result = crud.get_all(db)
     assert len(result) == 0
 
+def test_create_record(setup_database: Session):
+    db = setup_database
+    crud = CRUDBase(TestModel)
+    test_obj = TestModel(id=1)
+
+    result = crud.create(db, test_obj)
+    assert result is not None
+    assert result.id == 1
+
+def test_create_record_with_existing_id(setup_database: Session):
+    db = setup_database
+    crud = CRUDBase(TestModel)
+    test_obj1 = TestModel(id=1)
+    db.add(test_obj1)
+    db.commit()
+    db.refresh(test_obj1)
+
+    test_obj2 = TestModel(id=1)
+    with pytest.raises(RuntimeError):
+        crud.create(db, test_obj2)
+
+def test_update_existing_record(setup_database: Session):
+    db = setup_database
+    crud = CRUDBase(TestModel)
+    test_obj = TestModel(id=1)
+    db.add(test_obj)
+    db.commit()
+    db.refresh(test_obj)
+
+    update_data = {"id": 2}
+    result = crud.update(db, test_obj, update_data)
+    assert result is not None
+    assert result.id == 2
+
+def test_update_non_existing_record(setup_database: Session):
+    db = setup_database
+    crud = CRUDBase(TestModel)
+    test_obj = TestModel(id=1)
+    db.add(test_obj)
+    db.commit()
+    db.refresh(test_obj)
+
+    non_existing_obj = TestModel(id=999)
+    update_data = {"id": 2}
+    with pytest.raises(RuntimeError):
+        crud.update(db, non_existing_obj, update_data)
+        
+def test_delete_existing_record(setup_database: Session):
+    db = setup_database
+    crud = CRUDBase(TestModel)
+    test_obj = TestModel(id=1)
+    db.add(test_obj)
+    db.commit()
+    db.refresh(test_obj)
+
+    result = crud.delete(db, 1)
+    assert result is not None
+    assert result.id == 1
+
+    # Verify the record is deleted
+    result = crud.get(db, 1)
+    assert result is None
+
+def test_delete_non_existing_record(setup_database: Session):
+    db = setup_database
+    crud = CRUDBase(TestModel)
+
+    with pytest.raises(ValueError, match="Object not found"):
+        crud.delete(db, 999)
+
+
+
+

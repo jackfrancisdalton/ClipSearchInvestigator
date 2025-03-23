@@ -5,3 +5,5 @@ class VideoSearchError(Exception):
 class ChannelSearchError(Exception):
     """Raised when the YouTube channel search fails."""
     pass
+
+# TODO: determine if these are needed or not
