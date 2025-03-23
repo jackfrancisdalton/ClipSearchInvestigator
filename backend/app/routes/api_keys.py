@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from app.data.database import get_db
-from app.data.database_CRUDer import CRUDBase
+from app.data.database_cruder import CRUDBase
 from app.data import models
 from app.utility import password_encryptor
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse

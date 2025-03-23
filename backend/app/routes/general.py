@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.data.database import get_db
-from app.data.database_CRUDer import CRUDBase
+from app.data.database_cruder import CRUDBase
 from app.data import models
 from app.pydantic_schemas.shared import isAppConfiguredResponse
 from app.utility.fetch_api_key import get_currently_active_api_key
@@ -15,7 +15,7 @@ youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)
 def get_app_config_state(db: Session = Depends(get_db)):
     try:
         youtube_api_key = get_currently_active_api_key(db=db)
-    except Exception as e:
+    except Exception:
         youtube_api_key = None
     
     return isAppConfiguredResponse(
