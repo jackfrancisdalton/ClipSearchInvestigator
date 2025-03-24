@@ -20,4 +20,3 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WDS_SOCKET_PORT=0  # Prevent Webpack
-      - NODE_ENV=development

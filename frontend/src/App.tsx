@@ -1,11 +1,12 @@
 import './App.css';
+import './index.css'
 
 import { StrictMode, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { RootLayout } from './components';
-import { OptionsPage, SearchPage, SetUpPage } from './pages';
-import { redirectBasedOnAppConfigState } from './loaders';
-import ErrorBoundary from './pages/ErrorBoundary';
+import { RootLayout } from './components/index.js';
+import { OptionsPage, SearchPage, SetUpPage } from './pages/index.js';
+import { redirectBasedOnAppConfigState } from './loaders/index.js';
+import ErrorBoundary from './pages/ErrorBoundary.js';
 
 const routerConfig = [
   { 

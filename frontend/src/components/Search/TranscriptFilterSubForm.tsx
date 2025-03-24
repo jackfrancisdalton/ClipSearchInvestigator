@@ -16,7 +16,7 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
   return (
     <div className="border border-primary-700">
       <div className="items-center justify-start p-2 bg-background-600">
-        <h3 className="font-bold text-center text-white-50">Transcript Search</h3>
+        <h3 className="font-bold text-center text-white-50">Transcript Search Terms</h3>
       </div>
       <div className="w-auto h-0.5 bg-primary-700"></div>
       <div className="p-3 bg-background-500">

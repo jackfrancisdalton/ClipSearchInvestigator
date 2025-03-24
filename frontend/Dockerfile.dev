@@ -4,9 +4,14 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+ENV NODE_ENV=development
+
+RUN npm install --include=dev
 
 COPY . .
+
+# Ensure node_modules/.bin is on PATH
+ENV PATH /app/node_modules/.bin:$PATH
 
 EXPOSE 3000
 
