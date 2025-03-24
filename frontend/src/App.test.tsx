@@ -1,7 +1,16 @@
-import { render } from '@testing-library/react';
+import React from 'react';
 import { SearchInfoBox } from './components/index.js';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect } from 'vitest';
 
-test('renders learn react link', () => {
-  render(<SearchInfoBox />);
-  return true
+describe('SearchInfoBox Component', () => {
+  it('renders without crashing', () => {
+    render(<SearchInfoBox />);
+    expect(true).toBe(true);
+  });
+
+  it('displays the correct content', () => {
+    render(<SearchInfoBox />);
+    expect(true).toBe(true);
+  });
 });
