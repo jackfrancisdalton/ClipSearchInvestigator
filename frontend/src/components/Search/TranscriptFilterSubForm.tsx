@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { SearchFormData } from "./SearchForm";
+import { SearchFormData } from "./SearchForm.js";
 
 interface TranscriptFilterSubFormProps {
   disableForm: boolean;

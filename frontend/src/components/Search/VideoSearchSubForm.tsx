@@ -1,8 +1,7 @@
-// src/components/VideoSearchSubForm.tsx
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
-import { SearchFormData } from "./SearchForm";
-import { VideoSearchSortOrder } from "../../types";
+import { SearchFormData } from "./SearchForm.js";
+import { VideoSearchSortOrder } from "../../types/index.js";
 
 interface VideoSearchSubFormProps {
   disableForm: boolean;

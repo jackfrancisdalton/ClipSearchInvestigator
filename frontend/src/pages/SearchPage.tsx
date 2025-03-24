@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { MasonryGridLayout, LoadingSpinner, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm, SearchInfoBox } from "../components";
-import { searchForTermsInTranscripts } from "../api";
-import { TranscriptSearchResult } from "../types"; // Import the correct type
-import SearchErrorMessage from "../components/Search/SearchErrorMessage";
+import { MasonryGridLayout, LoadingSpinner, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm, SearchInfoBox } from "../components/index.js";
+import { searchForTermsInTranscripts } from "../api/index.js";
+import { TranscriptSearchResult } from "../types/index.js";
+import SearchErrorMessage from "../components/Search/SearchErrorMessage.js";
 
 const SearchPage: React.FC = () => {
   const [results, setResults] = useState<TranscriptSearchResult[]>([]);
@@ -18,7 +18,8 @@ const SearchPage: React.FC = () => {
     setError(null);
 
     try {
-      const result = await searchForTermsInTranscripts(data);
+      // TODO fix converting search form to data type
+      const result = await searchForTermsInTranscripts(data as any);
       setResults(result);
     } catch (err: any) {
       setError(err.message);

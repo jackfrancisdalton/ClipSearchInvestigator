@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getAllKeys, activateApiKey, deleteApiKey, saveApiKey, deleteAllApiKeys } from '../api';
-import { ApiKey } from '../types';
+import { getAllKeys, activateApiKey, deleteApiKey, saveApiKey, deleteAllApiKeys } from '../api/index.js';
+import { ApiKey } from '../types/index.js';
 
 export const useApiKeysManagagment = () => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);

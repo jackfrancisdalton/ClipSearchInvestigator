@@ -1,7 +1,7 @@
-import { useApiKeysManagagment } from '../hooks/apiKeysManagement';
-import ApiKeyManagementTable from '../components/Options/ApiKeyManagementTable';
-import AddNewApiKey from '../components/Options/AddNewApiKey';
-import FactoryResetApp from '../components/Options/FactoryResetApp';
+import { useApiKeysManagagment } from '../hooks/apiKeysManagement.js';
+import ApiKeyManagementTable from '../components/Options/ApiKeyManagementTable.js';
+import AddNewApiKey from '../components/Options/AddNewApiKey.js';
+import FactoryResetApp from '../components/Options/FactoryResetApp.js';
 
 const OptionsPage = () => {
   const { apiKeys, errors, activateKey, deleteKey, saveKey, deleteAllKeys } = useApiKeysManagagment();

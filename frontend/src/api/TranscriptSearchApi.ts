@@ -1,5 +1,5 @@
-import { TranscriptSearchResult } from "../types";
-import { apiRequest } from "./ApiUtilities";
+import { TranscriptSearchResult } from "../types/index.js";
+import { apiRequest } from "./ApiUtilities.js";
 
 type TranscriptSearchApiParams = {
     videoSearchQuery: string;

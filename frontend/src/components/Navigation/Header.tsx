@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useContext } from "react";
-import NavigationTab from "./NavigationTab";
-import { AppConfigContext } from "../../contexts/AppConfigContext";
+import NavigationTab from "./NavigationTab.js";
+import { AppConfigContext } from "../../contexts/AppConfigContext.js";
 
 const Header = () => {
   const location = useLocation();

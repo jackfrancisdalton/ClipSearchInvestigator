@@ -1,5 +1,5 @@
-import { ApiActionResultResponse, ApiKey, SetApiKeyRequest } from "../types";
-import { apiRequest } from "./ApiUtilities";
+import { ApiActionResultResponse, ApiKey, SetApiKeyRequest } from "../types/index.js";
+import { apiRequest } from "./ApiUtilities.js";
 
 const API_BASE = '/api/youtube-api-keys'
 

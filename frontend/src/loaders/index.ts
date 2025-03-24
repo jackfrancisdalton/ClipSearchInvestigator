@@ -1,1 +1,1 @@
-export { redirectBasedOnAppConfigState } from './redirectBasedOnAppConfigState'; 
+export { redirectBasedOnAppConfigState } from './redirectBasedOnAppConfigState.js'; 

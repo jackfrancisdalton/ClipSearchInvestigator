@@ -1,4 +1,4 @@
-import { AppConfigurationResponse } from "../types";
+import { AppConfigurationResponse } from "../types/index.js";
 
 const API_BASE = '/api/general'
 

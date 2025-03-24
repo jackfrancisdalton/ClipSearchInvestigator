@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApiKey } from '../../types';
+import { ApiKey } from '../../types/index.js';
 
 interface ApiKeyTableProps {
   apiKeys: ApiKey[];

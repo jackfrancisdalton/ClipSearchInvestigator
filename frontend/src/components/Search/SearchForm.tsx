@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { VideoSearchSortOrder } from "../../types";
-import TranscriptFilterSubForm from "./TranscriptFilterSubForm";
-import VideoSearchSubForm from "./VideoSearchSubForm";
+import { VideoSearchSortOrder } from "../../types/index.js";
+import TranscriptFilterSubForm from "./TranscriptFilterSubForm.js";
+import VideoSearchSubForm from "./VideoSearchSubForm.js";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import BigButton from "../Shared/BigButton";
+import BigButton from "../Shared/BigButton.js";
 
 export const searchFormSchema = z.object({
     videoSearchQuery: z.string().nonempty("Search query is required"),

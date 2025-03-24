@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Header from "../Navigation/Header";
-import { AppConfigProvider } from "../../contexts/AppConfigContext";
+import Header from "../Navigation/Header.js";
+import { AppConfigProvider } from "../../contexts/AppConfigContext.js";
 
 const RootLayout = () => {
   return (

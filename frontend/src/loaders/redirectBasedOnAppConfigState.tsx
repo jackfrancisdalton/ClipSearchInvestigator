@@ -1,5 +1,5 @@
 import { LoaderFunction, redirect } from "react-router-dom";
-import { fetchAppConfigState } from "../api";
+import { fetchAppConfigState } from "../api/index.js";
 
 export const redirectBasedOnAppConfigState: LoaderFunction = async ({ request }) => {
 

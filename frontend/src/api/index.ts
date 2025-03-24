@@ -1,3 +1,3 @@
-export * from './TranscriptSearchApi';
-export * from './YoutubeApiKeyApi';
-export * from './GeneralApi';
+export * from './TranscriptSearchApi.js';
+export * from './YoutubeApiKeyApi.js';
+export * from './GeneralApi.js';

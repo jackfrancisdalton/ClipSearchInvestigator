@@ -1,5 +1,5 @@
 import { ReactNode, createContext, useState, useEffect } from 'react';
-import { fetchAppConfigState } from '../api';
+import { fetchAppConfigState } from '../api/index.js';
 import { useLocation } from 'react-router-dom';
 
 export const AppConfigContext = createContext({

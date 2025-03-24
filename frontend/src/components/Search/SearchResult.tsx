@@ -1,4 +1,4 @@
-import { TranscriptSearchResult } from "../../types";
+import { TranscriptSearchResult } from "../../types/index.js";
 
 function SearchResult({ result }: { result: TranscriptSearchResult }) {
 
