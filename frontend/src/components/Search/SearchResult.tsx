@@ -6,7 +6,7 @@ const SearchResult: React.FC<{ result: TranscriptSearchResult }> = ({ result }) 
         <div className="p-6 transition-shadow shadow-lg bg-background-light hover:shadow-xl">
             <div className="flex items-center justify-between mb-4">
                 <div>
-                    <h3 className="overflow-hidden font-semibold text-md text-white-medium whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '13em' }} title={result.videoTitle}>
+                    <h3 className="overflow-hidden font-semibold text-md text-white-medium whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '20em' }} title={result.videoTitle}>
                         {result.videoTitle}
                     </h3>
                     <p 
