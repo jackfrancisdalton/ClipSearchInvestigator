@@ -1,0 +1,15 @@
+youtube_transcript_api
+python-dotenv
+fastapi
+uvicorn
+requests
+cryptography
+SQLAlchemy
+alembic
+pydantic
+psycopg2-binary
+pytest
+pytest-asyncio
+pytest-env
+httpx
+gunicorn

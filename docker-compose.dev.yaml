@@ -1,0 +1,25 @@
+services:
+  reverse-proxy:
+    volumes: 
+      - ./reverseProxy/default.dev.conf.template:/etc/nginx/conf.d/default.conf.template
+    environment:
+      - FRONTEND_INTERNAL_PORT=${FRONTEND_INTERNAL_PORT_DEV}  # React runs on different port when in dev mode
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    environment:
+      - PORT=${FRONTEND_INTERNAL_PORT_DEV}
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=0
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules

@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Pytest",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "justMyCode": true,
+            "args": [
+                "--maxfail=1",
+                "--disable-warnings",
+                "-q"
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

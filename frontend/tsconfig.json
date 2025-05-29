@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {    
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "lib": ["dom", "dom.iterable", "esnext"],    
+      "target": "ESNext",    
+      "types": ["vite/client", "vitest/globals", "jsdom", "@testing-library/jest-dom"],
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "isolatedModules": true,
+      "jsx": "react-jsx",
+      "strict": true,                   
+      "noImplicitAny": true,           
+      "strictNullChecks": true,         
+  },
+  "include": ["src", "tests", "setupTest.ts"],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -1,0 +1,23 @@
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+#  Copy pip installed dependencies from the builder stage
+COPY --from=builder /root/.local /root/.local
+ENV PATH=/root/.local/bin:$PATH
+
+# Copy App files into the image
+COPY app/ /app/app/
+
+# Copy required scripts and set permissions
+COPY entrypoint.sh /entrypoint.sh
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /entrypoint.sh /wait-for-it.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

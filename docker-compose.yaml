@@ -1,0 +1,39 @@
+services:
+  reverse-proxy:
+    container_name: reverse-proxy
+    build:
+      context: ./reverseProxy
+    environment:
+      - BACKEND_INTERNAL_PORT=${BACKEND_INTERNAL_PORT} # Same port for both dev and prod
+    ports:
+      - "${APPLICATION_ACCESS_PORT}:80" # Change port 81 here to whatever your desired port is for hosting the app
+    depends_on:
+      - backend
+      - frontend
+
+  backend:
+    container_name: backend
+    environment:
+      - PORT=${BACKEND_INTERNAL_PORT} # Informs the backend which port to listen on
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@database:5432/${POSTGRES_DB}
+      - FERNET_KEY=${FERNET_KEY}
+    depends_on:
+      - database
+
+  database:
+    container_name: database
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  frontend:
+    container_name: frontend
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

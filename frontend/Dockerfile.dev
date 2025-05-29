@@ -1,0 +1,21 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+ENV NODE_ENV=development
+
+RUN npm install --include=dev
+
+COPY . .
+
+# Ensure node_modules/.bin is on PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# Env Variables to ensure that webhooks work correclty with auto refresh in dev mode
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+ENV WDS_SOCKET_PORT=3000
+
+CMD ["npm", "start"]

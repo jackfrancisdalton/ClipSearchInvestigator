@@ -1,0 +1,22 @@
+server {
+    listen 80;
+
+    location /api/ {
+        proxy_pass http://backend:${BACKEND_INTERNAL_PORT}/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_connect_timeout 60s;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_buffer_size 32k;
+        proxy_buffers 16 16k;
+    }
+
+    location / {
+        proxy_pass http://frontend:${FRONTEND_INTERNAL_PORT};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;        
+    }
+}

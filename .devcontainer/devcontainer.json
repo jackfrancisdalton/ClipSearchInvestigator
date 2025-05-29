@@ -1,0 +1,27 @@
+{
+    "name": "CSIDevContainer",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "remoteUser": "vscode",
+    "forwardPorts": [],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.vscode-pylance",
+                "ms-python.debugpy",
+                "bradlc.vscode-tailwindcss",
+                "heybourn.headwind",
+                "dsznajder.es7-react-js-snippets",
+                "redhat.vscode-yaml",
+                "ms-python.python",
+                "EQuimper.react-native-react-redux",
+                "ms-python.pylint",
+                "dbaeumer.vscode-eslint",
+                "vitest.explorer",
+                "YoavBls.pretty-ts-errors"
+            ]
+        }
+    }
+}
