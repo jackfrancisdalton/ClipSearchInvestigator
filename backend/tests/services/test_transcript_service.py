@@ -24,7 +24,10 @@ def make_transcript(text: str, video_id: str ="test_video_id") -> FetchedTranscr
         is_generated=False
     )
 
-#  ------------------------------------------- Find Videos
+
+#  -------------------------------------------
+# Fetch Video Transcript
+# --------------------------------------------
 
 @pytest.mark.asyncio
 async def test_fetch_video_transcript__success():
@@ -56,7 +59,10 @@ async def test_fetch_video_transcript__no_transcript_found():
         with pytest.raises(Exception, match="NoTranscriptFound"):
             await fetch_video_transcript(video_id)
 
-#  ------------------------------------------- Find Matches
+
+#  -------------------------------------------
+# Find Matches in Video
+# --------------------------------------------
 
 @pytest.mark.asyncio
 async def test_find_matches_in_video__transcript_success(video_fixture: YoutubeVideoData):
@@ -100,7 +106,10 @@ async def test_find_matches_in_video__transcript_no_transcript(video_fixture: Yo
         # ASSERT
         assert result is None
         
-#  ------------------------------------------- Fetch Transcript Matches
+
+#  -------------------------------------------
+# Fetch Transcript Matches
+# --------------------------------------------
 
 @pytest.mark.asyncio
 async def test_fetch_transcript_matches__success():
