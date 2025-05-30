@@ -1,53 +1,70 @@
 # CSI: ClipSearchInvestigator
-Ever find it annoying not being able to find "that video". This script aims to search for key phrases via youtube transcripts to help!
+Are you ever trying to find "that one video clip" but it's just not showing up in the results? Maybe it's in the middle of a 50 minute video and you spend ages scrubbing for it! 
+Well this app provides you with the answer. It's a simple web-app that lets you find exactly what you're looking for with a few clicks!
+Even better it uses your own Youtube Search API key, and is completely self hosted so the only limits are your API allowance, and no data is tracked against you!
 
-## Setting up
-- docker compose up
-- run migration (todo: make this)
-- navigate to localhost: 80
+[app-video_UPAmlijW.webm](https://github.com/user-attachments/assets/6dafe8f9-1cca-4b85-b1e5-9109da1339e4)
 
-## Using
-- enter api key, it will check everything for you
-- enter video search
-- enter transcript search
-- find results and click
-- manage api keys if you want
+
+## How to Install the App
+- `git clone` this repository to your machine/server
+- Ensure docker and docker compose are installed
+- Enter the project root directory and run `docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up --build`
+- navigate to localhost: 81 and your app will be there!
+
+> NOTE: if you are already hosting an app on port 81, or simply want to use a different port, you can update the .env file port and rebuild the app.
+
+## Configuring the APP
+- When you first open the app, you'll be asked to enter your Youtube Search API key (see further down how to get this)
+- Once you've stored your API key you're ready to use the app
+- First enter a video search query to determine the videos you want to scan
+- Second enter the transcript terms/phrases you want to scan for
+- Finally hit search and get your results!
+- NOTE: you can add, remove, de-activate your API key at any point by heading to the options page 
 
 ## Project Structure
 
-| Service            | Description                                                                 |
-|--------------------|-----------------------------------------------------------------------------|
-| **reverse-proxy**  | Handles API requests, processes YouTube transcripts, and manages the database. |
-| **backend**        | User interface for searching and displaying video transcripts.             |
-| **frontend**       | Stores video metadata, transcripts, and user preferences.                  |
-| **database**       | Connects the frontend with the backend and external services like YouTube. |
+| Service            | Description                                                                                                                  |
+|--------------------|------------------------------------------------------------------------------------------------------------------------------|
+| **reverse-proxy**  | An NGINX reverse proxy that allows all apps to be served over the same host/port                                             |
+| **backend**        | FAST API backend that recieves requests from frontend and interacts with Google Youtube Search API and the postgres database |
+| **frontend**       | React Vite application handling user interaction and displaying search results                                               |
+| **database**       | PostgreSQL database for safely storing API keys. In the future will be used to store favourite clips.                        |
 
 
 
-## Known Limitations
-
+## Application Limitations
 ### VPN Issues
+Youtube Search API does not allow requests to be sent from a machine running a VPN. In this case results will always return with a 500.
 
 ### Youtube Search API Quota Limits
+Youtube Search API has a free quota by default. This is fairly generious and resets every day, however can result in blocking searches if you exceed your allowance.
+
+# Future Development Features
+1. Add a filtering bar at the top of the search results to filter for a specific term if multiple were entered
+3. Add saving specific quotes or specific searches in the database
+4. Make search result persistant when refreshing/changing page
 
 
-## Maintaining / Debugging
+## Debugging/Maintaining
 
-### SQL Database Migrations
+### Clearing Database
+To clear the database take the following steps:
+1. `docker compose exec -it database sh`: to access database container
+2. `psql -U youtubeSearchUser YoutubeSearchDb`: to connect to pql client 
+3. `\dt`: to list tables
+4. `SELECT * FROM mytable`; : to select all keys
+5. `TRUNCATE table_name`; : to drop all records from a given table
 
-### OpenAPI 
-
-
-## Future Changes
-- improved search matching
-- improve post search reuslt filtering
-- saving previous results
-
+### Update Models
+If you update an SQL model and need it reflected right away, you can trigger this by running
+`alembic revision --autogenerate -m "Updated models"` inside the backend container to generate new migrations
 
 
 # ------------------ NOTES TO SELF
 
-# TODO Today:
+# TODO:
+1. add guide information on how to set up Google API
 1. update all tests to use data-testid
 7. update favicon
 9. test the prouduction version of the app works
@@ -56,27 +73,3 @@ Ever find it annoying not being able to find "that video". This script aims to s
 12. verify that migrations on db work as intended
 13. double check for no private data
 14. clean up for making public
-
-
-# Post release features
-1. Bar on search page to allow for filtering by match condition
-2. faster rendering
-3. add saving specific
-4. make search results persistant between page swaps
-
-
-# Maintaining:
-## SQL
-`alembic revision --autogenerate -m "Updated models"` is run inside the container to generate new migrations when models change
-
-docker compose exec to database then run: 
-
-psql -U youtubeSearchUser YoutubeSearchDb: to connect to pql client 
-\dt: to list tables
-SELECT * FROM mytable; : to select all keys
-TRUNCATE table_name; : to drop all records
-
-# Bugs:
-- does not work with VPN
-- does not work if video not premiered yet: "Failed to fetch transcripts: \nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=cwish35WV4I! This is most likely caused by:\n\nThe video is unplayable for the following reason: Premieres in 36 hours\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
-
