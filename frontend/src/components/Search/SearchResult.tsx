@@ -6,7 +6,7 @@ const SearchResult: React.FC<{ result: TranscriptSearchResult }> = ({ result }) 
         <div className="p-6 transition-shadow shadow-lg bg-background-light hover:shadow-xl">
             <div className="flex items-center justify-between mb-4">
                 <div>
-                    <h3 className="overflow-hidden font-semibold text-md text-white-medium whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '13em' }} title={result.videoTitle}>
+                    <h3 className="overflow-hidden font-semibold text-md text-white-medium whitespace-nowrap overflow-ellipsis" style={{ maxHeight: '1.5em', maxWidth: '20em' }} title={result.videoTitle}>
                         {result.videoTitle}
                     </h3>
                     <p 
@@ -39,7 +39,7 @@ const SearchResult: React.FC<{ result: TranscriptSearchResult }> = ({ result }) 
                 {result.matches.map((quote) => (
                     <li
                         key={quote.startTime}
-                        className="p-2 text-sm rounded-lg cursor-pointer bg-primary-medium hover:bg-primary-dark"
+                        className="p-2 text-sm transition-colors duration-300 rounded-lg cursor-pointer bg-primary-medium hover:bg-primary-dark"
                         onClick={() => window.open(quote.link, '_blank')}
                         data-testid="search-result_quote"
                     >

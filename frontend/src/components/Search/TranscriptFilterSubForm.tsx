@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { SearchFormData } from "./SearchForm.js";
+import { X } from "lucide-react";
 
 interface TranscriptFilterSubFormProps {
   disableForm: boolean;
@@ -36,14 +37,17 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
                 {...register(`matchTerms.${index}.value`)}
                 disabled={disableForm}
               />
-              <button
-                type="button"
-                className="p-3 ml-2 bg-red-600 rounded-lg text-white-medium"
-                onClick={() => remove(index)}
-                disabled={disableForm}
-              >
-                X
-              </button>
+              {index > 0 &&
+                (<button
+                  type="button"
+                  className="p-3 ml-2 bg-red-600 rounded-lg hover:bg-red-700 text-white-medium"
+                  onClick={() => remove(index)}
+                  disabled={disableForm}
+                >
+                  <X className="w-6 h-6" strokeWidth={3} />
+                </button>)
+              }
+
             </div>
           ))}
           {errors.matchTerms && (
@@ -53,7 +57,7 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
           )}
           <button
             type="button"
-            className="p-2 mt-2 text-white rounded-lg bg-primary-medium hover:bg-primary-dark"
+            className="p-2 mt-2 text-white transition-colors duration-300 rounded-lg bg-primary-medium hover:bg-primary-dark"
             onClick={() => append({ value: "" })}
             disabled={disableForm}
           >

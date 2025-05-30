@@ -12,7 +12,7 @@ const BigButton: React.FC<BigButtonProps> = ({ disabled, disabledText, enabledTe
             type="submit"
             data-testid="shared-big-button"
             disabled={disabled}
-            className={`px-6 py-3 ${
+            className={`px-6 py-3 transition-colors duration-300 ${
             disabled
                 ? "bg-gray-500 cursor-not-allowed"
                 : "bg-primary-medium hover:bg-primary-dark"
