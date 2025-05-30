@@ -24,8 +24,8 @@ const Header: React.FC = () => {
             <div className="h-full w-[1px] bg-primary-dark mx-1"></div>
             <Link
               to={route}
-              className={`px-3 py-1 text-white border-none hover:bg-primary-dark rounded-sm ${
-                (currentPath === route || currentPath === aliasRoute) ? "bg-primary-medium" : ""
+              className={`px-3 py-1 text-white border-none hover:bg-primary-dark rounded-sm transition-colors duration-300 ${
+              (currentPath === route || currentPath === aliasRoute) ? "bg-primary-medium" : ""
               }`}
               data-testid={`navigation-tab-${index}`}
             >

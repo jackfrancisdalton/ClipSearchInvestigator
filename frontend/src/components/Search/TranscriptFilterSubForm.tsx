@@ -57,7 +57,7 @@ const TranscriptFilterSubForm: React.FC<TranscriptFilterSubFormProps> = ({ disab
           )}
           <button
             type="button"
-            className="p-2 mt-2 text-white rounded-lg bg-primary-medium hover:bg-primary-dark"
+            className="p-2 mt-2 text-white transition-colors duration-300 rounded-lg bg-primary-medium hover:bg-primary-dark"
             onClick={() => append({ value: "" })}
             disabled={disableForm}
           >

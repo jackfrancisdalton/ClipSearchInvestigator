@@ -39,7 +39,7 @@ const SearchResult: React.FC<{ result: TranscriptSearchResult }> = ({ result }) 
                 {result.matches.map((quote) => (
                     <li
                         key={quote.startTime}
-                        className="p-2 text-sm rounded-lg cursor-pointer bg-primary-medium hover:bg-primary-dark"
+                        className="p-2 text-sm transition-colors duration-300 rounded-lg cursor-pointer bg-primary-medium hover:bg-primary-dark"
                         onClick={() => window.open(quote.link, '_blank')}
                         data-testid="search-result_quote"
                     >
