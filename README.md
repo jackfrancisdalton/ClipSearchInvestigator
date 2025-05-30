@@ -1,6 +1,8 @@
-# CSI: ClipSearchInvestigator
-Are you ever trying to find "that one video clip" but it's just not showing up in the results? Maybe it's in the middle of a 50 minute video and you spend ages scrubbing for it! 
-Well this app provides you with the answer. It's a simple web-app that lets you find exactly what you're looking for with a few clicks!
+# CSI: Clip Search Investigator
+Ever trying to find "that one video clip" but it's just not showing up in the results? Maybe it's in the middle of a 50 minute video and you spend ages scrubbing for it! 
+Well *this app provides you with the answer*!
+
+CSI is a simple web-app that lets you find exactly what you're looking for with a few clicks!
 Even better it uses your own Youtube Search API key, and is completely self hosted so the only limits are your API allowance, and no data is tracked against you!
 
 [app-video_UPAmlijW.webm](https://github.com/user-attachments/assets/6dafe8f9-1cca-4b85-b1e5-9109da1339e4)
@@ -20,7 +22,13 @@ Even better it uses your own Youtube Search API key, and is completely self host
 - First enter a video search query to determine the videos you want to scan
 - Second enter the transcript terms/phrases you want to scan for
 - Finally hit search and get your results!
-- NOTE: you can add, remove, de-activate your API key at any point by heading to the options page 
+- NOTE: you can add, remove, de-activate your API key at any point by heading to the options page
+
+## Getting your Youtube Search API Key and Checking Your Allowance
+You can find your YouTube API key in the Google Developer Console. Follow this <a href="https://developers.google.com/youtube/registering_an_application" className="text-primary-light">guide</a> to get your API key.
+
+To see the limits on the number of requests you can make with the API key you can check them out <a href="https://developers.google.com/youtube/v3/getting-started#quota" className="text-primary-light">here</a>.
+Although note you'll need to be logged into your corresponding Google Account.
 
 ## Project Structure
 
