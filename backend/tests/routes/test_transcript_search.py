@@ -22,7 +22,7 @@ def override_get_db():
     app.dependency_overrides.clear()
 
 @pytest.fixture
-def valid_search_params() -> dict[str, str | list[str]]:
+def valid_search_params() -> dict[str, str | list[str] | int]:
     return {
         "videoSearchQuery": "test query",
         "matchTerms": ["term1", "term2"],
