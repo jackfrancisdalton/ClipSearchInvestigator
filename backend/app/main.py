@@ -13,6 +13,7 @@ app.include_router(api_keys.router)
 app.include_router(transcript_search.router)
 app.include_router(general.router)
 
+# Configure hosted OpenAPI so people using the app can easily inspect the backend
 def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema

@@ -64,7 +64,7 @@ def test_search_transcripts_success(mock_api_key: MagicMock | AsyncMock, mock_se
             "maxResults": 5
         }
     )
-    expected_response = [{
+    expected_response: list[dict[str, str | list[dict[str, str | float]]]] = [{
         "videoId": "123",
         "videoTitle": "Sample Video Title",
         "description": "Sample video description.",

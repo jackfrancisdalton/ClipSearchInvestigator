@@ -17,7 +17,7 @@ async def test_fetch_video_transcript_success():
         is_generated=False
     )
 
-    with patch("app.transcript_fetcher.YouTubeTranscriptApi") as MockYouTubeTranscriptApi:
+    with patch("app.services.transcript_service.YouTubeTranscriptApi") as MockYouTubeTranscriptApi:
         mock_api_instance = MockYouTubeTranscriptApi.return_value
         mock_api_instance.fetch = MagicMock(return_value=mock_transcript)
 
@@ -30,7 +30,7 @@ async def test_fetch_video_transcript_success():
 async def test_fetch_video_transcript_no_transcript_found():
     video_id = "test_video_id"
 
-    with patch("app.transcript_fetcher.YouTubeTranscriptApi") as MockYouTubeTranscriptApi:
+    with patch("app.services.transcript_service.YouTubeTranscriptApi") as MockYouTubeTranscriptApi:
         mock_api_instance = MockYouTubeTranscriptApi.return_value
         mock_api_instance.fetch = MagicMock(side_effect=Exception("NoTranscriptFound"))
 
@@ -58,7 +58,7 @@ async def test_find_matches_in_video_transcript_success():
         is_generated=False
     )
 
-    with patch("app.transcript_fetcher.fetch_video_transcript", return_value=mock_transcript):
+    with patch("app.services.transcript_service.fetch_video_transcript", return_value=mock_transcript):
         result = await find_matches_in_video_transcript(video, search_terms)
 
         assert result is not None
@@ -86,7 +86,7 @@ async def test_find_matches_in_video_transcript_no_matches():
         is_generated=False
     )
 
-    with patch("app.transcript_fetcher.fetch_video_transcript", return_value=mock_transcript):
+    with patch("app.services.transcript_service.fetch_video_transcript", return_value=mock_transcript):
         result = await find_matches_in_video_transcript(video, search_terms)
 
         assert result is None
@@ -103,7 +103,7 @@ async def test_find_matches_in_video_transcript_no_transcript():
     )
     search_terms = ["test"]
 
-    with patch("app.transcript_fetcher.fetch_video_transcript", side_effect=Exception("NoTranscriptFound")):
+    with patch("app.services.transcript_service.fetch_video_transcript", side_effect=Exception("NoTranscriptFound")):
         result = await find_matches_in_video_transcript(video, search_terms)
 
         assert result is None
@@ -144,7 +144,7 @@ async def test_fetch_transcript_matches_success():
         is_generated=False
     )
 
-    with patch("app.transcript_fetcher.fetch_video_transcript", side_effect=[mock_transcript_1, mock_transcript_2]):
+    with patch("app.services.transcript_service.fetch_video_transcript", side_effect=[mock_transcript_1, mock_transcript_2]):
         result = await fetch_transcript_matches(videos, search_terms)
 
         assert len(result) == 2
@@ -176,7 +176,7 @@ async def test_fetch_transcript_matches_no_matches():
         is_generated=False
     )
 
-    with patch("app.transcript_fetcher.fetch_video_transcript", return_value=mock_transcript):
+    with patch("app.services.transcript_service.fetch_video_transcript", return_value=mock_transcript):
         result = await fetch_transcript_matches(videos, search_terms)
 
         assert len(result) == 0
@@ -195,7 +195,7 @@ async def test_fetch_transcript_matches_no_transcript():
     ]
     search_terms = ["test"]
 
-    with patch("app.transcript_fetcher.fetch_video_transcript", side_effect=Exception("NoTranscriptFound")):
+    with patch("app.services.transcript_service.fetch_video_transcript", side_effect=Exception("NoTranscriptFound")):
         result = await fetch_transcript_matches(videos, search_terms)
 
         assert len(result) == 0

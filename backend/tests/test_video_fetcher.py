@@ -32,7 +32,7 @@ def mock_response() -> Dict[str, List[Dict[str, Any]]]: # TODO: sort out the typ
         ]
     }
 
-@patch('app.video_fetcher.requests.get')
+@patch('app.services.video_service.requests.get')
 def test_search_youtube_success(mock_get: Mock, mock_response: Dict[str, List[Dict[str, Any]]]):
     mock_get.return_value = Mock(status_code=200)
     mock_get.return_value.json.return_value = mock_response
@@ -70,7 +70,7 @@ def test_search_youtube_success(mock_get: Mock, mock_response: Dict[str, List[Di
     assert results[1].publishedAt == "2023-01-02T00:00:00Z"
     assert results[1].thumbnailUrl == "http://example.com/thumbnail2.jpg"
 
-@patch('app.video_fetcher.requests.get')
+@patch('app.services.video_service.requests.get')
 def test_search_youtube_failure(mock_get: Mock):
     mock_get.return_value = Mock(status_code=500)
     mock_get.return_value.raise_for_status.side_effect = Exception("API call failed")

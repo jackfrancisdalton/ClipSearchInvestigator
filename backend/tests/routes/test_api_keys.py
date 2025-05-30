@@ -1,8 +1,7 @@
-from typing import Literal
 import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import Session
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import MagicMock, patch
 from app.main import app
 from app.data import models
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate
