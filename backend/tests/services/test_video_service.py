@@ -34,6 +34,7 @@ def mock_response() -> Dict[str, List[Dict[str, Any]]]: # TODO: sort out the typ
 
 @patch('app.services.video_service.requests.get')
 def test_search_youtube__no_results(mock_get: Mock):
+    # ARRANGE
     mock_get.return_value = Mock(status_code=200)
     mock_get.return_value.json.return_value = {"items": []}
 
@@ -45,6 +46,7 @@ def test_search_youtube__no_results(mock_get: Mock):
     channel_name = None
     max_results = 10
 
+    # ACT
     results = search_youtube(
         api_key=api_key,
         video_search_query=video_search_query,
@@ -55,10 +57,12 @@ def test_search_youtube__no_results(mock_get: Mock):
         max_results=max_results
     )
 
+    # ASSERT
     assert len(results) == 0
 
 @patch('app.services.video_service.requests.get')
 def test_search_youtube__results_found(mock_get: Mock, mock_response: Dict[str, List[Dict[str, Any]]]):
+    # ARRANGE
     mock_get.return_value = Mock(status_code=200)
     mock_get.return_value.json.return_value = mock_response
 
@@ -70,6 +74,7 @@ def test_search_youtube__results_found(mock_get: Mock, mock_response: Dict[str, 
     channel_name = None
     max_results = 10
 
+    # ACT
     results = search_youtube(
         api_key=api_key,
         video_search_query=video_search_query,
@@ -80,6 +85,7 @@ def test_search_youtube__results_found(mock_get: Mock, mock_response: Dict[str, 
         max_results=max_results
     )
 
+    # ASSERT
     assert len(results) == 2
     assert results[0].videoId == "video1"
     assert results[0].title == "Test Video 1"
@@ -97,6 +103,7 @@ def test_search_youtube__results_found(mock_get: Mock, mock_response: Dict[str, 
 
 @patch('app.services.video_service.requests.get')
 def test_search_youtube__exception_handling(mock_get: Mock):
+    # ARRANGE
     mock_get.return_value = Mock(status_code=500)
     mock_get.return_value.raise_for_status.side_effect = Exception("API call failed")
 
@@ -108,6 +115,7 @@ def test_search_youtube__exception_handling(mock_get: Mock):
     channel_name = None
     max_results = 10
 
+    # ACT & ASSERT
     with pytest.raises(VideoSearchError):
         search_youtube(
             api_key=api_key,
