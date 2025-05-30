@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, Mock
 from datetime import date
-from app.video_fetcher import search_youtube, VideoSearchError
+from app.services.video_service import search_youtube, VideoSearchError
 
 from typing import Dict, List, Any
 

@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from youtube_transcript_api._transcripts import FetchedTranscript, FetchedTranscriptSnippet
-from app.transcript_fetcher import fetch_transcript_matches, fetch_video_transcript, find_matches_in_video_transcript
+from app.services.transcript_service import fetch_transcript_matches, fetch_video_transcript, find_matches_in_video_transcript
 from app.pydantic_schemas.search_results import YoutubeVideoData
 
 #  ------------------------------------------- Find Videos
