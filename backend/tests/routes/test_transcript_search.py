@@ -143,7 +143,9 @@ def test_search_transcripts__returns_500_if_transcript_fetch_raises(
         assert "Failed to fetch video transcript results" in response.json()["detail"]
 
 @pytest.mark.parametrize("missing_param", [
-    "videoSearchQuery", "matchTerms", "sortOrder"
+    "videoSearchQuery", 
+    "matchTerms", 
+    "sortOrder"
 ])
 def test_search_transcripts__returns_422_if_required_param_missing(
     missing_param: str, 

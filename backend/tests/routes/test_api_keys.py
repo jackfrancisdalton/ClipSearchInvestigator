@@ -35,7 +35,7 @@ def encrypted_api_key() -> str:
 
 
 
-def test_create_youtube_api_key__success(valid_api_key_request: YoutubeSearchApiKeyCreate, encrypted_api_key: str, override_get_db: MagicMock):
+def test_create_youtube_api_key__return_success(valid_api_key_request: YoutubeSearchApiKeyCreate, encrypted_api_key: str, override_get_db: MagicMock):
     # ARRANGE
     with patch("app.routes.api_keys.validate_youtube_api_key") as mock_validate, \
          patch("app.routes.api_keys.password_encryptor.encrypt", return_value=encrypted_api_key.encode()) as mock_encrypt:
@@ -52,7 +52,7 @@ def test_create_youtube_api_key__success(valid_api_key_request: YoutubeSearchApi
         override_get_db.add.assert_called_once()
         override_get_db.commit.assert_called_once()
 
-def test_create_youtube_api_key__with_active_key(valid_api_key_request: YoutubeSearchApiKeyCreate, encrypted_api_key: str, override_get_db: MagicMock):
+def test_create_youtube_api_key__with_existing_active_key__return_success(valid_api_key_request: YoutubeSearchApiKeyCreate, encrypted_api_key: str, override_get_db: MagicMock):
     # ARRANGE
     # Simulate that there is an already active API key in the database.
     override_get_db.query.return_value.filter.return_value.first.return_value = models.YoutubeSearchApiKey(is_active=True)
@@ -73,7 +73,7 @@ def test_create_youtube_api_key__with_active_key(valid_api_key_request: YoutubeS
     override_get_db.commit.assert_called_once()
 
 
-def test_create_youtube_api_key__validation_error(valid_api_key_request: YoutubeSearchApiKeyCreate):
+def test_create_youtube_api_key__when_key_is_invalid_return_validation_error(valid_api_key_request: YoutubeSearchApiKeyCreate):
     # ARRANGE
     with patch("app.routes.api_keys.validate_youtube_api_key", side_effect=Exception("Invalid API key")) as mock_validate:
         # ACT
@@ -85,7 +85,7 @@ def test_create_youtube_api_key__validation_error(valid_api_key_request: Youtube
     mock_validate.assert_called_once_with(valid_api_key_request.api_key)
 
 
-def test_create_youtube_api_key__encryption_error(valid_api_key_request: YoutubeSearchApiKeyCreate):
+def test_create_youtube_api_key___when_encryption_fails_return_encryption_error(valid_api_key_request: YoutubeSearchApiKeyCreate):
     # ARRANGE
     with patch("app.routes.api_keys.validate_youtube_api_key") as mock_validate, \
          patch("app.routes.api_keys.password_encryptor.encrypt", side_effect=Exception("Encryption error")) as mock_encrypt:
