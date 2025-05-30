@@ -3,12 +3,13 @@ import { useFormContext } from "react-hook-form";
 import { SearchFormData } from "./SearchForm.js";
 import { VideoSearchSortOrder } from "../../types/index.js";
 
+
 interface VideoSearchSubFormProps {
   disableForm: boolean;
 }
 
 const VideoSearchSubForm: React.FC<VideoSearchSubFormProps> = ({ disableForm }) => {
-  const { register, formState: { errors } } = useFormContext<SearchFormData>();
+  const { register, formState: { errors }, watch } = useFormContext<SearchFormData>();
   const [showMore, setShowMore] = useState(false);
 
   return (
@@ -43,7 +44,7 @@ const VideoSearchSubForm: React.FC<VideoSearchSubFormProps> = ({ disableForm }) 
         {/* Slider for Number of Videos */}
         <div className="mb-6">
           <label className="block mb-2 font-medium text-l text-white-medium">
-            Number of Search Results to Scan:
+            Number of Results to Scan: {watch("maxResults")}
           </label>
           <input
             type="range"
