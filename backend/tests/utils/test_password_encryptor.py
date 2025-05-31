@@ -2,7 +2,7 @@ import pytest
 from fastapi import HTTPException
 from cryptography.fernet import Fernet
 
-MODULE_PATH = "app.utility.password_encryptor"
+MODULE_PATH = "app.utils.password_encryptor"
 FERNET_KEY = "FERNET_KEY"
 
 @pytest.fixture

@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import MagicMock
 from sqlalchemy.orm import Session
-from app.utility.fetch_api_key import get_currently_active_api_key
+from app.utils.fetch_api_key import get_currently_active_api_key
 from app.data.models import YoutubeSearchApiKey
-from app.utility import password_encryptor
+from app.utils import password_encryptor
 
 def test_get_currently_active_api_key_success():
     # ARRANGE

@@ -1,7 +1,7 @@
 import pytest
 from requests.models import Response
 from unittest.mock import patch
-from app.utility.validators import validate_youtube_api_key
+from app.utils.validators import validate_youtube_api_key
 
 def test_validate_youtube_api_key__validation_success_no_exception_raised():
     # ARRANGE

@@ -62,7 +62,7 @@ class CRUDBase(Generic[T]):
             db.refresh(obj_in)
         except SQLAlchemyError as e:
             db.rollback()
-            raise RuntimeError(f"Database error during creation: {e}")
+            raise RuntimeError(f"Database error during creation: {e}") # TODO: replace with custom exception
         return obj_in
 
     def update(self, db: Session, db_obj: T, update_data: Dict[str, Any]) -> T:

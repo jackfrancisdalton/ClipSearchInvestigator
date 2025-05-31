@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 
 from app.data.database import get_db
-from app.utility.fetch_api_key import get_currently_active_api_key
+from app.utils.fetch_api_key import get_currently_active_api_key
 from app.services.video_service import search_youtube
 from app.services.transcript_service import fetch_transcript_matches
 from app.pydantic_schemas.search_results import TranscriptSearchResult

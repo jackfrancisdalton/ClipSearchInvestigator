@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.data import models
-from app.utility import password_encryptor
+from app.utils import password_encryptor
 
 def get_currently_active_api_key(db: Session) -> str:
     """
