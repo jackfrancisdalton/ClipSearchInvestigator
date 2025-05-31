@@ -19,12 +19,11 @@ interface UseApiKeysManagementReturn {
   apiKeys: ApiKey[];
   errors: ApiKeyErrors;
   activateKey: (keyId: number) => Promise<void>;
-  deleteKey: (keyId: number) => Promise<void>;
-  saveKey: (apiKey: string) => Promise<void>;
-  deleteAllKeys: () => Promise<void>;
+  deleteKey:   (keyId: number) => Promise<void>;
+  saveKey:    (apiKey: string) => Promise<void>;
+  deleteAllKeys:            () => Promise<void>;
 }
 
-// Note the corrected naming: "Management" instead of "Managagment"
 export const useApiKeysManagement = (): UseApiKeysManagementReturn => {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>([]);
   const [errors, setErrors] = useState<ApiKeyErrors>({
