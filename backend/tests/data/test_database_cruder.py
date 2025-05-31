@@ -1,139 +1,213 @@
+from typing import Callable, Generator, Optional
 import pytest
-from sqlalchemy import create_engine, Column, Integer
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import Session, sessionmaker, Mapped, mapped_column
 from app.data.database_cruder import CRUDBase
+
+
+# ---------------------------------------
+# Database setup for testing
+# ---------------------------------------
 
 Base = declarative_base()
 
 class TestModel(Base):
     __tablename__ = 'test_model'
-    id = Column(Integer, primary_key=True, index=True)
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    test_prop: Mapped[Optional[str]] = mapped_column(nullable=True)
 
 DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(DATABASE_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SessionLocal = sessionmaker(bind=engine)
 
 @pytest.fixture(scope="function")
-def setup_database():
-    Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
+
+def db_session() -> Generator[Session, None, None]:
+    Base.metadata.create_all(engine)
+    db: Session = SessionLocal()
     yield db
     db.close()
-    Base.metadata.drop_all(bind=engine)
+    Base.metadata.drop_all(engine)
 
-def test_get_existing_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj = TestModel(id=1)
-    db.add(test_obj)
+@pytest.fixture
+def crud():
+    return CRUDBase(TestModel)
+
+
+def create_test_model(
+    db: Session, 
+    id: Optional[int],
+    test_prop: Optional[str] = None
+) -> TestModel:
+    obj = TestModel(id=id, test_prop=test_prop) if id else TestModel()
+    db.add(obj)
     db.commit()
-    db.refresh(test_obj)
+    db.refresh(obj)
+    return obj
 
-    result = crud.get(db, 1)
-    assert result is not None
-    assert result.id == 1
 
-def test_get_non_existing_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
+def assert_record_exists_in_db(
+        db: Session, 
+        id: int,
+        assertion_func: Optional[Callable[[TestModel], bool]] = None
+) -> None:
+    obj = db.query(TestModel).filter(TestModel.id == id).first()
 
-    result = crud.get(db, 999)
-    assert result is None
+    # Allows lambda to be passed in for test specific assertions on object
+    if assertion_func:
+        assert assertion_func(obj), f"TestModel with id {id} does not match expected criteria."
 
-def test_get_all_with_records(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj1 = TestModel(id=1)
-    test_obj2 = TestModel(id=2)
-    db.add(test_obj1)
-    db.add(test_obj2)
-    db.commit()
-    db.refresh(test_obj1)
-    db.refresh(test_obj2)
+    assert obj is not None, f"TestModel with id {id} does not exist in the database."
 
-    result = crud.get_all(db)
-    assert len(result) == 2
-    assert result[0].id == 1
-    assert result[1].id == 2
+def assert_record_with_id_exists_in_db(db: Session, id: int) -> None:
+    matchCount = db.query(TestModel).filter(TestModel.id == id).count()
+    assert matchCount == 1, f"TestModel with id {id} does not exist in the database."
 
-def test_get_all_no_records(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
 
-    result = crud.get_all(db)
-    assert len(result) == 0
+def assert_record_does_not_exists_in_db(db: Session, id: int) -> None:
+    matchCount = db.query(TestModel).filter(TestModel.id == id).count()
+    assert matchCount == 0, f"TestModel with id {id} does not exist in the database."
 
-def test_create_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj = TestModel(id=1)
 
-    result = crud.create(db, test_obj)
-    assert result is not None
-    assert result.id == 1
 
-def test_create_record_with_existing_id(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj1 = TestModel(id=1)
-    db.add(test_obj1)
-    db.commit()
-    db.refresh(test_obj1)
+# ---------------------------------------
+# Tests for get
+# ---------------------------------------
 
-    test_obj2 = TestModel(id=1)
-    with pytest.raises(RuntimeError):
-        crud.create(db, test_obj2)
+def test_get_existing_record__should_return_model(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    created = create_test_model(db_session, id=1)
 
-def test_update_existing_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj = TestModel(id=1)
-    db.add(test_obj)
-    db.commit()
-    db.refresh(test_obj)
+    # ACT
+    retrieved = crud.get(db_session, 1)
 
-    update_data = {"id": 2}
-    result = crud.update(db, test_obj, update_data)
-    assert result is not None
-    assert result.id == 2
+    # ASSERT
+    assert retrieved is not None
+    assert retrieved.id == created.id
+    assert retrieved.test_prop is None
 
-def test_update_non_existing_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj = TestModel(id=1)
-    db.add(test_obj)
-    db.commit()
-    db.refresh(test_obj)
 
-    non_existing_obj = TestModel(id=999)
-    update_data = {"id": 2}
-    with pytest.raises(RuntimeError):
-        crud.update(db, non_existing_obj, update_data)
-        
-def test_delete_existing_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
-    test_obj = TestModel(id=1)
-    db.add(test_obj)
-    db.commit()
-    db.refresh(test_obj)
+def test_get__nonexisting_record__should_return_none(db_session: Session, crud: CRUDBase[TestModel]):
+    # ACT
+    retrieved = crud.get(db_session, 999)
 
-    result = crud.delete(db, 1)
-    assert result is not None
-    assert result.id == 1
+    # ASSERT
+    assert retrieved is None, "Should return None for non-existing record"
 
-    # Verify the record is deleted
-    result = crud.get(db, 1)
-    assert result is None
 
-def test_delete_non_existing_record(setup_database: Session):
-    db = setup_database
-    crud = CRUDBase(TestModel)
+# ---------------------------------------
+# Tests for get_all
+# ---------------------------------------
 
+def test_get_all__should_return_empty_list_when_no_records(db_session: Session, crud: CRUDBase[TestModel]):
+    # ACT
+    records = crud.get_all(db_session)
+
+    # ASSERT
+    assert records == [], "Should return an empty list when no records exist"
+
+def test_get_all__should_return_all_records(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    create_test_model(db_session, id=1, test_prop="first")
+    create_test_model(db_session, id=2, test_prop="second")
+
+    # ACT
+    records = crud.get_all(db_session)
+
+    # ASSERT
+    assert len(records) == 2, "Should return two records"
+    assert records[0].id == 1 and records[0].test_prop == "first", "First record should match"
+    assert records[1].id == 2 and records[1].test_prop == "second", "Second record should match"
+
+
+# ---------------------------------------
+# Tests for create
+# ---------------------------------------
+
+def test_create_record__should_assign_id_on_create(db_session: Session , crud: CRUDBase[TestModel]):
+    # ARRANGE
+    obj = TestModel(id=None, test_prop="new record")
+
+    # ACT
+    created = crud.create(db_session, obj)
+
+    # ASSERT
+    assert created.id is not None
+    assert_record_exists_in_db(
+        db_session, 
+        created.id, 
+        lambda x: x.test_prop == "new record"
+    )
+
+
+def test_create_duplicate__record_fails(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    create_test_model(db_session, id=1)
+    duplicate_obj = TestModel(id=1)
+
+    # ACT & ASSERT
+    with pytest.raises(RuntimeError, match="Database error during creation"):
+        crud.create(db_session, duplicate_obj)
+
+    assert_record_with_id_exists_in_db(db_session, id=1)
+
+
+# ---------------------------------------
+# Tests for update
+# ---------------------------------------
+
+def test_update_existing_record__should_update_properties(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    created = create_test_model(db_session, id=1, test_prop="old value")
+    update_data = {"test_prop": "updated value"}
+
+    # ACT
+    updated = crud.update(db_session, created, update_data)
+
+    # ASSERT
+    assert updated.test_prop == "updated value"
+    assert_record_exists_in_db(
+        db_session, 
+        updated.id, 
+        lambda x: x.test_prop == "updated value"
+    )
+
+def test_update_nonexisting_record__should_raise_error(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    non_existing = TestModel(id=999, test_prop="non-existing")
+
+    # ACT & ASSERT
+    with pytest.raises(RuntimeError, match="Database error during update"):
+        crud.update(db_session, non_existing, {"test_prop": "should not update"})
+
+    assert_record_does_not_exists_in_db(db_session, 999)
+
+
+
+# ---------------------------------------
+# Tests for delete
+# ---------------------------------------
+
+def test_delete_existing_record__should_remove_from_db(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    existing_id = 1
+    created = create_test_model(db_session, id=existing_id, test_prop="to be deleted")
+
+    # ACT
+    deleted = crud.delete(db_session, created.id)
+
+    # ASSERT
+    assert deleted.id == existing_id
+    assert_record_does_not_exists_in_db(db_session, existing_id)
+
+
+def test_delete_nonexisting_record__should_raise_error(db_session: Session, crud: CRUDBase[TestModel]):
+    # ARRANGE
+    non_existing_id = 999
+
+    # ACT & ASSERT
     with pytest.raises(ValueError, match="Object not found"):
-        crud.delete(db, 999)
+        crud.delete(db_session, non_existing_id)
 
-
-
-
+    assert_record_does_not_exists_in_db(db_session, non_existing_id)

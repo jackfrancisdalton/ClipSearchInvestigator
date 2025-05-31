@@ -4,10 +4,10 @@ from sqlalchemy.orm import Session
 from app.data.database import get_db
 from app.data.database_cruder import CRUDBase
 from app.data import models
-from app.utility import password_encryptor
+from app.utils import password_encryptor
 from app.pydantic_schemas.youtube_search_api_key import YoutubeSearchApiKeyCreate, YoutubeSearchApiKeyResponse
 from app.pydantic_schemas.shared import ActionResultResponse
-from app.utility.validators import validate_youtube_api_key
+from app.utils.validators import validate_youtube_api_key
 
 router = APIRouter()
 youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)

@@ -5,7 +5,7 @@ from app.data.database import get_db
 from app.data.database_cruder import CRUDBase
 from app.data import models
 from app.pydantic_schemas.shared import isAppConfiguredResponse
-from app.utility.fetch_api_key import get_currently_active_api_key
+from app.utils.fetch_api_key import get_currently_active_api_key
 
 router = APIRouter()
 youtube_api_key_crud = CRUDBase(models.YoutubeSearchApiKey)

@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch, Mock
 from datetime import date
-from app.video_fetcher import search_youtube, VideoSearchError
+from app.services.video_service import search_youtube, VideoSearchError
 
 from typing import Dict, List, Any
 
@@ -32,8 +32,37 @@ def mock_response() -> Dict[str, List[Dict[str, Any]]]: # TODO: sort out the typ
         ]
     }
 
-@patch('app.video_fetcher.requests.get')
-def test_search_youtube_success(mock_get: Mock, mock_response: Dict[str, List[Dict[str, Any]]]):
+@patch('app.services.video_service.requests.get')
+def test_search_youtube__no_results(mock_get: Mock):
+    # ARRANGE
+    mock_get.return_value = Mock(status_code=200)
+    mock_get.return_value.json.return_value = {"items": []}
+
+    api_key = "test_api_key"
+    video_search_query = "test query"
+    sort_order = "date"
+    published_before = date(2023, 1, 3)
+    published_after = date(2023, 1, 1)
+    channel_name = None
+    max_results = 10
+
+    # ACT
+    results = search_youtube(
+        api_key=api_key,
+        video_search_query=video_search_query,
+        sort_order=sort_order,
+        published_before=published_before,
+        published_after=published_after,
+        channel_name=channel_name,
+        max_results=max_results
+    )
+
+    # ASSERT
+    assert len(results) == 0
+
+@patch('app.services.video_service.requests.get')
+def test_search_youtube__results_found(mock_get: Mock, mock_response: Dict[str, List[Dict[str, Any]]]):
+    # ARRANGE
     mock_get.return_value = Mock(status_code=200)
     mock_get.return_value.json.return_value = mock_response
 
@@ -45,6 +74,7 @@ def test_search_youtube_success(mock_get: Mock, mock_response: Dict[str, List[Di
     channel_name = None
     max_results = 10
 
+    # ACT
     results = search_youtube(
         api_key=api_key,
         video_search_query=video_search_query,
@@ -55,6 +85,7 @@ def test_search_youtube_success(mock_get: Mock, mock_response: Dict[str, List[Di
         max_results=max_results
     )
 
+    # ASSERT
     assert len(results) == 2
     assert results[0].videoId == "video1"
     assert results[0].title == "Test Video 1"
@@ -70,8 +101,9 @@ def test_search_youtube_success(mock_get: Mock, mock_response: Dict[str, List[Di
     assert results[1].publishedAt == "2023-01-02T00:00:00Z"
     assert results[1].thumbnailUrl == "http://example.com/thumbnail2.jpg"
 
-@patch('app.video_fetcher.requests.get')
-def test_search_youtube_failure(mock_get: Mock):
+@patch('app.services.video_service.requests.get')
+def test_search_youtube__exception_handling(mock_get: Mock):
+    # ARRANGE
     mock_get.return_value = Mock(status_code=500)
     mock_get.return_value.raise_for_status.side_effect = Exception("API call failed")
 
@@ -83,6 +115,7 @@ def test_search_youtube_failure(mock_get: Mock):
     channel_name = None
     max_results = 10
 
+    # ACT & ASSERT
     with pytest.raises(VideoSearchError):
         search_youtube(
             api_key=api_key,

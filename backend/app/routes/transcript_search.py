@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 
 from app.data.database import get_db
-from app.utility.fetch_api_key import get_currently_active_api_key
-from app.video_fetcher import search_youtube
-from app.transcript_fetcher import fetch_transcript_matches
+from app.utils.fetch_api_key import get_currently_active_api_key
+from app.services.video_service import search_youtube
+from app.services.transcript_service import fetch_transcript_matches
 from app.pydantic_schemas.search_results import TranscriptSearchResult
 
 router = APIRouter()
@@ -44,6 +44,7 @@ async def search_transcripts(
     """
     youtube_api_key = get_currently_active_api_key(db=db)
     
+    # Handle if the user has removed their API key
     if not youtube_api_key:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -66,6 +67,7 @@ async def search_transcripts(
             detail=f"Error when searching for videos because... {e}"
         ) from e
 
+    # If no videos found return exception
     if not videos:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -80,6 +82,7 @@ async def search_transcripts(
             detail=f"Failed to fetch video transcript results because... {e}"
         ) from e
 
+    # If no transcripts found return exception
     if not transcript_results:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
