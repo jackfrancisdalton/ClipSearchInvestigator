@@ -1,40 +1,54 @@
 import pytest
+from typing import Generator
 from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker, Session
 from app.data.database import get_db, Base
 
-# Create an in-memory SQLite database for testing
-TEST_DATABASE_URL = "sqlite:///:memory:"
+# ---------------------------------------
+# Database setup for testing
+# ---------------------------------------
 
-# Create a new engine and sessionmaker for the test database
+# Use in-memory SQLite for testing
+TEST_DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(TEST_DATABASE_URL)
+
+# Create test session factory
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create the tables in the test database
+# Create tables for the in-memory test DB
 Base.metadata.create_all(bind=engine)
 
 @pytest.fixture(scope="function")
-def db_session() -> Session:
-    """
-    Creates a new database session for a test and ensures it is properly closed after the test.
-    """
+def db_session() -> Generator[Session, None, None]:
     connection = engine.connect()
     transaction = connection.begin()
     session = TestingSessionLocal(bind=connection)
 
-    yield session
+    try:
+        yield session
+    finally:
+        session.close()
+        transaction.rollback()
+        connection.close()
 
-    session.close()
-    transaction.rollback()
-    connection.close()
 
-def test_get_db(db_session):
-    """
-    Test the get_db function to ensure it provides a working database session.
-    """
-    generator = get_db()
-    db = next(generator)
-    assert isinstance(db, Session)
-    db.execute(text("SELECT 1"))  # Simple query to ensure the session works
-    generator.close()
+# ---------------------------------------
+# Tests for get_db and db_session fixture
+# ---------------------------------------
+
+def test_get_db__returns_session_instance():
+    db_gen = get_db()
+    db = next(db_gen)
+    try:
+        assert isinstance(db, Session)
+    finally:
+        db_gen.close()
+
+def test_get_db__session_executes_sql():    
+    db_gen = get_db()
+    db = next(db_gen)
+    try:
+        result = db.execute(text("SELECT 1")).scalar()
+        assert result == 1
+    finally:
+        db_gen.close()

@@ -72,8 +72,8 @@ If you update an SQL model and need it reflected right away, you can trigger thi
 # ------------------ NOTES TO SELF
 
 # TODO:
-1. add guide information on how to set up Google API
-1. update all tests to use data-testid
+1. assess scope of fixture (probably all should be function)
+1. update all tests to use data-testid on frontend
 7. update favicon
 9. test the prouduction version of the app works
 10. add continous integration to the build process
