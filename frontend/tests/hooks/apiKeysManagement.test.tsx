@@ -1,233 +1,111 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach, Mock } from 'vitest';
 import { render, waitFor, act } from '@testing-library/react';
-import { useApiKeysManagement } from '../../src/hooks/useApiKeysManagement.js';
-import { 
-  getAllKeys, 
-  activateApiKey, 
-  deleteApiKey, 
-  saveApiKey, 
-  deleteAllApiKeys 
+import { useApiKeysManagement, UseApiKeysManagementReturn } from '../../src/hooks/useApiKeysManagement.js';
+import {
+  getAllKeys,
+  activateApiKey,
+  deleteApiKey,
+  saveApiKey,
+  deleteAllApiKeys,
 } from '../../src/api/index.js';
 
 vi.mock('../../src/api/index.js');
 
-describe('useApiKeysManagagment', () => {
+// TODO: further clean up required with typing
+const createTestHook = (): () => UseApiKeysManagementReturn => {
+  let hookResult: UseApiKeysManagementReturn;
+
+  const HookComponent = () => {
+    hookResult = useApiKeysManagement();
+    return null;
+  };
+
+  render(<HookComponent />);
+  return () => hookResult;
+};
+
+describe('useApiKeysManagement', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should fetch all keys on mount', async () => {
+  it('fetches all API keys on mount', async () => {
     const mockKeys = [{ id: 1, apiKey: 'key1' }];
     (getAllKeys as Mock).mockResolvedValue(mockKeys);
 
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
+    const getHook = createTestHook();
 
     await waitFor(() => {
-      // Wait until apiKeys have been updated
-      expect(hookResult!.apiKeys).toEqual(mockKeys);
+      expect(getHook().apiKeys).toEqual(mockKeys);
+      expect(getHook().errors.fetch).toBe('');
     });
-
-    expect(hookResult!.errors.fetch).toBe('');
   });
 
-  it('should handle fetch all keys error', async () => {
-    const errorMessage = 'Failed to fetch keys';
-    (getAllKeys as Mock).mockRejectedValue(new Error(errorMessage));
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
+  it('sets fetch error if getAllKeys fails', async () => {
+    (getAllKeys as Mock).mockRejectedValue(new Error('Fetch failed'));
+    const getHook = createTestHook();
 
     await waitFor(() => {
-      expect(hookResult!.errors.fetch).toBe(errorMessage);
+      expect(getHook().errors.fetch).toBe('Fetch failed');
     });
-
-    expect(hookResult!.apiKeys).toEqual([]);
   });
 
-  it('should activate a key', async () => {
-    const keyId = 1;
-    (activateApiKey as Mock).mockResolvedValue(undefined);
+  it.each([
+    ['activateKey', activateApiKey, 'row'],
+    ['deleteKey', deleteApiKey, 'row'],
+    ['saveKey', saveApiKey, 'newApiKey'],
+    ['deleteAllKeys', deleteAllApiKeys, 'deleteAll'],
+  ])('calls %s and updates errors correctly on success', async (method, apiMethod, errorKey) => {
+    (apiMethod as Mock).mockResolvedValue(undefined);
     (getAllKeys as Mock).mockResolvedValue([]);
 
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
+    const getHook = createTestHook();
+    await waitFor(() => expect(getHook()).toBeDefined());
 
     await act(async () => {
-      await hookResult!.activateKey(keyId);
+      if (method === 'saveKey') {
+        await getHook()[method]('myKey');
+      } else if (method === 'deleteAllKeys') {
+        await getHook()[method]();
+      } else {
+        await getHook()[method](1);
+      }
     });
 
-    expect(activateApiKey).toHaveBeenCalledWith(keyId);
-    expect(hookResult!.errors.row[keyId]).toBe('');
+    expect(apiMethod).toHaveBeenCalled();
+    if (errorKey === 'row') {
+      expect(getHook().errors.row[1]).toBe('');
+    } else {
+      expect(getHook().errors[errorKey]).toBe('');
+    }
   });
 
-  it('should handle activate key error', async () => {
-    const keyId = 1;
-    const errorMessage = 'Failed to activate key';
-    (activateApiKey as Mock).mockRejectedValue(new Error(errorMessage));
+  it.each([
+    ['activateKey', activateApiKey, 'row', 'fail activate'],
+    ['deleteKey', deleteApiKey, 'row', 'fail delete'],
+    ['saveKey', saveApiKey, 'newApiKey', 'fail save'],
+    ['deleteAllKeys', deleteAllApiKeys, 'deleteAll', 'fail deleteAll'],
+  ])('sets error if %s fails', async (method, apiMethod, errorKey, errorMsg) => {
+    (apiMethod as Mock).mockRejectedValue(new Error(errorMsg));
     (getAllKeys as Mock).mockResolvedValue([]);
 
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
+    const getHook = createTestHook();
+    await waitFor(() => expect(getHook()).toBeDefined());
 
     await act(async () => {
-      await hookResult!.activateKey(keyId);
+      if (method === 'saveKey') {
+        await getHook()[method]('myKey');
+      } else if (method === 'deleteAllKeys') {
+        await getHook()[method]();
+      } else {
+        await getHook()[method](1);
+      }
     });
 
-    expect(hookResult!.errors.row[keyId]).toBe(errorMessage);
-  });
-
-  it('should delete a key', async () => {
-    const keyId = 1;
-    (deleteApiKey as Mock).mockResolvedValue(undefined);
-    (getAllKeys as Mock).mockResolvedValue([]);
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
-
-    await act(async () => {
-      await hookResult!.deleteKey(keyId);
-    });
-
-    expect(deleteApiKey).toHaveBeenCalledWith(keyId);
-    expect(hookResult!.errors.row[keyId]).toBe('');
-  });
-
-  it('should handle delete key error', async () => {
-    const keyId = 1;
-    const errorMessage = 'Failed to delete key';
-    (deleteApiKey as Mock).mockRejectedValue(new Error(errorMessage));
-    (getAllKeys as Mock).mockResolvedValue([]);
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
-
-    await act(async () => {
-      await hookResult!.deleteKey(keyId);
-    });
-
-    expect(hookResult!.errors.row[keyId]).toBe(errorMessage);
-  });
-
-  it('should save a new key', async () => {
-    const apiKey = 'newKey';
-    (saveApiKey as Mock).mockResolvedValue(undefined);
-    (getAllKeys as Mock).mockResolvedValue([]);
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
-
-    await act(async () => {
-      await hookResult!.saveKey(apiKey);
-    });
-
-    expect(saveApiKey).toHaveBeenCalledWith({ apiKey });
-    expect(hookResult!.errors.newApiKey).toBe('');
-  });
-
-  it('should handle save new key error', async () => {
-    const apiKey = 'newKey';
-    const errorMessage = 'Failed to save key';
-    (saveApiKey as Mock).mockRejectedValue(new Error(errorMessage));
-    (getAllKeys as Mock).mockResolvedValue([]);
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
-
-    await act(async () => {
-      await hookResult!.saveKey(apiKey);
-    });
-
-    expect(hookResult!.errors.newApiKey).toBe(errorMessage);
-  });
-
-  it('should delete all keys', async () => {
-    (deleteAllApiKeys as Mock).mockResolvedValue(undefined);
-    (getAllKeys as Mock).mockResolvedValue([]);
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
-
-    await act(async () => {
-      await hookResult!.deleteAllKeys();
-    });
-
-    expect(deleteAllApiKeys).toHaveBeenCalled();
-    expect(hookResult!.errors.deleteAll).toBe('');
-  });
-
-  it('should handle delete all keys error', async () => {
-    const errorMessage = 'Failed to delete all keys';
-    (deleteAllApiKeys as Mock).mockRejectedValue(new Error(errorMessage));
-    (getAllKeys as Mock).mockResolvedValue([]);
-
-    let hookResult: ReturnType<typeof useApiKeysManagement>;
-    const HookTestComponent: React.FC = () => {
-      hookResult = useApiKeysManagement();
-      return null;
-    };
-
-    render(<HookTestComponent />);
-    await waitFor(() => expect(hookResult).toBeDefined());
-
-    await act(async () => {
-      await hookResult!.deleteAllKeys();
-    });
-
-    expect(hookResult!.errors.deleteAll).toBe(errorMessage);
+    if (errorKey === 'row') {
+      expect(getHook().errors.row[1]).toBe(errorMsg);
+    } else {
+      expect(getHook().errors[errorKey]).toBe(errorMsg);
+    }
   });
 });

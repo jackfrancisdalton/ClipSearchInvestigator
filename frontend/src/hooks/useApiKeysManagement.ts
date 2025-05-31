@@ -15,7 +15,7 @@ interface ApiKeyErrors {
   row: Record<number, string>;
 }
 
-interface UseApiKeysManagementReturn {
+export interface UseApiKeysManagementReturn {
   apiKeys: ApiKey[];
   errors: ApiKeyErrors;
   activateKey: (keyId: number) => Promise<void>;
