@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { apiRequest } from '../../src/api/ApiUtilities';
 
-describe('ApiUtilities', () => {
+describe('apiRequest', () => {
 
     // ------------------------------
     // Setup and Teardown
