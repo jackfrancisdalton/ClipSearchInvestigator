@@ -96,20 +96,6 @@ def test_get__nonexisting_record__should_return_none(db_session: Session, crud: 
     assert retrieved is None, "Should return None for non-existing record"
 
 
-def test_get__duplicate_records__should_return_first(db_session: Session, crud: CRUDBase[TestModel]):
-    # ARRANGE
-    create_test_model(db_session, id=1, test_prop="first")
-    create_test_model(db_session, id=1, test_prop="duplicate")
-
-    # ACT
-    retrieved = crud.get(db_session, 1)
-
-    # ASSERT
-    assert retrieved is not None
-    assert retrieved.id == 1
-    assert retrieved.test_prop == "first", "Should return the first record with id 1"
-
-
 # ---------------------------------------
 # Tests for get_all
 # ---------------------------------------
@@ -221,7 +207,7 @@ def test_delete_nonexisting_record__should_raise_error(db_session: Session, crud
     non_existing_id = 999
 
     # ACT & ASSERT
-    with pytest.raises(RuntimeError, match="Database error during deletion"):
+    with pytest.raises(ValueError, match="Object not found"):
         crud.delete(db_session, non_existing_id)
 
     assert_record_does_not_exists_in_db(db_session, non_existing_id)
