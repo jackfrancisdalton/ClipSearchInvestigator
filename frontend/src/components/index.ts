@@ -10,3 +10,4 @@ export { default as SearchResult } from './Search/SearchResult.js';
 
 export { default as LoadingSpinner } from './Shared/LoadingSpinner.js';
 export { default as BigButton } from './Shared/BigButton.js';
+export { default as SearchErrorMessage } from './Search/SearchErrorMessage.js';
