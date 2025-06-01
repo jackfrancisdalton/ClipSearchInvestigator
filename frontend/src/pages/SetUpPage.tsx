@@ -18,9 +18,7 @@ function SetUpPage() {
     try {
       await saveApiKey({ apiKey });
       setSuccess(true);
-      setTimeout(() => {
-        navigate('/');
-      }, 4000); // Navigate to the home page after 2 seconds
+      navigate('/');
     } catch (err: Error | any) {
       setErrorMessage(`Error: ${err.message}`);
     } finally {
@@ -41,6 +39,7 @@ function SetUpPage() {
         className="w-full p-2 mb-4 text-black rounded outline-none"
         aria-label="Paste your API Key here"
         disabled={loading}
+        data-testid="api-key-input"
       />
       {errorMessage && (
         <div className="w-full p-2 mb-4 bg-red-500 rounded text-white-medium">
@@ -52,6 +51,7 @@ function SetUpPage() {
         className="w-full p-2 mb-4 text-white rounded bg-primary-light hover:bg-primary-medium"
         aria-label="Complete Set Up"
         disabled={loading}
+        data-testid="setup-button"
       >
         Complete Set Up
       </button>
@@ -74,7 +74,12 @@ function SetUpPage() {
         <path d="M20 6L9 17l-5-5" />
         </svg>
       </div>
-      <p className="text-white-medium">Perfect, you're all set up, navigating to the app now...</p>
+      <p 
+        className="text-white-medium"
+        data-testid="setup-complete-message"
+      >
+        Perfect, you're all set up, navigating to the app now...
+      </p>
       </div>
     </div>
   );
