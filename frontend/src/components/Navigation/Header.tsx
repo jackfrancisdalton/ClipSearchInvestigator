@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AppConfigContext } from "../../contexts/AppConfigContext";
+import { AppConfigContext } from "../../contexts";
 
 const navigationTabs = [
   { label: "SEARCH", route: "/search", aliasRoute: "/" },

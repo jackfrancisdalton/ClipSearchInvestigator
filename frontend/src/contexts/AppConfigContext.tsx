@@ -28,4 +28,4 @@ export const AppConfigProvider: React.FC<{ children: ReactNode }> = ({ children 
         {children}
       </AppConfigContext.Provider>
     );
-  };
+};
