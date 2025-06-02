@@ -31,17 +31,17 @@ const SearchResult: React.FC<{ result: TranscriptSearchResult }> = ({ result }) 
                 <img 
                     className="h-24 ml-4 bg-gray-300 rounded-lg w-28" 
                     src={result.thumbnailUrl} 
-                    alt="thumbnial"
+                    alt="thumbnail"
                     data-testid="search-result_thumbnail"
                 />
             </div>
             <ul className="space-y-2">
-                {result.matches.map((quote) => (
+                {result.matches.map((quote, idx) => (
                     <li
                         key={quote.startTime}
                         className="p-2 text-sm transition-colors duration-300 rounded-lg cursor-pointer bg-primary-medium hover:bg-primary-dark"
                         onClick={() => window.open(quote.link, '_blank')}
-                        data-testid="search-result_quote"
+                        data-testid={`search-result_quote-${idx}`}
                     >
                         <strong>"{quote.text}"</strong> - {new Date(quote.startTime * 1000).toISOString().slice(11, 19)}
                     </li>
