@@ -69,15 +69,12 @@ If you update an SQL model and need it reflected right away, you can trigger thi
 `alembic revision --autogenerate -m "Updated models"` inside the backend container to generate new migrations
 
 
-# ------------------ NOTES TO SELF
+# ------------------ Authors notes to self (no harm in sharing :) )
 
 # TODO:
-1. assess scope of fixture (probably all should be function)
-1. update all tests to use data-testid on frontend
-7. update favicon
-9. test the prouduction version of the app works
-10. add continous integration to the build process
-11. clean up the readme
-12. verify that migrations on db work as intended
-13. double check for no private data
-14. clean up for making public
+1. Clean up TODOs and assess model naming/typing throughout application
+2. Clean up fixture scope in backend tests (likely most should be function level)
+3. Update favicon to something other than default react one
+4. Review and improve README
+5. Do testing of auto migration on initial app load to ensure it works correctly across OS
+6. Add Github Action CI and associated run tags to READMe
