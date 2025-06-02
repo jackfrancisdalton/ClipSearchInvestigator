@@ -16,7 +16,7 @@ interface ApiKeyFormProps {
   errorMessage: string;
 }
 
-const AddNewApiKey: React.FC<ApiKeyFormProps> = ({ onSave, errorMessage }) => {
+const AddNewApiKeyForm: React.FC<ApiKeyFormProps> = ({ onSave, errorMessage }) => {
   const { register, handleSubmit, watch, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(newApiKeySchema),
     defaultValues: { apiKey: '' },
@@ -77,4 +77,4 @@ const AddNewApiKey: React.FC<ApiKeyFormProps> = ({ onSave, errorMessage }) => {
   );
 };
 
-export default AddNewApiKey;
+export default AddNewApiKeyForm;

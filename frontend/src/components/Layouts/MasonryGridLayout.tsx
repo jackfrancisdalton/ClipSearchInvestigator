@@ -11,7 +11,10 @@ const MasonryGridLayout: React.FC<MasonryGridLayoutProps> = ({ children }) => {
       data-testid="masonary-grid-layout_parent" 
     >
       {React.Children.map(children, child => (
-        <div data-testid="masonary-grid-layout_children" className="mb-4 break-inside-avoid">
+        <div
+         className="mb-4 break-inside-avoid"
+         data-testid="child" 
+        >
           { child }
         </div>
       ))}

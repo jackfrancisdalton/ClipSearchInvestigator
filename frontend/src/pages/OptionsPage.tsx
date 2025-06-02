@@ -1,6 +1,6 @@
 import { useApiKeysManagement } from '../hooks/useApiKeysManagement.js';
 import ApiKeyManagementTable from '../components/Options/ApiKeyManagementTable.js';
-import AddNewApiKey from '../components/Options/AddNewApiKey.js';
+import AddNewApiKeyForm from '../components/Options/AddNewApiKeyForm.js';
 import FactoryResetApp from '../components/Options/FactoryResetApp.js';
 
 const OptionsPage = () => {
@@ -11,7 +11,10 @@ const OptionsPage = () => {
       <div className="p-4 rounded bg-background-medium">
         <h3 className="mb-2 text-xl text-white">Manage API Keys</h3>
         {errors.fetch && (
-          <div className="p-2 mb-2 text-sm text-white bg-red-500 rounded">
+          <div 
+            className="p-2 mb-2 text-sm text-white bg-red-500 rounded"
+            data-testid="fetch-error"
+          >
             {errors.fetch}
           </div>
         )}
@@ -20,9 +23,18 @@ const OptionsPage = () => {
           errors={errors.row}
           onActivate={activateKey}
           onDelete={deleteKey}
+          data-testid="management-table"
         />
-        <AddNewApiKey onSave={saveKey} errorMessage={errors.newApiKey} />
-        <FactoryResetApp onDeleteAll={deleteAllKeys} errorMessage={errors.deleteAll} />
+        <AddNewApiKeyForm 
+          onSave={saveKey} 
+          errorMessage={errors.newApiKey} 
+          data-testid="add-new-key"
+        />
+        <FactoryResetApp 
+          onDeleteAll={deleteAllKeys} 
+          errorMessage={errors.deleteAll} 
+          data-testid="factory-reset"
+        />
       </div>
     </div>
   );

@@ -50,13 +50,25 @@ export const SearchForm: React.FC<SearchFormProps> = ({ onSubmit, loading }) => 
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)} data-testid="search-form_form" className="p-4 space-y-6" role="form">
-        <VideoSearchSubForm disableForm={loading} />
-        <TranscriptFilterSubForm disableForm={loading} />
+      <form 
+        onSubmit={handleSubmit(onSubmit)} 
+        role="form"
+        className="p-4 space-y-6" 
+        data-testid="search-form" 
+      >
+        <VideoSearchSubForm 
+          disableForm={loading}
+          data-testid="video-search-subform"
+        />
+        <TranscriptFilterSubForm 
+          disableForm={loading} 
+          data-testid="transcript-filter-subform"
+        />
         <BigButton 
           disabled={loading} 
           disabledText="Searching..." 
           enabledText="Search"
+          data-testid="big-button"
         ></BigButton>
       </form>
     </FormProvider>

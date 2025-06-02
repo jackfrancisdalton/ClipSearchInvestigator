@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { AppConfigContext } from "../../contexts/AppConfigContext";
+import { AppConfigContext } from "../../contexts";
 
 const navigationTabs = [
   { label: "SEARCH", route: "/search", aliasRoute: "/" },
@@ -61,7 +61,12 @@ const Header: React.FC = () => {
 
   return (
     <header className="flex items-center p-2 text-white bg-background-light">
-      <Link to="/">{renderLogo()}</Link>
+      <Link 
+        to="/"
+        data-testid="logo-link"
+      >
+          {renderLogo()}
+      </Link>
       <nav className="flex">{renderNavigationTabs()}</nav>
     </header>
   );

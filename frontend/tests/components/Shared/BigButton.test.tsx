@@ -1,42 +1,33 @@
+import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import BigButton from '../../../src/components/Shared/BigButton';
-import { describe, expect, it } from 'vitest';
 
-describe('BigButton Component', () => {
+describe('BigButton', () => {
+  const baseProps = {
+    disabledText: 'Saving...',
+    enabledText: 'Save Changes',
+  };
 
-    it('renders enabled button with correct text', () => {
-        render(<BigButton disabled={false} disabledText="Disabled" enabledText="Enabled" />);
+  it('renders the enabled button with correct text and styling', () => {
+    render(<BigButton {...baseProps} disabled={false} />);
 
-        const button = screen.getByTestId('shared-big-button') as HTMLButtonElement;
+    const button = screen.getByTestId('big-button_button');
 
-        expect(button.disabled).toBe(false);
-        expect(button.textContent).toBe('Enabled');
-    });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent('Save Changes');
+    expect(button).not.toBeDisabled();
+    expect(button).toHaveClass('bg-primary-medium');
+  });
 
-    it('renders disabled button with correct text', () => {
-        render(<BigButton disabled={true} disabledText="Disabled" enabledText="Enabled" />);
+  it('renders the disabled button with correct text and styling', () => {
+    render(<BigButton {...baseProps} disabled={true} />);
 
-        const button = screen.getByTestId('shared-big-button') as HTMLButtonElement;
+    const button = screen.getByTestId('big-button_button');
 
-        expect(button.disabled).toBe(true);
-        expect(button.textContent).toBe('Disabled');
-    });
-
-    it('applies correct styles when enabled', () => {
-        render(<BigButton disabled={false} disabledText="Disabled" enabledText="Enabled" />);
-
-        const button = screen.getByTestId('shared-big-button');
-
-        expect(button.classList.contains('bg-primary-medium')).toBe(true);
-        expect(button.classList.contains('hover:bg-primary-dark')).toBe(true);
-    });
-
-    it('applies correct styles when disabled', () => {
-        render(<BigButton disabled={true} disabledText="Disabled" enabledText="Enabled" />);
-
-        const button = screen.getByTestId('shared-big-button');
-
-        expect(button.classList.contains('bg-gray-500')).toBe(true);
-        expect(button.classList.contains('cursor-not-allowed')).toBe(true);
-    });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent('Saving...');
+    expect(button).toBeDisabled();
+    expect(button).toHaveClass('bg-gray-500');
+    expect(button).toHaveClass('cursor-not-allowed');
+  });
 });

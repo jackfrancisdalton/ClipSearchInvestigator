@@ -7,7 +7,7 @@ const SearchErrorMessage: React.FC<{errorMessage: string}> = ({ errorMessage }) 
                 <h1 className="font-bold text-red-500">Bad Luck</h1>
                 <p 
                     className="text-white"
-                    data-testid="search-error-message"
+                    data-testid="search-error_message"
                 >
                     {errorMessage}
                 </p>

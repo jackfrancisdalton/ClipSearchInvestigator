@@ -10,7 +10,7 @@ const BigButton: React.FC<BigButtonProps> = ({ disabled, disabledText, enabledTe
     return (
         <button
             type="submit"
-            data-testid="shared-big-button"
+            data-testid="big-button_button"
             disabled={disabled}
             className={`px-6 py-3 transition-colors duration-300 ${
             disabled

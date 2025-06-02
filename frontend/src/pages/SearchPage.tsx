@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { MasonryGridLayout, LoadingSpinner, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm, SearchInfoBox } from "../components/index.js";
+import { MasonryGridLayout, LoadingSpinner, MobilePopOutMenu, SearchResult, SearchFormData, SearchForm, SearchInfoBox, SearchErrorMessage } from "../components/index.js";
 import { searchForTermsInTranscripts } from "../api/index.js";
 import { TranscriptSearchResult } from "../types/index.js";
-import SearchErrorMessage from "../components/Search/SearchErrorMessage.js";
 
 const SearchPage: React.FC = () => {
   const [results, setResults] = useState<TranscriptSearchResult[]>([]);
@@ -34,22 +33,29 @@ const SearchPage: React.FC = () => {
     <div className="flex flex-col h-full overflow-hidden md:flex-row">
       {/* Desktop Sidebar */}
       <div className="hidden overflow-auto border-r-4 border-background-light w-84 md:block bg-background-darker">
-        <SearchForm onSubmit={onSubmit} loading={loading} />
+        <SearchForm 
+          onSubmit={onSubmit} 
+          loading={loading} 
+          data-testid="search-form"
+        />
       </div>
 
       {/* Placeholder for first render */}
-      {!hasSearched && !loading && <SearchInfoBox />}
+      {!hasSearched && !loading && <SearchInfoBox data-testid="search-info" />}
 
       {/* Loading Spinner */}
       {loading && (
         <div className="flex items-center justify-center flex-1 p-4 bg-background-dark">
-          <LoadingSpinner />
+          <LoadingSpinner  data-testid="loading-spinner" />
         </div>
       )}
 
       {/* Error Message */}
       {error && (
-        <SearchErrorMessage errorMessage={error}/>
+        <SearchErrorMessage 
+          errorMessage={error}
+          data-testid="error-message"
+        />
       )}
 
       {/* Results */}
@@ -58,7 +64,10 @@ const SearchPage: React.FC = () => {
           <MasonryGridLayout>
             {results.map((result, index) => (
               <div key={index}>
-                <SearchResult result={result} />
+                <SearchResult 
+                  result={result} 
+                  data-testid={`search-result`}
+                />
               </div>
             ))}
           </MasonryGridLayout>
@@ -69,8 +78,13 @@ const SearchPage: React.FC = () => {
       <MobilePopOutMenu
         isOpen={isMobileSidebarOpen}
         toggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        data-testid="mobile-menu"
       >
-        <SearchForm onSubmit={onSubmit} loading={loading} />
+        <SearchForm 
+          onSubmit={onSubmit} 
+          loading={loading} 
+          data-testid="mobile-search-form"
+        />
       </MobilePopOutMenu>
 
       {/* Mobile: Toggle Button */}
@@ -78,6 +92,7 @@ const SearchPage: React.FC = () => {
         <button
           onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
           className="w-full p-3 text-center text-white shadow-lg bg-primary-medium"
+          data-testid="toggle-filters-button"
         >
           {isMobileSidebarOpen ? "Hide Filters" : "Show Filters"}
         </button>
