@@ -1,6 +1,6 @@
 import { useApiKeysManagement } from '../hooks/useApiKeysManagement.js';
 import ApiKeyManagementTable from '../components/Options/ApiKeyManagementTable.js';
-import AddNewApiKey from '../components/Options/AddNewApiKey.js';
+import AddNewApiKeyForm from '../components/Options/AddNewApiKeyForm.js';
 import FactoryResetApp from '../components/Options/FactoryResetApp.js';
 
 const OptionsPage = () => {
@@ -25,7 +25,7 @@ const OptionsPage = () => {
           onDelete={deleteKey}
           data-testid="management-table"
         />
-        <AddNewApiKey 
+        <AddNewApiKeyForm 
           onSave={saveKey} 
           errorMessage={errors.newApiKey} 
           data-testid="add-new-key"
